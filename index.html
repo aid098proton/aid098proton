@@ -17,8 +17,8 @@
             color: #333;
         }
         .meal-table {
-            width: 100%;
-            max-width: 800px;
+            width: 95%; /* 화면 비율로 넓게 */
+            max-width: 1400px; /* 최대 가로 길이 늘림 */
             margin: auto;
             border-collapse: collapse;
             background: #fff;
@@ -27,9 +27,11 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .meal-table th, .meal-table td {
-            padding: 16px;
+            padding: 22px; /* 패딩 약간 늘림 */
             text-align: center;
             border-bottom: 1px solid #ddd;
+            font-size: 18px; /* 글자 크기 키움 */
+            line-height: 1.8; /* 줄 간격 추가 */
         }
         .meal-table th {
             font-weight: bold;
@@ -42,38 +44,42 @@
         .highlight {
             background-color: #fff7a6;
         }
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: 900px) { /* 반응형 쿼리 조정 */
+            .meal-table {
+                max-width: 100%;
+            }
             .meal-table th, .meal-table td {
-                padding: 12px;
-                font-size: 14px;
+                padding: 14px;
+                font-size: 16px; /* 작은 화면에서는 글자 축소 */
+                line-height: 1.6;
             }
         }
     </style>
 </head>
 <body>
-    <h1>📅 이번 주 식단표</h1>
+    <h1>강서 폴리텍 식단표</h1>
     <table class="meal-table">
         <tr>
             <th>요일</th>
 <th class="">월요일</th><th class="">화요일</th><th class="">수요일</th><th class="highlight">목요일</th><th class="">금요일</th></tr><tr><td>식단</td>
             <td class="">
-                사천짜장덮밥(돈육-국내산), 파계란국, 탕수육(돈육-국내산), 단무지, 김치
+                사천짜장덮밥(돈육-국내산),<br>파계란국,<br>탕수육(돈육-국내산),<br>단무지,<br>김치,
             </td>
         
             <td class="">
-                백미밥, 미역국, 불닭떢볶음(닭-국내산), 새우튀김*케찹(새우-베트남산), 참나물겉절이, 김치
+                백미밥,<br>미역국,<br>불닭떢볶음(닭-국내산),<br>새우튀김*케찹(새우-베트남산),<br>참나물겉절이,<br>김치,
             </td>
         
             <td class="">
-                비빔밥, 미소장국, 생선까스*타르타르소스(베트남산), 마카로니샐러드, 김치, 요구르트
+                비빔밥,<br>미소장국,<br>생선까스*타르타르소스(베트남산),<br>마카로니샐러드,<br>김치,<br>요구르트,
             </td>
         
             <td class="highlight">
-                불고기덮밥(우육-호주산), 수제비국, 해시브라운*케찹, 오복지무침, 김치
+                불고기덮밥(우육-호주산),<br>수제비국,<br>해시브라운*케찹,<br>오복지무침,<br>김치,
             </td>
         
             <td class="">
-                백미밥, 매운콩나물국, 치즈돈까스(돈육-국내산), 꽃맛살샐러드, 고추된장무침, 김치
+                백미밥,<br>매운콩나물국,<br>치즈돈까스(돈육-국내산),<br>꽃맛살샐러드,<br>고추된장무침,<br>김치,
             </td>
         
         </tr>
