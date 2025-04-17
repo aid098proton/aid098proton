@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -27,20 +28,19 @@
         }
         .meal-table th, .meal-table td {
             padding: 16px;
-            text-align: left;
+            text-align: center;
             border-bottom: 1px solid #ddd;
         }
-        .meal-table tr.highlight {
-            background-color: #fff7a6;
-        }
-        .weekday {
+        .meal-table th {
             font-weight: bold;
             color: #2c3e50;
+            background-color: #f7f7f7;
         }
-        .allergens {
-            margin-top: 8px;
-            font-size: 0.9em;
-            color: #d84315;
+        .meal-table td {
+            vertical-align: top;
+        }
+        .highlight {
+            background-color: #fff7a6;
         }
         @media screen and (max-width: 600px) {
             .meal-table th, .meal-table td {
@@ -51,53 +51,32 @@
     </style>
 </head>
 <body>
-    <h1>강서 폴리텍 식단표</h1>
+    <h1>📅 이번 주 식단표</h1>
     <table class="meal-table">
         <tr>
             <th>요일</th>
-            <th>식단</th>
-        </tr>
-
-        <tr class="">
-            <td class="weekday">월요일</td>
-            <td>
-                사천짜장덮밥(돈육-국내산)<br>파계란국<br>탕수육(돈육-국내산)<br>단무지<br>김치
-                <div class="allergens">알레르기 유발: 짜장, 탕수육(돼지고기)</div>
+<th class="">월요일</th><th class="">화요일</th><th class="">수요일</th><th class="highlight">목요일</th><th class="">금요일</th></tr><tr><td>식단</td>
+            <td class="">
+                사천짜장덮밥(돈육-국내산), 파계란국, 탕수육(돈육-국내산), 단무지, 김치
             </td>
-        </tr>
-
-        <tr class="">
-            <td class="weekday">화요일</td>
-            <td>
-                백미밥<br>미역국<br>불닭떢볶음(닭-국내산)<br>새우튀김*케찹(새우-베트남산)<br>참나물겉절이<br>김치
-                <div class="allergens">알레르기 유발: 불닭(닭고기), 새우튀김(새우, 밀)</div>
+        
+            <td class="">
+                백미밥, 미역국, 불닭떢볶음(닭-국내산), 새우튀김*케찹(새우-베트남산), 참나물겉절이, 김치
             </td>
-        </tr>
-
-        <tr class="">
-            <td class="weekday">수요일</td>
-            <td>
-                비빔밥<br>미소장국<br>생선까스*타르타르소스(베트남산)<br>마카로니샐러드<br>김치<br>요구르트
-                <div class="allergens">알레르기 유발: 생선까스(대구살, 밀), 마카로니(밀, 마요네즈)</div>
+        
+            <td class="">
+                비빔밥, 미소장국, 생선까스*타르타르소스(베트남산), 마카로니샐러드, 김치, 요구르트
             </td>
-        </tr>
-
-        <tr class="highlight">
-            <td class="weekday">목요일</td>
-            <td>
-                불고기덮밥(우육-호주산)<br>수제비국<br>해시브라운*케찹<br>오복지무침<br>김치
-                <div class="allergens">알레르기 유발: 불고기덮밥(소고기), 수제비(밀), 해시브라운(밀)</div>
+        
+            <td class="highlight">
+                불고기덮밥(우육-호주산), 수제비국, 해시브라운*케찹, 오복지무침, 김치
             </td>
-        </tr>
-
-        <tr class="">
-            <td class="weekday">금요일</td>
-            <td>
-                백미밥<br>매운콩나물국<br>치즈돈까스(돈육-국내산)<br>꽃맛살샐러드<br>고추된장무침<br>김치
-                <div class="allergens">알레르기 유발: 돈까스(치즈, 돼지고기), 꽃맛살샐러드(맛살, 마요네즈)</div>
+        
+            <td class="">
+                백미밥, 매운콩나물국, 치즈돈까스(돈육-국내산), 꽃맛살샐러드, 고추된장무침, 김치
             </td>
+        
         </tr>
-
     </table>
 </body>
 </html>
