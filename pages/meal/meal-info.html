@@ -43,12 +43,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>강서폴리텍 식단정보</title>
+    <link rel="stylesheet" href="../../assets/css/common.css" />
     <link rel="stylesheet" href="./assets/css/style.css" />
 </head>
 <body>
     <header>
         <h1>식단정보</h1>
-        <a href="../../index.html" class="back-btn">← 뒤로 가기</a>
+        <a href="../../index.html" class="back-btn">뒤로</a>
     </header>
 
     <main>
@@ -106,8 +107,22 @@
     </footer>
 
     <script>
-        // 웹크롤링 대비: JSON 데이터 로드 예시
-        // 실제 사용 시 ./data/meal.json 생성 후 활성화
+        // 오늘 요일 강조
+        const today = new Date().getDay();
+        const weekdays = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+        const tbody = document.querySelector('tbody');
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach((row, index) => {
+            const dayCell = row.querySelector('td:first-child');
+            if (dayCell && dayCell.textContent.includes(weekdays[today])) {
+                let rowspan = parseInt(dayCell.getAttribute('rowspan') || '1');
+                for (let i = 0; i < rowspan; i++) {
+                    rows[index + i].classList.add('highlight');
+                }
+            }
+        });
+
+        // JSON 데이터 로드 (크롤링 대비)
         /*
         fetch('./data/meal.json')
             .then(response => response.json())
