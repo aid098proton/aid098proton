@@ -3,7 +3,6 @@ main {
 }
 
 .table-container {
-    overflowdeclare(strict_typescript)
     overflow-x: auto;
     margin: 1rem 0;
 }
@@ -41,6 +40,12 @@ th:first-child, td:first-child {
 td {
     vertical-align: top;
     word-break: break-word;
+    font-weight: bold; /* 메뉴 굵게 */
+    border-bottom: 1px solid #e0e0e0; /* 메뉴 간 구분선 */
+}
+
+td:last-child {
+    border-bottom: none; /* 마지막 메뉴는 구분선 제거 */
 }
 
 .highlight {
