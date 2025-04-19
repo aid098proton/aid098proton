@@ -1,49 +1,10 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>함께 코딩하며 꿈을 키우는 곳</title>
+    <title>코딩하며 꿈을 키우는 곳</title>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -62,7 +23,8 @@
         }
 
         main {
-            padding: 1rem 0.5rem; /* 좌우 패딩 추가 */
+            padding: 1rem 0.5rem;
+            /* 좌우 패딩 추가 */
         }
 
         section {
@@ -77,7 +39,8 @@
 
         .link-btn {
             display: block;
-            max-width: 90vw; /* 화면 너비의 90%로 제한 */
+            max-width: 90vw;
+            /* 화면 너비의 90%로 제한 */
             margin: 0 auto 0.5rem;
             background-color: #f0f0f0;
             color: #007acc;
@@ -87,7 +50,8 @@
             font-size: 1.1rem;
             text-align: center;
             transition: background-color 0.3s;
-            box-sizing: border-box; /* 패딩과 보더 포함 */
+            box-sizing: border-box;
+            /* 패딩과 보더 포함 */
         }
 
         .link-btn:hover {
@@ -119,11 +83,15 @@
             .link-btn {
                 padding: 0.8rem;
                 font-size: 1rem;
-                margin: 0.5rem; /* 여백 추가 */
+                margin: 0.5rem;
+                /* 여백 추가 */
             }
+
             main {
-                padding: 1rem; /* 모바일에서 패딩 조정 */
+                padding: 1rem;
+                /* 모바일에서 패딩 조정 */
             }
+
             h2 {
                 font-size: 1.1rem;
             }
@@ -133,18 +101,17 @@
 
 <body>
     <header>
-        <h1>함께 코딩하며 꿈을 키우는 곳</h1>
+        <h1>코딩하며 꿈을 키우는 곳</h1>
     </header>
 
     <main>
         <section>
-            <h2>오늘의 명언</h2>
             <p id="random-quote"></p>
-            <button onclick="showQuote()">다른 명언 보기</button>
+            <button onclick="showQuote()">다른 글 보기</button>
         </section>
 
         <section>
-            <h2>학교 관련</h2>
+            <h2>학교 식단</h2>
             <a class="link-btn" href="./pages/meal/meal-info.html">🍽️ 학교 식단 보기</a>
         </section>
 
@@ -155,7 +122,7 @@
     </main>
 
     <footer>
-        한 걸음씩, 더 큰 꿈을 향해 🌟
+        한 걸음씩, 꿈을 향해 🌟
     </footer>
 
     <script>
