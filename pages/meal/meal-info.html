@@ -1,0 +1,135 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>강서폴리텍 식단정보</title>
+    <link rel="stylesheet" href="./assets/css/style.css" />
+</head>
+<body>
+    <header>
+        <h1>강서폴리텍 식단정보</h1>
+        <a href="../../index.html" class="back-btn">← 뒤로 가기</a>
+    </header>
+
+    <main>
+        <section>
+            <h2>주간 중식 메뉴</h2>
+            <div class="table-container">
+                <table role="grid" aria-labelledby="meal-table-caption">
+                    <caption id="meal-table-caption">강서폴리텍 2025년 4월 2주차 식단</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">요일/날짜</th>
+                            <th scope="col">중식 메뉴</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="4">25.04.14<br>월요일</td>
+                            <td>사천짜장덮밥</td>
+                        </tr>
+                        <tr><td>김치찌개</td></tr>
+                        <tr><td>제육볶음</td></tr>
+                        <tr><td>잡채</td></tr>
+                        <tr>
+                            <td rowspan="4">25.04.15<br>화요일</td>
+                            <td>된장국</td>
+                        </tr>
+                        <tr><td>불고기</td></tr>
+                        <tr><td>계란말이</td></tr>
+                        <tr><td>콩나물무침</td></tr>
+                        <tr>
+                            <td rowspan="3">25.04.16<br>수요일</td>
+                            <td>떡국</td>
+                        </tr>
+                        <tr><td>돈까스</td></tr>
+                        <tr><td>김치볶음</td></tr>
+                        <tr>
+                            <td rowspan="4">25.04.17<br>목요일</td>
+                            <td>미역국</td>
+                        </tr>
+                        <tr><td>잡채밥</td></tr>
+                        <tr><td>오징어볶음</td></tr>
+                        <tr><td>샐러드</td></tr>
+                        <tr>
+                            <td rowspan="3">25.04.18<br>금요일</td>
+                            <td>콩나물국</td>
+                        </tr>
+                        <tr><td>비빔밥</td></tr>
+                        <tr><td>고추장불고기</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        한 걸음씩, 더 큰 꿈을 향해 🌟
+    </footer>
+
+    <script>
+        // 웹크롤링 대비: JSON 데이터 로드 예시
+        // 실제 사용 시 ./data/meal.json 생성 후 활성화
+        /*
+        fetch('./data/meal.json')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('tbody');
+                tbody.innerHTML = '';
+                data.forEach(day => {
+                    const rowspan = day.menu.length;
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td rowspan="${rowspan}">${day.date}<br>${day.day}</td><td>${day.menu[0]}</td>`;
+                    tbody.appendChild(tr);
+                    for (let i = 1; i < day.menu.length; i++) {
+                        const extraTr = document.createElement('tr');
+                        extraTr.innerHTML = `<td>${day.menu[i]}</td>`;
+                        tbody.appendChild(extraTr);
+                    }
+                });
+            })
+            .catch(error => console.error('Error loading meal data:', error));
+        */
+    </script>
+</body>
+</html>
