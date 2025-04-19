@@ -1,89 +1,122 @@
-
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>강서 폴리텍 식단표</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>함께 코딩하며 꿈을 키우는 곳</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            padding: 20px;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
-            background: #f0f2f5;
-        }
-        h1 {
-            text-align: center;
+            padding: 0;
+            background-color: #ffffff;
             color: #333;
         }
-        .meal-table {
-            width: 95%; /* 화면 비율로 넓게 */
-            max-width: 1400px; /* 최대 가로 길이 늘림 */
-            margin: auto;
-            border-collapse: collapse;
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .meal-table th, .meal-table td {
-            padding: 22px; /* 패딩 약간 늘림 */
+
+        header,
+        footer {
+            background-color: #007acc;
+            color: white;
             text-align: center;
-            border-bottom: 1px solid #ddd;
-            font-size: 18px; /* 글자 크기 키움 */
-            line-height: 1.8; /* 줄 간격 추가 */
+            padding: 1rem;
         }
-        .meal-table th {
-            font-weight: bold;
-            color: #2c3e50;
-            background-color: #f7f7f7;
+
+        main {
+            padding: 1rem;
         }
-        .meal-table td {
-            vertical-align: top;
+
+        section {
+            margin-bottom: 2rem;
         }
-        .highlight {
-            background-color: #fff7a6;
+
+        h2 {
+            font-size: 1.2rem;
+            color: #007acc;
+            margin-bottom: 0.5rem;
         }
-        @media screen and (max-width: 900px) { /* 반응형 쿼리 조정 */
-            .meal-table {
-                max-width: 100%;
-            }
-            .meal-table th, .meal-table td {
-                padding: 14px;
-                font-size: 16px; /* 작은 화면에서는 글자 축소 */
-                line-height: 1.6;
-            }
+
+        .link-btn {
+            display: block;
+            width: 100%;
+            background-color: #f0f0f0;
+            color: #007acc;
+            text-decoration: none;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .link-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        #random-quote {
+            border-left: 4px solid #007acc;
+            background: #f0f8ff;
+            padding: 1rem;
+            font-style: italic;
+            border-radius: 6px;
+        }
+
+        button {
+            display: block;
+            margin: 1rem auto;
+            padding: 0.5rem 1rem;
+            background-color: #007acc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
         }
     </style>
 </head>
+
 <body>
-    <a href="http://192.168.110.24:5500/a.html">http://192.168.110.24:5500/a.html</a>
-    <h1>강서 폴리텍 식단표</h1>
-    <table class="meal-table">
-        <tr>
-            <th>요일</th>
-<th class="">월요일</th><th class="">화요일</th><th class="">수요일</th><th class="highlight">목요일</th><th class="">금요일</th></tr><tr><td>식단</td>
-            <td class="">
-                사천짜장덮밥(돈육-국내산),<br>파계란국,<br>탕수육(돈육-국내산),<br>단무지,<br>김치,
-            </td>
-        
-            <td class="">
-                백미밥,<br>미역국,<br>불닭떢볶음(닭-국내산),<br>새우튀김*케찹(새우-베트남산),<br>참나물겉절이,<br>김치,
-            </td>
-        
-            <td class="">
-                비빔밥,<br>미소장국,<br>생선까스*타르타르소스(베트남산),<br>마카로니샐러드,<br>김치,<br>요구르트,
-            </td>
-        
-            <td class="highlight">
-                불고기덮밥(우육-호주산),<br>수제비국,<br>해시브라운*케찹,<br>오복지무침,<br>김치,
-            </td>
-        
-            <td class="">
-                백미밥,<br>매운콩나물국,<br>치즈돈까스(돈육-국내산),<br>꽃맛살샐러드,<br>고추된장무침,<br>김치,
-            </td>
-        
-        </tr>
-    </table>
+    <header>
+        <h1>함께 코딩하며 꿈을 키우는 곳</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>오늘의 명언</h2>
+            <p id="random-quote"></p>
+            <button onclick="showQuote()">다른 명언 보기</button>
+        </section>
+
+        <section>
+            <h2>학교 관련</h2>
+            <a class="link-btn" href="./school-meal.html">🍽️ 학교 식단 보기</a>
+        </section>
+
+        <section>
+            <h2>내 개발 링크</h2>
+            <a class="link-btn" href="http://192.168.0.123:5000">🖥️ 내 서버 접속</a>
+        </section>
+    </main>
+
+    <footer>
+        매일 조금씩, 함께 성장해요 🌱
+    </footer>
+
+    <script>
+        const quotes = [
+            "성공은 실패를 거듭해도 열정을 잃지 않는 것이다. – 윈스턴 처칠",
+            "작은 성취를 꾸준히 모으면 큰 성과가 된다.",
+            "노력은 배신하지 않는다. 단지 시간이 걸릴 뿐이다."
+        ];
+
+        function showQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            document.getElementById('random-quote').textContent = quotes[randomIndex];
+        }
+
+        window.onload = showQuote;
+    </script>
 </body>
+
 </html>
