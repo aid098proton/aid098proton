@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Share</title>
+    <link rel="stylesheet" href="/assets/css/common.css">
+    <style>
+        .link-section p {
+            margin: 0.5rem 0;
+        }
+
+        .link-btn {
+            background: #007acc;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        #copy-btn {
+            padding: 0.4rem 0.9rem;
+            font-size: 0.9rem;
+            min-width: 70px;
+        }
+
+        #copy-notice {
+            color: #007acc;
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+        }
+
+        #content-title {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+        }
+
+        #content {
+            border: 1px solid #ccc;
+            background: #f0f8ff;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            white-space: pre;
+            cursor: text;
+        }
+
+        @media (max-width: 600px) {
+
+            .link-btn,
+            #copy-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            #content {
+                font-size: 0.9rem;
+            }
+
+            #content-title {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Code Share</h1>
+    </header>
+    <main>
+        <div class="link-section">
+            <p>1. DNS와 ping 설명 <a class="link-btn" onclick="showContent('./files/text1.txt', '1. DNS와 ping 설명')">보기</a>
+                / <a class="link-btn" href="./files/text1.txt" download="text1.txt">다운로드</a></p>
+
+        </div>
+        <div class="content-section">
+            <h2 id="content-title"></h2> <button id="copy-btn" class="link-btn" onclick="copyContent()">복사</button>
+            <span id="copy-notice"></span>
+            <pre id="content" onclick="this.select()"></pre>
+        </div>
+    </main>
+    <footer>한 걸음씩, 꿈을 향해 🌟</footer>
+    <script>
+        function showContent(file, title) {
+            fetch(file)
+                .then(res => res.text())
+                .then(data => {
+                    document.querySelector('#content').textContent = data;
+                    document.querySelector('#content-title').textContent = title;
+                })
+                .catch(err => console.error('파일 로드 실패:', err));
+        }
+        function copyContent() {
+            navigator.clipboard.writeText(document.querySelector('#content').textContent);
+            const notice = document.querySelector('#copy-notice');
+            notice.textContent = '클립보드에 저장!';
+            setTimeout(() => notice.textContent = '', 2000);
+        }
+    </script>
+</body>
+
+</html>
