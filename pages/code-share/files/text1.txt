@@ -1,61 +1,45 @@
-A
-B
-C
-D
-E
-F
-G
-G
-G
-G
-G
-G
-G
-G
-G
-G
-G
-G
-G
-G
-A
-B
-C
-D
-E
-F
-G
-G
-G
-G
-G
-G
-G
-G
-G
-G
-G
-G
-G
-G
-A
-B
-C
-D
-E
-F
-G
-G
-G
-G
-G
-G
-G
-G
-G
-G
-G
-G
-G
-G
+!pip install ultralytics
+
+import cv2
+from ultralytics import YOLO
+
+model = YOLO("yolo11n.pt")
+
+# colab인 경우
+# imagePath = “/content/gdrive/….jpg”
+imagePath = "/content/yolo_test_img.jpg"
+#예측
+results = model(imagePath)[0]
+
+CONFIDENCE_THRESHOLD = 0.6
+GREEN = (0, 255, 0)
+WHITE = (255, 255, 255)
+
+boxInfos = results.boxes.data.tolist()
+
+eachBox = boxInfos[0]
+eachBox
+
+frame = cv2.imread("/content/yolo_test_img.jpg")
+#cv2.rectangle( frame, (10,80), (30, 150), (255,0,0), 3 )
+
+boxInfos = results.boxes.data.tolist()
+
+for i in range(0, len(boxInfos) ) :
+  eachBox = boxInfos[i]
+  eachBox
+
+  xmin = int(eachBox[0])
+  ymin = int(eachBox[1])
+  xmax = int(eachBox[2])
+  ymax = int(eachBox[3])
+  confidence = eachBox[4] 
+  className = eachBox[5]
+  realName = results.names[ int( className ) ]
+
+  # 0.6 보다 높은것만 그려지겠죠? 사각형 그림
+  if ( confidence > CONFIDENCE_THRESHOLD):
+    cv2.rectangle ( frame, (xmin, ymin), (xmax, ymax), GREEN, 3)
+    cv2.putText( frame, realName, (xmin, ymin-10), cv2.FONT_HERSHEY_SIMPLEX, 2, GREEN, 2)
+
 
