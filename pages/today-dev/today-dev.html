@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오늘의 개발 여행</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .content-section {
+            margin-bottom: 20px;
+        }
+        .book, .news {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .book h3, .news h3 {
+            margin-top: 0;
+        }
+        .button {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>오늘의 개발 여행</h1>
+
+    <!-- 책 섹션 -->
+    <div class="content-section" id="book-section">
+        <h2>📚 오늘의 개발 책 탐험</h2>
+        <div id="books"></div>
+    </div>
+
+    <!-- 뉴스 섹션 -->
+    <div class="content-section" id="news-section">
+        <h2>📰 오늘의 개발 소식 피드</h2>
+        <div id="news"></div>
+    </div>
+
+    <button class="button" onclick="getContent()">새로고침</button>
+</div>
+
+<script src="./js/today-dev-journey.js"></script>
+</body>
+</html>
