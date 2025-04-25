@@ -1,77 +1,82 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>오늘의 개발 여행</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-        }
-        .content-section {
-            margin-bottom: 20px;
-        }
-        .book, .news {
-            background-color: #f9f9f9;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .book h3, .news h3 {
-            margin-top: 0;
-        }
-        .button {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #45a049;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>오늘의 개발 뉴스</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 1rem;
+    }
+    header, footer {
+      background-color: #222;
+      color: #fff;
+      text-align: center;
+      padding: 1rem 0;
+    }
+    .card {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin: 1rem auto;
+      max-width: 800px;
+      padding: 1rem 1.5rem;
+    }
+    .card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .card p {
+      margin: 0.5rem 0;
+    }
+    .card .date {
+      font-size: 0.9rem;
+      color: #777;
+    }
+    .card a {
+      display: inline-block;
+      margin-top: 0.5rem;
+      color: #007acc;
+      text-decoration: none;
+    }
+    .card a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>오늘의 개발 뉴스</h1>
+  </header>
 
-<div class="container">
-    <h1>오늘의 개발 여행</h1>
+  <main id="news-container">
+    <!-- 뉴스 카드가 여기에 출력됩니다 -->
+  </main>
 
-    <!-- 책 섹션 -->
-    <div class="content-section" id="book-section">
-        <h2>📚 오늘의 개발 책 탐험</h2>
-        <div id="books"></div>
-    </div>
+  <footer>
+    <p>&copy; 2025 인석의 개발 일지</p>
+  </footer>
 
-    <!-- 뉴스 섹션 -->
-    <div class="content-section" id="news-section">
-        <h2>📰 오늘의 개발 소식 피드</h2>
-        <div id="news"></div>
-    </div>
-
-    <button class="button" onclick="getContent()">새로고침</button>
-</div>
-
-<script src="./js/today-dev.js"></script>
+  <script>
+    fetch('./js/it_news.json')
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('news-container');
+        data.items.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <h2>${item.title}</h2>
+            <p class="date">${item.pubDate}</p>
+            <p>${item.description}</p>
+            <a href="${item.link}" target="_blank">기사 보기</a>
+          `;
+          container.appendChild(card);
+        });
+      })
+      .catch(err => console.error('뉴스 데이터를 불러오지 못했습니다:', err));
+  </script>
 </body>
 </html>
