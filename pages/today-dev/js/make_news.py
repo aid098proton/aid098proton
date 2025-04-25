@@ -6,14 +6,12 @@ from datetime import datetime
 # // 네이버 개발자 센터에서 발급받은 ID와 Secret을 사용해야 합니다.
 # // 주의: 클라이언트 ID와 Secret은 1~4주 간격으로 주기적으로 변경해야 합니다.
 # // API 키가 유출되지 않도록 관리에 유의하고, 변경 시 코드에 반영하는 것을 잊지 마세요.
-# const clientId = 'Qn7GYYC_k7IbzNHPk1UE';  // 네이버 클라이언트 ID
-# const clientSecret = '8cjTKYhRYn';  // 네이버 클라이언트 Secret
 
 # ✅ 네이버 API 정보
-client_id = "Qn7GYYC_k7IbzNHPk1UE"
-client_secret = "8cjTKYhRYn"
+client_id = "Qn7GYYC_k7IbzNHPk1UE"  # 네이버 클라이언트 ID
+client_secret = "8cjTKYhRYn"  # 네이버 클라이언트 Secret
 query = "개발"
-display = 10
+display = 7
 
 # ✅ 요청 URL
 url = f"https://openapi.naver.com/v1/search/news.json?query={query}&display={display}&sort=date"
