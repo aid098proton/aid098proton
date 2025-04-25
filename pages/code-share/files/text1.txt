@@ -1,3 +1,5 @@
-curl -sL bit.ly/dcs_0 -o ./dcs
-chmod +x dcs
-sudo mv ./dcs /usr/bin/dcs
+평일 학교에서 접속 가능합니다.
+
+192.168.110.24:5500/index.html
+
+접속 하세요.
