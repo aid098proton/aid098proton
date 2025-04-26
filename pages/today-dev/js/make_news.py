@@ -10,8 +10,8 @@ from datetime import datetime
 # ✅ 네이버 API 정보
 client_id = "Qn7GYYC_k7IbzNHPk1UE"  # 네이버 클라이언트 ID
 client_secret = "8cjTKYhRYn"  # 네이버 클라이언트 Secret
-query = "개발"
-display = 7
+query = "it dev 개발 소프트웨어 sw"
+display = 5
 
 # ✅ 요청 URL
 url = f"https://openapi.naver.com/v1/search/news.json?query={query}&display={display}&sort=date"
@@ -28,8 +28,9 @@ if response.status_code == 200:
     data = response.json()
     
     # ✅ 파일 이름: 오늘 날짜 기준
-    today = datetime.now().strftime("%Y%m%d")
-    filename = f"2025/202504/{today}_news.json"
+    #today = datetime.now().strftime("%Y%m%d")
+    #filename = f"2025/202504/{today}_news.json"
+    filename = "./dev_news.json"
 
     # ✅ 디렉터리 먼저 만들기
     import os

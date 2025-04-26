@@ -1,62 +1,103 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>오늘의 개발 뉴스</title>
+  <link rel="stylesheet" href="../../css/common.css" />
+  
   <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f5f5f5;
-      margin: 0;
-      padding: 1rem;
+    .card {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      margin: 1.5rem auto;
+      padding: 1.5rem;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    header, footer {
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h2 {
+      font-size: 1.3rem;
+      margin: 0 0 0.75rem 0;
+      color: #333;
+      line-height: 1.4;
+    }
+
+    .card .date {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .card p {
+      margin: 0.75rem 0;
+      line-height: 1.6;
+      color: #444;
+    }
+
+    .card a {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #007acc;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    .card a:hover {
+      background-color: #005c99;
+    }
+
+    footer {
       background-color: #222;
       color: #fff;
       text-align: center;
       padding: 1rem 0;
+      margin-top: 2rem;
     }
-    .card {
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      margin: 1rem auto;
-      max-width: 800px;
-      padding: 1rem 1.5rem;
-    }
-    .card h2 {
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-    }
-    .card p {
-      margin: 0.5rem 0;
-    }
-    .card .date {
-      font-size: 0.9rem;
-      color: #777;
-    }
-    .card a {
-      display: inline-block;
-      margin-top: 0.5rem;
-      color: #007acc;
-      text-decoration: none;
-    }
-    .card a:hover {
-      text-decoration: underline;
+
+    @media (max-width: 768px) {
+      .card {
+        margin: 1rem auto;
+        padding: 1rem;
+      }
+
+      .card h2 {
+        font-size: 1.2rem;
+      }
     }
   </style>
 </head>
+
 <body>
   <header>
-    <h1>오늘의 개발 뉴스</h1>
+    <div class="container">
+      <h1>오늘의 개발 뉴스</h1>
+      <a href="../../index.html" class="back-btn">뒤로</a>
+    </div>
   </header>
 
-  <main id="news-container">
-    <!-- 뉴스 카드가 여기에 출력됩니다 -->
+  <main>
+    <div class="container">
+      <div id="news-container">
+        <!-- 뉴스 카드가 여기에 출력됩니다 -->
+      </div>
+    </div>
   </main>
 
   <footer>
-    <p>&copy; 2025 인석의 개발 일지</p>
+    <div class="container">
+      한 걸음씩, 꿈을 향해 🌟
+    </div>
   </footer>
 
   <script>
@@ -69,7 +110,7 @@
           card.className = 'card';
           card.innerHTML = `
             <h2>${item.title}</h2>
-            <p class="date">${item.pubDate}</p>
+            <span class="date">${item.pubDate}</span>
             <p>${item.description}</p>
             <a href="${item.link}" target="_blank">기사 보기</a>
           `;
@@ -79,4 +120,5 @@
       .catch(err => console.error('뉴스 데이터를 불러오지 못했습니다:', err));
   </script>
 </body>
+
 </html>

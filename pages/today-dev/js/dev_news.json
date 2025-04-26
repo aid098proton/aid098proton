@@ -1,36 +1,43 @@
 {
-  "lastBuildDate": "Fri, 25 Apr 2025 21:30:38 +0900",
-  "total": 330,
+  "lastBuildDate": "Sat, 26 Apr 2025 17:10:59 +0900",
+  "total": 79,
   "start": 1,
-  "display": 4,
+  "display": 5,
   "items": [
     {
-      "title": "디자인·<b>개발</b> 플랫폼 피그마, 한국어 완전 현지화 제품 출시",
-      "originallink": "http://www.itdaily.kr/news/articleView.html?idxno=232273",
-      "link": "http://www.itdaily.kr/news/articleView.html?idxno=232273",
-      "description": "실제 <b>소프트웨어</b> 구현까지의 전 과정을 지원하는 신제품들을 출시하고 있다. 지난 2023년 출시된 디자인을 코드로 전환하는 '<b>개발</b>자모드(<b>Dev</b> Mode)', 지난해 출시된 협업 기능이 탑재된 프레젠테이션 도구... ",
-      "pubDate": "Wed, 16 Apr 2025 11:28:00 +0900"
-    },
-    {
-      "title": "라자루스, 'ClickFix' 전술로 가상화폐 구직자 노려 신종 백도어 'GolangG...",
-      "originallink": "https://www.dailysecu.com/news/articleView.html?idxno=165058",
-      "link": "https://www.dailysecu.com/news/articleView.html?idxno=165058",
-      "description": "이는 과거 'Contagious Interview(전염성 인터뷰)' 또는 'DeceptiveDevelopment', '<b>DEV</b>#POPPER', 'Famous Chollima'로 알려진... 이는 이전에 <b>개발</b>자와 <b>소프트웨어</b> 엔지니어를 주로 노리던 기존 라자루스 전략과는 다른 양상이다.... ",
-      "pubDate": "Fri, 04 Apr 2025 12:10:00 +0900"
-    },
-    {
-      "title": "[화제의 현장] &quot;AI 시대, 자연어로 쉬워지는 <b>소프트웨어</b> <b>개발</b>&quot;",
-      "originallink": "http://www.itdaily.kr/news/articleView.html?idxno=231862",
-      "link": "http://www.itdaily.kr/news/articleView.html?idxno=231862",
-      "description": "그는 회사 공식 블로그에 '우리가 알던 프로그래밍의 종말(The End of Programming as We Know <b>It</b>)'을 제목으로 글을 올려 C+, 자바(JAVA)를 근간으로 삼던 기존 <b>개발</b> 방식은 사라지지만, AI로 더 복잡한 <b>소프트웨어</b>를 만드는 데 더... ",
-      "pubDate": "Mon, 31 Mar 2025 14:22:00 +0900"
-    },
-    {
-      "title": "[ZD SW 투데이] 시엑스알, LLM 기반 건설 현장 위험성 평가 시스템 <b>개발</b>...",
+      "title": "[ZD <b>SW</b> 투데이] 시엑스알, LLM 기반 건설 현장 위험성 평가 시스템 <b>개발</b>...",
       "originallink": "https://zdnet.co.kr/view/?no=20250326171248",
       "link": "https://n.news.naver.com/mnews/article/092/0002368206?sid=105",
-      "description": "지디넷코리아가 <b>소프트웨어</b>(SW) 업계의 다양한 소식을 한 눈에 볼 수 있는 'ZD SW 투데이'를 새롭게... AI시대 <b>개발</b>자를 위한 '아우디 데브 데이(AUD <b>DEV</b> DAY) 2025'를 성황리에 마무리했다. 이번 행사는 AI 기반 UI <b>개발</b> 자동화... ",
+      "description": "지디넷코리아가 <b>소프트웨어</b>(<b>SW</b>) 업계의 다양한 소식을 한 눈에 볼 수 있는 'ZD <b>SW</b> 투데이'를 새롭게... AI시대 <b>개발</b>자를 위한 '아우디 데브 데이(AUD <b>DEV</b> DAY) 2025'를 성황리에 마무리했다. 이번 행사는 AI 기반 UI <b>개발</b> 자동화... ",
       "pubDate": "Wed, 26 Mar 2025 17:20:00 +0900"
+    },
+    {
+      "title": "비아이매트릭스, CES2025 참가…“‘세계 최초’ 3종 기술로 글로벌 공략...",
+      "originallink": "https://biz.heraldcorp.com/article/10381498?ref=naver",
+      "link": "https://n.news.naver.com/mnews/article/016/0002410492?sid=101",
+      "description": "K-<b>소프트웨어</b>(<b>SW</b>)의 우수성을 선보일 예정이다. 이번 전시회를 계기로 비아이매트릭스의 혁신적인... EPA는 기존 시스템 <b>개발</b>방법론인 에자일(Agile)이나 <b>DEV</b>/OPS 보다도 훨씬 더 혁신적인 한국형 <b>개발</b>방법론으로... ",
+      "pubDate": "Thu, 02 Jan 2025 13:46:00 +0900"
+    },
+    {
+      "title": "해나소프트, 효율적인 통합 콘텐츠 관리 솔루션 'HaenaCMS'로  GS인증 1등...",
+      "originallink": "https://www.epnc.co.kr/news/articleView.html?idxno=308706",
+      "link": "https://www.epnc.co.kr/news/articleView.html?idxno=308706",
+      "description": "위치한 <b>IT</b> 기업 ㈜해나소프트는 자사가 <b>개발</b>한 콘텐츠 관리 솔루션 'HaenaCMS'가 지난 7일, 한국정보통신기술협회(TTA)로부터 GS(Good Software) 인증 최고 등급인 1등급을 획득했다고 밝혔다. GS인증은 <b>소프트웨어</b>의... ",
+      "pubDate": "Fri, 15 Nov 2024 13:14:00 +0900"
+    },
+    {
+      "title": "&quot;프로그레시브 웹 앱의 필수 요소&quot; 서비스 워커 백그라운드 동기화",
+      "originallink": "https://www.itworld.co.kr/news/344292",
+      "link": "https://www.itworld.co.kr/news/344292",
+      "description": "설치되는 <b>소프트웨어</b>의 기능을 결합하므로 웹 <b>개발</b>에서 중요한 개념이다. 네이티브와... if ('serviceWorker' in navigator) { // 1 window.addEventListener('load', () =&gt; { // 2 navigator.serviceWorker.register('<b>sw</b>.js... ",
+      "pubDate": "Mon, 15 Jul 2024 12:38:00 +0900"
+    },
+    {
+      "title": "AI 넘어 ‘플랫폼 공룡’ 꿈꾼다…애플·구글 뒤쫓는 챗GPT [스페셜리포...",
+      "originallink": "https://www.mk.co.kr/article/10930016",
+      "link": "https://n.news.naver.com/mnews/article/024/0000087127?sid=101",
+      "description": "먼저 2023년 11월 데브 데이(<b>Dev</b> Day·<b>개발</b>자의 날) 무대에서 공개한 GPTs다. 복잡한 코딩 없이 몇 번의 텍스트... <b>소프트웨어</b> <b>개발</b>사에는 치명적인 문제다. <b>IT</b>업계 관계자는 “GPT 스토어가 애플 앱스토어와 구글... ",
+      "pubDate": "Fri, 26 Jan 2024 12:28:00 +0900"
     }
   ]
 }
