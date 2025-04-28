@@ -1,0 +1,141 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.music-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.volume-icon {
+    font-size: 24px;
+    color: #4caf50;
+}
+
+.volume-control input[type="range"] {
+    flex: 1;
+    height: 6px;
+    -webkit-appearance: none;
+    background: #e0e0e0;
+    border-radius: 6px;
+    outline: none;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #4caf50;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+.playlist {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.music-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.music-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.music-item.playing {
+    background-color: #e8f5e9;
+    border-left: 4px solid #4caf50;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+}
+
+.music-info {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.music-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    color: #333;
+}
+
+.play-button {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background-color: #4caf50;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 18px;
+}
+
+.play-button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+.play-button.playing {
+    background-color: #f44336;
+}
+
+.play-button.playing:hover {
+    background-color: #e53935;
+}
+
+@media (max-width: 600px) {
+    .music-container {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    .music-item {
+        padding: 14px;
+    }
+
+    .play-button {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .music-title {
+        font-size: 16px;
+    }
+} 
