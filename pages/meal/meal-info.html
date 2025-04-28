@@ -46,8 +46,10 @@
     </footer>
 
     <script>
-        // 오늘 요일 강조
-        const today = new Date().getDay();
+        // 오늘 날짜와 요일 가져오기
+        const today = new Date();
+        const currentDate = today.getDate();
+        const currentDay = today.getDay();
         const weekdays = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
 
         // JSON 데이터 로드
@@ -60,19 +62,31 @@
                     const rowspan = day.menu.length;
                     const tr = document.createElement('tr');
                     tr.innerHTML = `<td rowspan="${rowspan}">${day.date}<br>${day.day}</td><td>${day.menu[0]}</td>`;
-                    if (day.day === weekdays[today]) {
+                    
+                    // 날짜에서 숫자만 추출 (예: "2024-03-20" -> "20")
+                    const dayDate = parseInt(day.date.split('-')[2]);
+                    
+                    // 오늘 날짜와 요일이 모두 일치하는 경우에만 강조
+                    if (dayDate === currentDate && day.day === weekdays[currentDay]) {
                         tr.classList.add('highlight');
                     }
                     tbody.appendChild(tr);
+                    
                     for (let i = 1; i < day.menu.length; i++) {
                         const extraTr = document.createElement('tr');
                         extraTr.innerHTML = `<td>${day.menu[i]}</td>`;
-                        if (day.day === weekdays[today]) {
+                        if (dayDate === currentDate && day.day === weekdays[currentDay]) {
                             extraTr.classList.add('highlight');
                         }
                         tbody.appendChild(extraTr);
                     }
                 });
+
+                // 강조된 행을 찾아서 스크롤
+                const highlightedRow = document.querySelector('.highlight');
+                if (highlightedRow) {
+                    highlightedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
             })
             .catch(error => console.error('Error loading meal data:', error));
     </script>
