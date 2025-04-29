@@ -1,6 +1,4 @@
-<script type="text/javascript">
- 
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8" />
@@ -10,6 +8,80 @@
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="icon" type="image/png" sizes="180x180" href="/favicon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+    <style>
+        .meal-cards {
+            display: grid;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .meal-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .meal-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .day {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .menu-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .menu-list li:last-child {
+            border-bottom: none;
+        }
+
+        .highlight {
+            background-color: #fff9e6;
+            border: 2px solid #ffd700;
+        }
+
+        @media (max-width: 768px) {
+            .meal-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .meal-card {
+                margin: 0.5rem;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .meal-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -22,18 +94,8 @@
     <main>
         <div class="container">
             <section>
-                <div class="table-container">
-                    <table role="grid">
-                        <thead>
-                            <tr>
-                                <th scope="col">날짜/요일</th>
-                                <th scope="col">중식 메뉴</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- JSON 데이터로 동적 로드 -->
-                        </tbody>
-                    </table>
+                <div class="meal-cards" id="mealCards">
+                    <!-- JSON 데이터로 동적 로드 -->
                 </div>
             </section>
         </div>
@@ -56,36 +118,40 @@
         fetch('./data/meal.json')
             .then(response => response.json())
             .then(data => {
-                const tbody = document.querySelector('tbody');
-                tbody.innerHTML = '';
+                const mealCards = document.getElementById('mealCards');
+                mealCards.innerHTML = '';
+                
                 data.forEach(day => {
-                    const rowspan = day.menu.length;
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `<td rowspan="${rowspan}">${day.date}<br>${day.day}</td><td>${day.menu[0]}</td>`;
+                    const card = document.createElement('div');
+                    card.className = 'meal-card';
                     
                     // 날짜에서 숫자만 추출 (예: "2024-03-20" -> "20")
                     const dayDate = parseInt(day.date.split('-')[2]);
                     
-                    // 오늘 날짜와 요일이 모두 일치하는 경우에만 강조
+                    // 오늘 날짜와 요일이 모두 일치하는 경우 강조
                     if (dayDate === currentDate && day.day === weekdays[currentDay]) {
-                        tr.classList.add('highlight');
+                        card.classList.add('highlight');
                     }
-                    tbody.appendChild(tr);
                     
-                    for (let i = 1; i < day.menu.length; i++) {
-                        const extraTr = document.createElement('tr');
-                        extraTr.innerHTML = `<td>${day.menu[i]}</td>`;
-                        if (dayDate === currentDate && day.day === weekdays[currentDay]) {
-                            extraTr.classList.add('highlight');
-                        }
-                        tbody.appendChild(extraTr);
-                    }
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <h3>${day.date}</h3>
+                            <span class="day">${day.day}</span>
+                        </div>
+                        <div class="card-body">
+                            <ul class="menu-list">
+                                ${day.menu.map(menu => `<li>${menu}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                    
+                    mealCards.appendChild(card);
                 });
 
-                // 강조된 행을 찾아서 스크롤
-                const highlightedRow = document.querySelector('.highlight');
-                if (highlightedRow) {
-                    highlightedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // 강조된 카드를 찾아서 스크롤
+                const highlightedCard = document.querySelector('.highlight');
+                if (highlightedCard) {
+                    highlightedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             })
             .catch(error => console.error('Error loading meal data:', error));
