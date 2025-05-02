@@ -8,8 +8,8 @@ from datetime import datetime
 # // API 키가 유출되지 않도록 관리에 유의하고, 변경 시 코드에 반영하는 것을 잊지 마세요.
 
 # ✅ 네이버 API 정보
-client_id = "Qn7GYYC_k7IbzNHPk1UE"  # 네이버 클라이언트 ID
-client_secret = "8cjTKYhRYn"  # 네이버 클라이언트 Secret
+client_id = "???????"  # 네이버 클라이언트 ID
+client_secret = "???????"  # 네이버 클라이언트 Secret
 query = "it dev 개발 소프트웨어 sw"
 display = 5
 
