@@ -21,7 +21,7 @@ const menuData = [
             { name: "그린티라떼", priceHot: 3000, priceIce: 3300 },
             { name: "토피넛라떼", priceHot: 3000, priceIce: 3300 },
             { name: "로얄밀크티", priceHot: 3200, priceIce: 3500 },
-            { name: "허니미숫가루", priceHot: 3200, priceIce: 3500, soldOut: false },
+            { name: "허니미숫가루", priceHot: 3200, priceIce: 3500, soldOut: true },
             { name: "우유", priceIce: 2200 }
         ]
     },
@@ -47,7 +47,7 @@ const menuData = [
             { name: "오레오쉐이크", price: 4000 },
             { name: "딸기주스", price: 3800 },
             { name: "바나나주스", price: 3800 },
-            { name: "오렌지주스", price: 3800, soldOut: false },
+            { name: "오렌지주스", price: 3800, soldOut: true },
             { name: "딸기 + 바나나 주스", price: 4000 },
             { name: "블루베리 + 바나나 주스", price: 4000 },
             { name: "복숭아 아이스티", price: 2800 }
@@ -72,7 +72,22 @@ const menuData = [
         category: "SIDE",
         items: [
             { name: "초코칩머핀", price: 2500 },
-            { name: "블루베리머핀", price: 2500 }
+            { name: "블루베리머핀", price: 2500 },
+            { name: "크림치즈 베이글 - 플레인", price: 3000, soldOut: true },
+            { name: "크림치즈 베이글 - 블루베리", price: 3000, soldOut: true },
+            { name: "오리지널 핫도그", price: 3500, soldOut: true },
+            { name: "잉글리쉬머핀 샌드위치", price: 3700 },
+            { name: "크로크무슈 샌드위치", price: 3800 },
+            { name: "허니버터 브레드", price: 4500 },
+            { name: "수프림 쿠키", price: 1800 }
+        ]
+    },
+    {
+        category: "SET MENU",
+        items: [
+            { name: "잉글리쉬머핀 + 아메리카노", price: 4700 },
+            { name: "크로크무슈 + 아메리카노", price: 4800 },
+            { name: "허니버터브레드 + 아메리카노", price: 5500 }
         ]
     }
 ];
@@ -93,19 +108,28 @@ menuData.forEach(category => {
         itemElement.classList.add('menu-item');
 
         const itemName = document.createElement('h3');
-        itemName.textContent = item.name;
+
+        let menuName = "";
+
+        if (item.soldOut) {
+            menuName += '(품절) ';
+        }
+
+        menuName += item.name;
+
+        itemName.textContent = menuName;
         itemElement.appendChild(itemName);
 
         let priceText = '';
         if (item.price) {
             priceText = `가격: ${formatPrice(item.price)}`;
         } else if (item.priceHot && item.priceIce) {
-            priceText = `HOT ${formatPrice(item.priceHot)} | ICE ${formatPrice(item.priceIce)}`;
+            priceText = `ICE ${formatPrice(item.priceIce)} &nbsp;|&nbsp; HOT ${formatPrice(item.priceHot)}`;
+        } else if (item.priceIce) {
+            priceText = `ICE ${formatPrice(item.priceIce)}`;
         }
 
-        if (item.soldOut) {
-            priceText += ' (품절)';
-        }
+        
 
         const itemPrice = document.createElement('p');
         itemPrice.innerHTML = priceText;

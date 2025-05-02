@@ -12,29 +12,10 @@ body {
     font-size: 24px;
     font-weight: bold;
     margin: 20px 0 10px 15px;
-    /* 왼쪽 여백을 추가 */
     color: #333;
 }
 
-.container {
-    width: 90%;
-    margin: 0 auto;
-    padding: 20px 0;
-}
-
-
-
-.operation-hours {
-    text-align: center;
-    font-size: 18px;
-    margin: 20px 0;
-}
-
-.operation-hours p {
-    margin: 5px 0;
-    color: #555;
-}
-
+/* 메뉴 항목 스타일 */
 .menu-item {
     background-color: #fff;
     border-radius: 10px;
@@ -43,7 +24,7 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.menu-item h2 {
+.menu-item h3 {
     margin: 0;
     font-size: 20px;
     color: #333;
@@ -58,10 +39,15 @@ body {
     font-weight: bold;
 }
 
+/* 품절 표시 스타일 */
+.menu-item p.soldOut {
+    color: red;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
 
-    .menu-item h2 {
+    .menu-item h3 {
         font-size: 18px;
     }
 
@@ -72,15 +58,11 @@ body {
     .operation-hours p {
         font-size: 16px;
     }
-
-    footer .container {
-        font-size: 12px;
-    }
 }
 
 @media (max-width: 480px) {
 
-    .menu-item h2 {
+    .menu-item h3 {
         font-size: 16px;
     }
 
@@ -90,9 +72,5 @@ body {
 
     .operation-hours p {
         font-size: 14px;
-    }
-
-    footer .container {
-        font-size: 10px;
     }
 }
