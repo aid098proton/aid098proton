@@ -117,7 +117,7 @@ public class GameManager extends java.lang.Object {
 	/***
 	 * 메뉴 출력 */
 	private void showMenu() {
-		System.out.printf("\n%s", "===========================menu===========================");
+		System.out.printf("\n%s", "===========================menu===========================\n");
 		System.out.printf("%s", "1.탐색 및 잡기 | 2.고양이 지명수배 (전체) | 3.내가 잡은 고양이들 | 종료(q)\n");
 		System.out.printf("%s", "번호를 선택해주세요.\n");
 	}
