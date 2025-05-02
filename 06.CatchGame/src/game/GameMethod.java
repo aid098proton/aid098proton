@@ -1,7 +1,5 @@
 package game;
 
-import java.util.Random;
-
 import cat.Base;
 import cat.Cat1;
 import cat.Cat2;
@@ -16,7 +14,7 @@ import cat.Cat3;
  *   <li>고양이 탐색 및 포획 로직</li>
  *   <li>고양이 정보 출력 및 상태 관리</li>
  * </ul>  */
-public class GameMethod {
+public class GameMethod extends java.lang.Object {
 	// 게임에 등장하는 모든 고양이 객체를 저장하는 배열
 	Base[] cat = new Base[Config.CAT_LENGTH];
 
@@ -24,10 +22,10 @@ public class GameMethod {
 	int catchCount = 0;
 	
 	// 아이템 (츄르) 개수
-	int itemCount = 3;
+	int itemCount = 1;
 
 	/***
-	 * GameMethod 클래스의 생성자 게임에 등장하는 10마리의 고양이 객체를 생성하고 초기화합니다. 	 */
+	 * GameMethod 클래스의 생성자 게임에 등장하는 3마리의 고양이 객체를 생성하고 초기화합니다. 	 */
 	public GameMethod() {
 		// 3마리의 고양이 객체를 생성하여 배열에 할당
 		this.cat[0] = new Cat1();
@@ -43,7 +41,8 @@ public class GameMethod {
 		System.out.println("고양이 수배 목록");
 		// 고양이 이름과 포획 여부를 출력
 		for (int i = 0; i < Config.CAT_LENGTH; i++) {
-			System.out.println((i + 1) + "번째 고양이");
+			int number = (i + 1);
+			System.out.println(number + "번째 고양이");
 			System.out.print(this.cat[i].name + "(");
 			if (this.cat[i].isCatch == true) {
 				System.out.println(" O )");
@@ -53,6 +52,7 @@ public class GameMethod {
 		}
 
 		System.out.println();
+		
 		// 상세 조회를 위한 사용자 입력을 받는 부분
 		for (int i = 0; i < Config.GAME_LENGTH; i++) {
 			System.out.println();
@@ -65,40 +65,41 @@ public class GameMethod {
 			}
 
 			// 사용자 입력값 검증 - 숫자인지 확인하여 잘못된 입력 처리
-			if (!input.matches("\\d+")) { // 숫자를 의미하는 정규표현식 [0-9]와 같은 의미
-				System.out.println("1~10 중에 입력해주세요.");
+			if (input.matches("\\d+") == false) { // 숫자를 의미하는 정규표현식 [0-9]와 같은 의미
+				System.out.println("1~3 중에 입력해주세요.");
 				continue;
 			}
 
 			int inputNum = Integer.parseInt(input);
 
-			// 1~10번 사이의 고양이 번호에 대해 상세 조회
-			if (inputNum < 11 && inputNum > 0) {
+			// 1~3번 사이의 고양이 번호에 대해 상세 조회
+			if (inputNum <= Config.CAT_LENGTH && inputNum > 0) {
 				this.printCat(inputNum);
 			} else {
-				System.out.println("1~10 중에 입력해주세요.");
+				System.out.printf("1~%d 중에 입력해주세요.", Config.CAT_LENGTH);
 			}
 		}
+		
 		System.out.println();
 	}
 
 	/***
 	 * 특정 고양이의 상세 정보를 출력하는 메소드
 	 * 
-	 * @param num 조회할 고양이의 번호 (1~10)
+	 * @param num 조회할 고양이의 번호 (1~3)
 	 * <br>
 	 * 출력 정보: - 이름 - 포획 여부 - 성별 - 나이 - 민첩성	 */
 	public void printCat(int num) {
-		System.out.println();
-		System.out.println("-----------" + this.cat[num - 1].name + "의 상세조회" + "-----------");
-		if (this.cat[num - 1].isCatch == true) {
+		int index = num - 1;
+		System.out.printf("\n-----------%s의 상세조회-----------", this.cat[index].name);
+		if (this.cat[index].isCatch == true) {
 			System.out.println("포획여부 : O");
 		} else {
 			System.out.println("포획여부 : X");
 		}
-		System.out.println("성별 : " + this.cat[num - 1].gender);
-		System.out.println("나이 : " + this.cat[num - 1].age);
-		System.out.println("민첩성 : " + this.cat[num - 1].speed);
+		System.out.println("성별 : " + this.cat[index].gender);
+		System.out.println("나이 : " + this.cat[index].age);
+		System.out.println("민첩성 : " + this.cat[index].speed);
 	}
 
 	/***
@@ -119,8 +120,7 @@ public class GameMethod {
 				}
 			}
 			// 진행 상황 출력
-			System.out.println("진행사항 (" + count + "/" + Config.CAT_LENGTH + ")");
-			System.out.println();
+			System.out.printf("진행사항 (%d/%d)\n\n", count, Config.CAT_LENGTH);
 		}
 	}
 
@@ -130,11 +130,9 @@ public class GameMethod {
 	 * <br>
 	 * 진행 순서: 1. 랜덤한 미포획 고양이 선택 2. 고양이 탐색 시도 3. 탐색 성공 시 포획 시도 4. 포획 성공 시 catchCount 증가 	 */
 	public void searchCat() {
-		Random random = new Random();
-
 		int num = 0;
 		for (int i = 0; i < Config.GAME_LENGTH; i++) {
-			num = random.nextInt(Config.CAT_LENGTH);
+			num = Config.random.nextInt(Config.CAT_LENGTH);
 			if (this.cat[num].isCatch == true) {
 				continue;
 			} else {
@@ -149,8 +147,9 @@ public class GameMethod {
 			boolean isItem = false;
 			// item을 다 소진하면 더 이상 아이템 사용 여부를 묻지 않음
 			if(this.itemCount > 0) {
-				System.out.println("츄르를 사용하시겠습니까? y/n (남은개수 : " + this.itemCount + ")");
-				while(true){
+				System.out.printf("츄르를 사용하시겠습니까? y/n (남은개수 : %d)\n", this.itemCount);
+				
+				while(true) {
 					String input = Config.scanner.nextLine();
 					if(input.equals("y")) {
 						isItem = true;

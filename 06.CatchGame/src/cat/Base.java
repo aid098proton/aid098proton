@@ -4,7 +4,7 @@ package cat;
  * 추상 클래스 Base는 게임 내 고양이의 공통 속성과 기본 행동을 정의합니다.  
  * 모든 고양이 클래스의 부모 클래스로서, 이름, 나이, 성별, 속도 등 공통 필드를 가지고 있으며, 
  * 고양이를 찾고 잡는 기능은 추상 메서드로 정의되어 하위 클래스에서 구현해야 합니다. */
-public abstract class Base {
+public abstract class Base extends java.lang.Object {
 
     /** 고양이의 이름 */
     public String name;
@@ -42,4 +42,8 @@ public abstract class Base {
      * @param item 아이템 사용 여부 (true: 아이템 사용, false: 아이템 미사용)
      * @return 고양이를 잡았으면 true, 그렇지 않으면 false      */
     public abstract boolean catchCat(boolean item);
+    
+    public String toString() {
+    	return "";
+    }
 }

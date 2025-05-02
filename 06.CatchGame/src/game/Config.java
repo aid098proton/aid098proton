@@ -1,5 +1,6 @@
 package game;
 
+import java.util.Random;
 import java.util.Scanner;
 
 /***
@@ -13,7 +14,7 @@ import java.util.Scanner;
  *   <li>게임에서 공통으로 사용되는 {@link Scanner} 객체</li>
  *   <li>게임에서 사용되는 색상 코드 상수</li>
  * </ul> */
-public class Config {
+public class Config extends java.lang.Object {
     
     /** 
      * 게임에 등장하는 총 고양이의 수 
@@ -29,6 +30,16 @@ public class Config {
      * 게임 전체에서 공통으로 사용되는 {@link Scanner} 객체 
      * 사용자 입력을 받는 데 사용됩니다.     */
     public static Scanner scanner = new Scanner(System.in);
+    
+    /**
+     * 게임 전체에서 공통으로 사용되는 {@link Random} 객체
+     * 랜덤 숫자를 받는 데 사용됩니다.     */
+    public static Random random = new Random();
+    
+    /**
+     * 게임 전체에서 공통으로 사용되는 {@link StringBuilder} 객체
+     * 출력 하는 데 사용됩니다.      */
+    public static StringBuilder stringBuilder = new StringBuilder();
 
     /** 
      * 빨간색 출력에 사용되는 ANSI 이스케이프 코드

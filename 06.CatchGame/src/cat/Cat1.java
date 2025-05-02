@@ -1,6 +1,5 @@
 package cat;
 
-import java.util.Random;
 import game.Config;
 
 /**
@@ -24,13 +23,14 @@ public class Cat1 extends Base {
      * - 나이를 3살로 설정
      * - 성별을 수컷으로 설정
      * - 민첩성을 1로 설정
-     * - 포획 확률을 90%로 설정     */
+     * - 포획 확률을 50%로 설정     */
     public Cat1() {
         this.name = "춘식이";
         this.age = 3;
         this.gender = "수컷";
         this.speed = 1;
-        this.catchProbability = 90;  // 포획 확률 90%
+        // 포획 확률 50%
+        this.catchProbability = 50;
     }
 
     /**
@@ -41,8 +41,8 @@ public class Cat1 extends Base {
      *         false - 발견하지 못함     */
     @Override
     public boolean findCat() {
-        Random random = new Random();
-        int randNumber = random.nextInt(2); // 0 또는 1로 랜덤 결정
+        // 0 또는 1로 랜덤 결정
+        int randNumber = Config.random.nextInt(2); 
         if (randNumber == 1) {
             System.out.println(Config.BLUE + "[탐색 성공]");
             System.out.println(Config.GREEN + this.name + Config.RESET + "을(를) 발견했습니다!!");
@@ -64,12 +64,14 @@ public class Cat1 extends Base {
      *         false - 포획 실패     */
     @Override
     public boolean catchCat(boolean item) {
-        Random random = new Random();
-        int randNumber = random.nextInt(100); // 0~99 범위에서 랜덤 확률 생성
-        if (randNumber < this.catchProbability || item == true) {  // 확률이 catchProbability 이하일 때 포획 성공
+        // 0~99 범위에서 랜덤 확률 생성
+        int randNumber = Config.random.nextInt(100); 
+        // 확률이 catchProbability 이하일 때 포획 성공
+        if (randNumber < this.catchProbability || item == true) {  
             System.out.println(Config.BLUE + "[잡았다!]");
             System.out.println(Config.GREEN + this.name + Config.RESET + "가(이) 야옹 소리를 내며 다가왔습니다.");
-            this.isCatch = true; // 포획 성공 상태 변경
+            // 포획 성공 상태 변경
+            this.isCatch = true; 
             return true;
         }
         System.out.println(Config.RED + "[포획 실패..]");
