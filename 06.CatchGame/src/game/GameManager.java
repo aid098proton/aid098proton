@@ -28,7 +28,7 @@ public class GameManager {
 	 * </ol> 	 */
 	public void run() {
 		// 게임 시작 메시지 출력
-		System.out.println("지금 폴리텍에 키우던 10마리의 고양이가 실종되었습니다.");
+		System.out.println("지금 폴리텍에 키우던 3마리의 고양이가 실종되었습니다.");
 		System.out.println("여러분의 도움이 필요해요.. 힘을 합쳐 찾아주세요!!");
 		System.out.println("------------------------------------------");
 		System.out.println("게임 설명");

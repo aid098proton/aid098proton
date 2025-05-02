@@ -36,17 +36,10 @@ public class GameMethod {
 	/***
 	 * GameMethod 클래스의 생성자 게임에 등장하는 10마리의 고양이 객체를 생성하고 초기화합니다. 	 */
 	public GameMethod() {
-		// 10마리의 고양이 객체를 생성하여 배열에 할당
+		// 3마리의 고양이 객체를 생성하여 배열에 할당
 		this.cat[0] = new Cat1();
 		this.cat[1] = new Cat2();
 		this.cat[2] = new Cat3();
-		this.cat[3] = new Cat4();
-		this.cat[4] = new Cat5();
-		this.cat[5] = new Cat6();
-		this.cat[6] = new Cat7();
-		this.cat[7] = new Cat8();
-		this.cat[8] = new Cat9();
-		this.cat[9] = new Cat10();
 	}
 
 	/***

@@ -17,8 +17,8 @@ public class Config {
     
     /** 
      * 게임에 등장하는 총 고양이의 수 
-     * Cat1부터 Cat10까지 총 10마리의 고양이를 의미합니다.     */
-    public static final int CAT_LENGTH = 10;
+     * Cat1부터 Cat3까지 총 3마리의 고양이를 의미합니다.     */
+    public static final int CAT_LENGTH = 3;
 
     /** 
      * 게임의 최대 진행 가능 턴 수 
