@@ -1,9 +1,16 @@
 {
-  "lastBuildDate": "Mon, 28 Apr 2025 08:02:08 +0900",
-  "total": 79,
+  "lastBuildDate": "Sat, 03 May 2025 08:06:33 +0900",
+  "total": 80,
   "start": 1,
   "display": 5,
   "items": [
+    {
+      "title": "KT, 깃허브와 '<b>개발</b>자 워크숍'…업무혁신 사례 공유",
+      "originallink": "https://www.itbiznews.com/news/articleView.html?idxno=167047",
+      "link": "https://www.itbiznews.com/news/articleView.html?idxno=167047",
+      "description": "<b>SW</b>) <b>개발</b> 및 협업 플랫폼인 '깃허브 엔터프라이즈'와 AI 코딩 도우미 '깃허브 코파일럿'으로 <b>개발</b> 조직의 생산성을 끌어올리고 직원들의 업무 부하를 줄였다. 이번 워크숍에서 발표에 나선 KT 기술혁신부문 <b>IT Dev</b>본부... ",
+      "pubDate": "Mon, 28 Apr 2025 10:46:00 +0900"
+    },
     {
       "title": "[ZD <b>SW</b> 투데이] 시엑스알, LLM 기반 건설 현장 위험성 평가 시스템 <b>개발</b>...",
       "originallink": "https://zdnet.co.kr/view/?no=20250326171248",
@@ -31,13 +38,6 @@
       "link": "https://www.itworld.co.kr/news/344292",
       "description": "설치되는 <b>소프트웨어</b>의 기능을 결합하므로 웹 <b>개발</b>에서 중요한 개념이다. 네이티브와... if ('serviceWorker' in navigator) { // 1 window.addEventListener('load', () =&gt; { // 2 navigator.serviceWorker.register('<b>sw</b>.js... ",
       "pubDate": "Mon, 15 Jul 2024 12:38:00 +0900"
-    },
-    {
-      "title": "AI 넘어 ‘플랫폼 공룡’ 꿈꾼다…애플·구글 뒤쫓는 챗GPT [스페셜리포...",
-      "originallink": "https://www.mk.co.kr/article/10930016",
-      "link": "https://n.news.naver.com/mnews/article/024/0000087127?sid=101",
-      "description": "먼저 2023년 11월 데브 데이(<b>Dev</b> Day·<b>개발</b>자의 날) 무대에서 공개한 GPTs다. 복잡한 코딩 없이 몇 번의 텍스트... <b>소프트웨어</b> <b>개발</b>사에는 치명적인 문제다. <b>IT</b>업계 관계자는 “GPT 스토어가 애플 앱스토어와 구글... ",
-      "pubDate": "Fri, 26 Jan 2024 12:28:00 +0900"
     }
   ]
 }
