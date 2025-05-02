@@ -4,15 +4,8 @@ import java.util.Random;
 
 import cat.Base;
 import cat.Cat1;
-import cat.Cat10;
 import cat.Cat2;
 import cat.Cat3;
-import cat.Cat4;
-import cat.Cat5;
-import cat.Cat6;
-import cat.Cat7;
-import cat.Cat8;
-import cat.Cat9;
 
 /***
  * GameMethod 클래스 게임의 핵심 기능들을 구현한 클래스입니다. 고양이 관리, 탐색, 포획, 상태 출력 등의 주요 게임 메소드들을 포함합니다.
