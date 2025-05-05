@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,7 +19,7 @@
         .meal-card {
             background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             padding: 1rem;
             transition: transform 0.2s;
         }
@@ -66,23 +67,44 @@
             border: 2px solid #ffd700;
         }
 
-        @media (max-width: 768px) {
+        /* 미디어 쿼리 수정 - PC 화면에서 5열로 표시 */
+        @media (min-width: 1200px) {
             .meal-cards {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(5, 1fr);
             }
-            
+        }
+
+        /* 중간 화면 크기에서 3열로 표시 */
+        @media (min-width: 769px) and (max-width: 1199px) {
+            .meal-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* 작은 화면에서 2열로 표시 */
+        @media (min-width: 576px) and (max-width: 768px) {
+            .meal-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
             .meal-card {
                 margin: 0.5rem;
             }
         }
 
-        @media (min-width: 769px) {
+        /* 모바일 화면에서 1열로 표시 */
+        @media (max-width: 575px) {
             .meal-cards {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
+            }
+
+            .meal-card {
+                margin: 0.5rem;
             }
         }
     </style>
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -120,19 +142,19 @@
             .then(data => {
                 const mealCards = document.getElementById('mealCards');
                 mealCards.innerHTML = '';
-                
+
                 data.forEach(day => {
                     const card = document.createElement('div');
                     card.className = 'meal-card';
-                    
+
                     // 날짜에서 숫자만 추출 (예: "2024-03-20" -> "20")
                     const dayDate = parseInt(day.date.split('-')[2]);
-                    
+
                     // 오늘 날짜와 요일이 모두 일치하는 경우 강조
                     if (dayDate === currentDate && day.day === weekdays[currentDay]) {
                         card.classList.add('highlight');
                     }
-                    
+
                     card.innerHTML = `
                         <div class="card-header">
                             <h3>${day.date}</h3>
@@ -144,7 +166,7 @@
                             </ul>
                         </div>
                     `;
-                    
+
                     mealCards.appendChild(card);
                 });
 
@@ -157,4 +179,5 @@
             .catch(error => console.error('Error loading meal data:', error));
     </script>
 </body>
+
 </html>
