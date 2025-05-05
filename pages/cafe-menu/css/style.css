@@ -7,48 +7,179 @@ body {
     color: #333;
 }
 
-/* 메뉴 카테고리 제목 여백 수정 */
+/* 카테고리 네비게이션 */
+.category-nav {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin-bottom: 15px;
+    z-index: 100;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
+
+.category-nav button {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin-right: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.category-nav button:hover {
+    background-color: #eee;
+}
+
+.category-nav button.active {
+    background-color: #4a6da7;
+    color: white;
+    border-color: #4a6da7;
+}
+
+/* 운영 시간 스타일 */
+.operation-hours {
+    background-color: #fff;
+    border-left: 4px solid #4a6da7;
+    padding: 10px 15px;
+    margin: 15px 0;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.operation-hours p {
+    margin: 5px 0;
+    color: #555;
+}
+
+/* 메뉴 카테고리 스타일 */
+.menu-category {
+    margin-bottom: 30px;
+    padding-top: 15px;
+}
+
 .menu-category h2 {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
-    margin: 20px 0 10px 15px;
-    color: #333;
+    margin: 0 0 15px 0;
+    padding: 10px 15px;
+    color: #fff;
+    background-color: #4a6da7;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.category-icon {
+    margin-right: 10px;
+    font-size: 24px;
 }
 
 /* 메뉴 항목 스타일 */
 .menu-item {
     background-color: #fff;
     border-radius: 10px;
-    padding: 20px;
-    margin: 10px 0;
+    padding: 15px 20px;
+    margin: 12px 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.menu-item-content {
+    flex: 1;
 }
 
 .menu-item h3 {
-    margin: 0;
-    font-size: 20px;
+    margin: 0 0 5px 0;
+    font-size: 18px;
     color: #333;
 }
 
 .menu-item p {
-    font-size: 16px;
+    font-size: 15px;
     color: #666;
+    margin: 5px 0 0 0;
 }
 
-.menu-item p span {
+/* 가격 스타일 */
+.price-tag {
     font-weight: bold;
+    color: #4a6da7;
+}
+
+.price-hot,
+.price-ice {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 15px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.price-hot {
+    background-color: rgba(255, 99, 71, 0.1);
+    border: 1px solid rgba(255, 99, 71, 0.3);
+}
+
+.price-ice {
+    background-color: rgba(79, 195, 247, 0.1);
+    border: 1px solid rgba(79, 195, 247, 0.3);
 }
 
 /* 품절 표시 스타일 */
-.menu-item p.soldOut {
-    color: red;
+.menu-item.soldout {
+    opacity: 0.7;
+    background-color: #f9f9f9;
+}
+
+.soldout-badge {
+    display: inline-block;
+    background-color: #ff6b6b;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 8px;
+    vertical-align: middle;
 }
 
 /* 반응형 디자인 */
-@media (max-width: 768px) {
+@media (min-width: 768px) {
+    .menu-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .menu-category {
+        grid-column: 1 / -1;
+    }
+}
 
+@media (max-width: 768px) {
+    .menu-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
     .menu-item h3 {
-        font-size: 18px;
+        font-size: 17px;
+        margin-bottom: 8px;
     }
 
     .menu-item p {
@@ -56,21 +187,29 @@ body {
     }
 
     .operation-hours p {
-        font-size: 16px;
+        font-size: 15px;
+    }
+    
+    .price-info {
+        margin-top: 8px;
     }
 }
 
 @media (max-width: 480px) {
-
     .menu-item h3 {
         font-size: 16px;
     }
 
     .menu-item p {
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .operation-hours p {
         font-size: 14px;
+    }
+    
+    .category-nav button {
+        padding: 6px 12px;
+        font-size: 13px;
     }
 }
