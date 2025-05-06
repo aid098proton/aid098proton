@@ -6,6 +6,15 @@ function formatPrice(price) {
 // 메뉴 데이터와 카테고리 아이콘 추가
 const menuData = [
     {
+        category: "SET MENU",
+        icon: "🍽️",
+        items: [
+            { name: "잉글리쉬머핀 + 아메리카노", price: 4700 },
+            { name: "크로크무슈 + 아메리카노", price: 4800 },
+            { name: "허니버터브레드 + 아메리카노", price: 5500 }
+        ]
+    },
+    {
         category: "COFFEE",
         icon: "☕",
         items: [
@@ -87,16 +96,7 @@ const menuData = [
             { name: "허니버터 브레드", price: 4500 },
             { name: "수프림 쿠키", price: 1800 }
         ]
-    },
-    {
-        category: "SET MENU",
-        icon: "🍽️",
-        items: [
-            { name: "잉글리쉬머핀 + 아메리카노", price: 4700 },
-            { name: "크로크무슈 + 아메리카노", price: 4800 },
-            { name: "허니버터브레드 + 아메리카노", price: 5500 }
-        ]
-    }
+    },   
 ];
 
 // 페이지가 로드되면 실행
