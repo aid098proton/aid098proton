@@ -1,117 +1,204 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+ /* 웹 폰트 추가 - Noto Serif KR */
+ @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap');
 
-html, body {
-    height: 100%;
-    width: 100%;
-}
+ * {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+ }
 
-body {
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    position: relative;
-}
+ html,
+ body {
+     height: 100%;
+     width: 100%;
+ }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-    padding: 0 20px;
-}
+ /* 기존 body 스타일을 수정 */
+ body {
+     font-family: 'Noto Serif KR', serif;
+     line-height: 1.7;
+     color: #333;
+     margin: 0;
+     padding: 0;
+     display: flex;
+     flex-direction: column;
+     min-height: 100vh;
+     position: relative;
+     font-size: 16px;
+ }
 
-header {
-    background: linear-gradient(135deg, #007acc, #005f99);
-    color: white;
-    text-align: center;
-    padding: 2rem 0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    width: 100%;
-}
+ .container {
+     max-width: 1200px;
+     margin: 0 auto;
+     width: 100%;
+     padding: 0 20px;
+ }
 
-header .container {
-    position: relative;
-}
+ header {
+     background: linear-gradient(135deg, #007acc, #005f99);
+     color: white;
+     text-align: center;
+     padding: 1.8rem 0;
+     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+     width: 100%;
+ }
 
-h1 {
-    color: white;
-    margin: 0;
-    font-size: 1.8rem;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    font-weight: 600;
-}
+ header .container {
+     position: relative;
+ }
 
-h2 {
-    color: #34495e;
-    margin-bottom: 15px;
-}
+ /* 헤더 스타일 수정 */
+ h1 {
+     color: white;
+     margin: 0;
+     font-size: 1.7rem;
+     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+     font-weight: 700;
+     letter-spacing: 0.03em;
+ }
 
-.subtitle {
-    font-size: 0.9rem;
-    color: #666;
-}
+ h2 {
+     color: #1e3a5c;
+     margin-bottom: 15px;
+     font-size: 1.3rem;
+     font-weight: 600;
+     letter-spacing: 0.02em;
+ }
 
-main {
-    flex: 1;
-    padding: 2rem 0;
-    padding-bottom: 6rem;
-    width: 100%;
-}
+ /* 부제목 스타일 개선 */
+ .subtitle {
+     font-size: 0.85rem;
+     color: #666;
+     font-weight: 400;
+     margin-left: 0.3rem;
+ }
 
-main .container {
-    padding: 0 20px;
-}
 
-footer {
-    background: linear-gradient(135deg, #007acc, #005f99);
-    color: white;
-    text-align: center;
-    padding: 2rem 0;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    font-size: 1.8rem;
-    font-weight: 600;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    width: 100%;
-    z-index: 10;
-}
+ main {
+     flex: 1;
+     padding: 2rem 0;
+     padding-bottom: 6rem;
+     width: 100%;
+ }
 
-.back-btn {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #fff;
-    text-decoration: none;
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    background-color: rgba(255, 255, 255, 0.1);
-    transition: background-color 0.3s;
-}
+ main .container {
+     padding: 0 20px;
+ }
 
-.back-btn:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-}
+ /* 푸터 텍스트 스타일 */
+ footer {
+     background: linear-gradient(135deg, #007acc, #005f99);
+     color: white;
+     text-align: center;
+     padding: 1.8rem 0;
+     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+     font-size: 1.4rem;
+     font-weight: 500;
+     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+     width: 100%;
+     z-index: 10;
+ }
 
-@media (max-width: 600px) {
-    header, footer {
-        padding: 1.5rem 0;
-    }
-    
-    h1, footer {
-        font-size: 1.5rem;
-    }
-    
-    .back-btn {
-        padding: 0.6rem 1rem;
-        font-size: 0.9rem;
-    }
-}
+ .back-btn {
+     position: absolute;
+     left: 1rem;
+     top: 50%;
+     transform: translateY(-50%);
+     color: #fff;
+     text-decoration: none;
+     font-size: 0.95rem;
+     padding: 0.5rem 1rem;
+     border-radius: 4px;
+     background-color: rgba(255, 255, 255, 0.1);
+     transition: background-color 0.3s;
+     font-weight: 500;
+ }
+
+ .back-btn:hover {
+     background-color: rgba(255, 255, 255, 0.2);
+ }
+
+ /* 추가적인 텍스트 스타일 */
+ p {
+     font-size: 16px;
+     margin-bottom: 1rem;
+ }
+
+ a {
+     color: #007acc;
+     text-decoration: none;
+     transition: color 0.3s;
+ }
+
+ a:hover {
+     color: #0056b3;
+ }
+
+ @media (max-width: 600px) {
+
+     header,
+     footer {
+         padding: 1.4rem 0;
+     }
+
+     h1 {
+         font-size: 1.4rem;
+     }
+
+     h2 {
+         font-size: 1.2rem;
+     }
+
+     footer {
+         font-size: 1.2rem;
+     }
+
+     .back-btn {
+         padding: 0.6rem 1rem;
+         font-size: 0.9rem;
+     }
+
+     p {
+         font-size: 15px;
+     }
+ }
+
+ /* 태블릿 사이즈에 대한 추가 미디어 쿼리 */
+ @media (min-width: 601px) and (max-width: 960px) {
+     h1 {
+         font-size: 1.6rem;
+     }
+
+     h2 {
+         font-size: 1.25rem;
+     }
+
+     footer {
+         font-size: 1.3rem;
+     }
+
+ }
+
+ /* 모바일 화면에 대한 폰트 크기 조정 */
+ @media (max-width: 600px) {
+     h1 {
+         font-size: 1.4rem;
+     }
+
+     h2 {
+         font-size: 1.2rem;
+     }
+
+     footer {
+         font-size: 1.2rem;
+         padding: 1.4rem 0;
+     }
+
+     .back-btn {
+         font-size: 0.9rem;
+     }
+
+     body {
+         font-size: 15px;
+     }
+ }

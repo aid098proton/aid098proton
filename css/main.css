@@ -1,8 +1,16 @@
+/* main.css 파일에 적용할 변경사항 */
+
 main {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
     padding: 2rem;
+}
+
+main .container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;  /* 섹션 간 간격 */
 }
 
 section {
@@ -12,6 +20,18 @@ section {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;  /* 추가 하단 여백 */
+}
+
+/* 섹션 내부 콘텐츠에 여백 추가 */
+section > div {
+    margin-top: 1.5rem;
+}
+
+/* 첫 번째 섹션 (랜덤 인용구) 특별 스타일 */
+section:first-child {
+    background-color: #f8fafc;
+    border-left: 4px solid #007acc;
 }
 
 section:hover {
@@ -20,11 +40,13 @@ section:hover {
 }
 
 section h2 {
-    color: #2c3e50;
+    color: #1e3a5c;
     margin-bottom: 1.5rem;
     padding-bottom: 0.5rem;
     border-bottom: 2px solid #007acc;
     display: inline-block;
+    font-weight: 600;
+    letter-spacing: 0.02em;
 }
 
 .link-btn {
@@ -39,6 +61,8 @@ section h2 {
     font-weight: 500;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
 }
 
 .link-btn:hover {
@@ -54,8 +78,9 @@ section h2 {
     background: #f8f9fa;
     border-radius: 8px;
     border-left: 4px solid #007acc;
-    font-size: 1.1rem;
-    line-height: 1.6;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #444;
 }
 
 button {
@@ -68,6 +93,8 @@ button {
     font-weight: 500;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 0.95rem;
+    font-family: 'Noto Serif KR', serif;
 }
 
 button:hover {
@@ -82,8 +109,24 @@ button:hover {
         gap: 1.5rem;
         padding: 1.5rem;
     }
-    
+
+    main .container {
+        gap: 1.5rem;
+    }
+
     section {
         padding: 1.5rem;
+        margin-bottom: 0.5rem;
     }
-} 
+
+    #random-quote {
+        font-size: 0.95rem;
+        padding: 0.8rem;
+    }
+
+    .link-btn,
+    button {
+        font-size: 0.9rem;
+        padding: 0.7rem 1.3rem;
+    }
+}
