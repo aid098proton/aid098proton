@@ -21,13 +21,48 @@
 
     <main>
         <div class="music-container">
-            <div class="volume-control">
-                <span class="volume-icon">🔊</span>
-                <input type="range" id="volume" min="0" max="100" value="100">
+            <!-- 검색 바 -->
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="음악 검색...">
+                <button id="search-button">🔍</button>
             </div>
 
-            <div class="playlist">
-                <!-- 음악 목록이 여기에 동적으로 추가됩니다 -->
+            <!-- 볼륨 및 플레이어 컨트롤 -->
+            <div class="player-controls-wrapper">
+                <div class="volume-control">
+                    <span class="volume-icon">🔊</span>
+                    <input type="range" id="volume" min="0" max="100" value="100">
+                </div>
+
+                <div class="player-controls">
+                    <button id="prev-button" title="이전 곡">⏮️</button>
+                    <button id="random-toggle" title="랜덤 재생">🔀</button>
+                    <button id="autoplay-toggle" title="자동 재생">🔄</button>
+                    <button id="next-button" title="다음 곡">⏭️</button>
+                </div>
+            </div>
+
+            <!-- 키보드 단축키 도움말 -->
+            <div class="keyboard-shortcuts">
+                <details>
+                    <summary>키보드 단축키 보기</summary>
+                    <ul>
+                        <li><kbd>Space</kbd> - 재생/일시정지</li>
+                        <li><kbd>→</kbd> - 다음 곡</li>
+                        <li><kbd>←</kbd> - 이전 곡</li>
+                        <li><kbd>R</kbd> - 랜덤 재생 토글</li>
+                        <li><kbd>A</kbd> - 자동 재생 토글</li>
+                    </ul>
+                </details>
+            </div>
+
+            <!-- 음악 목록 -->
+            <div class="playlist-container">
+                <h2>🎵 플레이리스트</h2>
+                <div class="playlist">
+                    <!-- 음악 목록이 여기에 동적으로 추가됩니다 -->
+                </div>
+                <div id="no-results" style="display: none;">검색 결과가 없습니다.</div>
             </div>
         </div>
     </main>

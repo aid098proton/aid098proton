@@ -1,8 +1,9 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
     background-color: #f8f9fa;
     margin: 0;
     padding: 0;
+    color: #333;
 }
 
 .music-container {
@@ -11,11 +12,55 @@ body {
     padding: 20px;
 }
 
+/* 검색 바 */
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.search-bar:focus-within {
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+}
+
+#search-input {
+    flex: 1;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    outline: none;
+}
+
+#search-button {
+    background: none;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: transform 0.2s;
+}
+
+#search-button:hover {
+    transform: scale(1.1);
+}
+
+/* 볼륨 및 플레이어 컨트롤 */
+.player-controls-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
 .volume-control {
     display: flex;
     align-items: center;
     gap: 15px;
-    margin-bottom: 30px;
     padding: 15px;
     background-color: white;
     border-radius: 12px;
@@ -50,18 +95,146 @@ body {
     transform: scale(1.1);
 }
 
+.player-controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.player-controls button {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background-color: #f5f5f5;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.player-controls button:hover {
+    background-color: #e0e0e0;
+    transform: scale(1.05);
+}
+
+#prev-button, #next-button {
+    background-color: #e8f5e9;
+    color: #4caf50;
+}
+
+#prev-button:hover, #next-button:hover {
+    background-color: #c8e6c9;
+}
+
+#random-toggle, #autoplay-toggle {
+    opacity: 0.7;
+}
+
+#random-toggle.active, #autoplay-toggle.active {
+    background-color: #4caf50;
+    color: white;
+    opacity: 1;
+}
+
+/* 키보드 단축키 */
+.keyboard-shortcuts {
+    margin-bottom: 20px;
+}
+
+.keyboard-shortcuts details {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 15px;
+}
+
+.keyboard-shortcuts summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #4caf50;
+}
+
+.keyboard-shortcuts ul {
+    padding-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.keyboard-shortcuts li {
+    margin-bottom: 8px;
+}
+
+kbd {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    color: #333;
+    display: inline-block;
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 1;
+    padding: 3px 6px;
+    white-space: nowrap;
+}
+
+/* 플레이리스트 */
+.playlist-container {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 20px;
+}
+
+.playlist-container h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
 .playlist {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.playlist::-webkit-scrollbar {
+    width: 6px;
+}
+
+.playlist::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.playlist::-webkit-scrollbar-thumb {
+    background: #c8e6c9;
+    border-radius: 10px;
+}
+
+.playlist::-webkit-scrollbar-thumb:hover {
+    background: #4caf50;
 }
 
 .music-item {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     padding: 16px;
-    background-color: white;
+    background-color: #f9f9f9;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     transition: all 0.3s ease;
@@ -81,16 +254,14 @@ body {
 
 .music-info {
     flex: 1;
-    margin-left: 20px;
-    text-align: right;
+    margin-right: 15px;
 }
 
 .music-title {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     margin: 0;
     color: #333;
-    text-align: left;
 }
 
 .play-button {
@@ -106,7 +277,6 @@ body {
     justify-content: center;
     transition: all 0.3s ease;
     font-size: 18px;
-    order: -1;
 }
 
 .play-button:hover {
@@ -122,23 +292,49 @@ body {
     background-color: #e53935;
 }
 
+.play-icon, .pause-icon {
+    font-style: normal;
+}
+
+#no-results {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+    font-style: italic;
+}
+
+/* 모바일 반응형 */
 @media (max-width: 600px) {
     .music-container {
         margin: 20px;
         padding: 15px;
     }
-
+    
+    .player-controls {
+        gap: 10px;
+    }
+    
+    .player-controls button {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    
     .music-item {
         padding: 14px;
     }
-
+    
     .play-button {
         width: 40px;
         height: 40px;
         font-size: 16px;
     }
-
+    
     .music-title {
-        font-size: 16px;
+        font-size: 14px;
     }
-} 
+    
+    .keyboard-shortcuts li {
+        font-size: 14px;
+    }
+}
