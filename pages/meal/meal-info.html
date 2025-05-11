@@ -5,46 +5,132 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>강서폴리텍 식단정보</title>
-    <link rel="stylesheet" href="../../css/common.css" />
-    <link rel="stylesheet" href="./css/style.css" />
     <link rel="icon" type="image/png" sizes="180x180" href="/favicon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
     <style>
-        .meal-cards {
-            display: grid;
-            gap: 1rem;
-            padding: 1rem;
+        :root {
+            --primary-color: #4a6fa5;
+            --accent-color: #ff9800;
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --border-color: #e0e6ed;
+            --highlight-bg: #fff9e6;
+            --highlight-border: #ffc107;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
-        .meal-card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 1rem;
-            transition: transform 0.2s;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
         }
 
-        .meal-card:hover {
-            transform: translateY(-2px);
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
         }
 
-        .card-header {
-            border-bottom: 1px solid #eee;
-            padding-bottom: 0.5rem;
-            margin-bottom: 0.5rem;
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.2rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .card-header h3 {
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
             margin: 0;
-            font-size: 1.2rem;
+        }
+
+        .back-btn {
+            display: none;
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.15);
+            transition: background-color 0.2s;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        /* 메인 컨텐츠 */
+        main {
+            padding: 1.5rem 0;
+        }
+
+        /* 식단 카드 스타일 */
+        .meal-cards {
+            display: grid;
+            gap: 1.2rem;
+            padding: 0.5rem;
+        }
+
+        .meal-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 1.2rem;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .meal-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .date-wrap {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--primary-color);
         }
 
         .day {
-            color: #666;
-            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-top: 0.2rem;
         }
 
         .menu-list {
@@ -54,8 +140,17 @@
         }
 
         .menu-list li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #f5f5f5;
+            padding: 0.6rem 0;
+            border-bottom: 1px dashed var(--border-color);
+            position: relative;
+            padding-left: 0.8rem;
+        }
+
+        .menu-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
         }
 
         .menu-list li:last-child {
@@ -63,11 +158,77 @@
         }
 
         .highlight {
-            background-color: #fff9e6;
-            border: 2px solid #ffd700;
+            background-color: var(--highlight-bg);
+            border: 2px solid var(--highlight-border);
+            position: relative;
         }
 
-        /* 미디어 쿼리 수정 - PC 화면에서 5열로 표시 */
+        .highlight:after {
+            content: "오늘";
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        /* 푸터 스타일 */
+        footer {
+            background-color: var(--primary-color);
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 애니메이션 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .meal-card {
+            animation: fadeIn 0.4s ease forwards;
+            opacity: 0;
+        }
+
+        /* 로딩 인디케이터 */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(74, 111, 165, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 미디어 쿼리 - PC 화면에서 5열로 표시 */
         @media (min-width: 1200px) {
             .meal-cards {
                 grid-template-columns: repeat(5, 1fr);
@@ -86,21 +247,29 @@
             .meal-cards {
                 grid-template-columns: repeat(2, 1fr);
             }
-
-            .meal-card {
-                margin: 0.5rem;
-            }
         }
 
         /* 모바일 화면에서 1열로 표시 */
         @media (max-width: 575px) {
             .meal-cards {
                 grid-template-columns: 1fr;
+                gap: 1rem;
             }
 
-            .meal-card {
-                margin: 0.5rem;
+            .back-btn {
+                display: block;
             }
+
+            header h1 {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* 메뉴 아이템 스타일 - 애니메이션 딜레이 */
+        .menu-list li {
+            animation: fadeIn 0.3s ease forwards;
+            animation-delay: calc(var(--i) * 0.05s);
+            opacity: 0;
         }
     </style>
 </head>
@@ -108,15 +277,18 @@
 <body>
     <header>
         <div class="container">
-            <h1>식단정보</h1>
-            <a href="../../index.html" class="back-btn">뒤로</a>
+            <h1>강서폴리텍 식단정보</h1>
+            <a href="../../index.html" class="back-btn">← 뒤로</a>
         </div>
     </header>
 
     <main>
         <div class="container">
             <section>
-                <div class="meal-cards" id="mealCards">
+                <div class="loading" id="loading">
+                    <div class="loading-spinner"></div>
+                </div>
+                <div class="meal-cards" id="mealCards" style="display: none;">
                     <!-- JSON 데이터로 동적 로드 -->
                 </div>
             </section>
@@ -136,47 +308,75 @@
         const currentDay = today.getDay();
         const weekdays = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
 
+        // 날짜 포맷 함수
+        function formatDateDisplay(dateStr) {
+            const date = new Date(dateStr);
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            return `${month}월 ${day}일`;
+        }
+
         // JSON 데이터 로드
-        fetch('./data/meal.json')
-            .then(response => response.json())
-            .then(data => {
-                const mealCards = document.getElementById('mealCards');
-                mealCards.innerHTML = '';
+        setTimeout(() => {
+            fetch('./data/meal.json')
+                .then(response => response.json())
+                .then(data => {
+                    // 로딩 인디케이터 숨기기
+                    document.getElementById('loading').style.display = 'none';
 
-                data.forEach(day => {
-                    const card = document.createElement('div');
-                    card.className = 'meal-card';
+                    const mealCards = document.getElementById('mealCards');
+                    mealCards.style.display = 'grid';
+                    mealCards.innerHTML = '';
 
-                    // 날짜에서 숫자만 추출 (예: "2024-03-20" -> "20")
-                    const dayDate = parseInt(day.date.split('-')[2]);
+                    data.forEach((day, index) => {
+                        const card = document.createElement('div');
+                        card.className = 'meal-card';
+                        card.style.animationDelay = `${index * 0.1}s`;
 
-                    // 오늘 날짜와 요일이 모두 일치하는 경우 강조
-                    if (dayDate === currentDate && day.day === weekdays[currentDay]) {
-                        card.classList.add('highlight');
-                    }
+                        // 날짜에서 숫자만 추출 (예: "2025-05-12" -> "12")
+                        const dayDate = parseInt(day.date.split('-')[2]);
+                        const formattedDate = formatDateDisplay(day.date);
 
-                    card.innerHTML = `
-                        <div class="card-header">
-                            <h3>${day.date}</h3>
-                            <span class="day">${day.day}</span>
-                        </div>
-                        <div class="card-body">
-                            <ul class="menu-list">
-                                ${day.menu.map(menu => `<li>${menu}</li>`).join('')}
-                            </ul>
-                        </div>
-                    `;
+                        // 오늘 날짜와 요일이 모두 일치하는 경우 강조
+                        if (dayDate === currentDate && day.day === weekdays[currentDay]) {
+                            card.classList.add('highlight');
+                        }
 
-                    mealCards.appendChild(card);
+                        // 메뉴 아이템 HTML 생성
+                        const menuItems = day.menu.map((menu, i) =>
+                            `<li style="--i: ${i + 1}">${menu}</li>`
+                        ).join('');
+
+                        card.innerHTML = `
+                            <div class="card-header">
+                                <div class="date-wrap">
+                                    <h3>${formattedDate}</h3>
+                                    <span class="day">${day.day}</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul class="menu-list">
+                                    ${menuItems}
+                                </ul>
+                            </div>
+                        `;
+
+                        mealCards.appendChild(card);
+                    });
+
+                    // 강조된 카드를 찾아서 스크롤
+                    setTimeout(() => {
+                        const highlightedCard = document.querySelector('.highlight');
+                        if (highlightedCard) {
+                            highlightedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }, 500);
+                })
+                .catch(error => {
+                    console.error('Error loading meal data:', error);
+                    document.getElementById('loading').innerHTML = '<p>식단 정보를 불러오는데 실패했습니다.</p>';
                 });
-
-                // 강조된 카드를 찾아서 스크롤
-                const highlightedCard = document.querySelector('.highlight');
-                if (highlightedCard) {
-                    highlightedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            })
-            .catch(error => console.error('Error loading meal data:', error));
+        }, 300); // 로딩 인디케이터를 잠시 보여주기 위한 지연
     </script>
 </body>
 
