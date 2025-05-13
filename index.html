@@ -25,13 +25,22 @@
         <div class="container">
             <!-- 첫 번째 섹션: 환영 메시지 -->
             <section class="welcome-section">
-                <div class="section-icon"><i class="fas fa-code"></i></div>
-                <h2>환영합니다</h2>
-                <p class="section-description">코딩을 통해 새로운 세상을 만들어가는 여정에 함께해요.</p>
-                <div class="welcome-actions">
-                    <!-- <button class="primary-btn">시작하기</button>
-                    <button class="secondary-btn">더 알아보기</button> -->
+                <!-- 학습 일정 정보 추가 -->
+                <div class="study-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-label">입학일(2025.03.04)로부터</div>
+                        <div class="timeline-value" id="days-since-start">계산 중...</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-label">수료일(2026.02.04)까지</div>
+                        <div class="timeline-value" id="days-until-end">계산 중...</div>
+                    </div>
                 </div>
+
+                <!-- <div class="welcome-actions">
+                    <button class="primary-btn">시작하기</button>
+                    <button class="secondary-btn">더 알아보기</button>
+                </div> -->
             </section>
 
             <!-- 두 번째 섹션: 랜덤 인용구 -->
@@ -128,6 +137,9 @@
             <p class="footer-credit">© 2025 코딩하며 꿈을 키우는 곳</p>
         </div>
     </footer>
+
+    <!-- 기존 script 태그 위에 anniversary.js 추가 -->
+    <script src="./js/anniversary.js"></script>
     <script src="./js/main.js"></script>
 </body>
 
