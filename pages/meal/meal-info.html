@@ -7,6 +7,7 @@
     <title>강서폴리텍 식단정보</title>
     <link rel="icon" type="image/png" sizes="180x180" href="/favicon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+    <link rel="stylesheet" href="../../css/common.css" />
     <style>
         :root {
             --primary-color: #4a6fa5;
@@ -39,40 +40,6 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 1rem;
-        }
-
-        /* 헤더 스타일 */
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1.2rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        header h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        .back-btn {
-            display: none;
-            color: white;
-            text-decoration: none;
-            font-size: 0.9rem;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            background-color: rgba(255, 255, 255, 0.15);
-            transition: background-color 0.2s;
         }
 
         .back-btn:hover {
@@ -176,17 +143,6 @@
             font-weight: 600;
         }
 
-        /* 푸터 스타일 */
-        footer {
-            background-color: var(--primary-color);
-            color: rgba(255, 255, 255, 0.8);
-            text-align: center;
-            padding: 1.5rem 0;
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
         /* 애니메이션 */
         @keyframes fadeIn {
             from {
@@ -255,14 +211,6 @@
                 grid-template-columns: 1fr;
                 gap: 1rem;
             }
-
-            .back-btn {
-                display: block;
-            }
-
-            header h1 {
-                font-size: 1.3rem;
-            }
         }
 
         /* 메뉴 아이템 스타일 - 애니메이션 딜레이 */
@@ -272,6 +220,7 @@
             opacity: 0;
         }
     </style>
+
 </head>
 
 <body>
