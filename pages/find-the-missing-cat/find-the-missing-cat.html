@@ -21,7 +21,7 @@
             background: #1e1e1e;
             color: #eee;
             font-family: 'Courier New', monospace;
-            padding: 20px;
+            padding: 0px;
         }
 
         #output {
@@ -32,6 +32,7 @@
             border: 1px solid #444;
             padding: 10px;
             margin-bottom: 10px;
+            margin: 10px;
             background: #2a2a2a;
             overflow-y: auto;
 
@@ -42,7 +43,7 @@
             color: white;
             border: none;
             padding: 10px 20px;
-            margin: 5px;
+            margin: 10px;
             font-size: 16px;
             cursor: pointer;
         }
@@ -66,24 +67,26 @@
         }
 
         .info {
-            color: #00f;
+            color: rgb(238, 255, 0);
         }
 
         #progress {
             margin-top: 20px;
+            margin-left: 20px;
             margin-bottom: 20px;
             font-size: 14px;
         }
 
         .progress-bar {
-            width: 100%;
+            width: 97%;
+            margin-left: 10px;
             background: #444;
             height: 10px;
         }
 
         .progress-fill {
             height: 100%;
-            background: #0f0;
+            background: rgb(68, 148, 240);
             width: 0%;
         }
 
@@ -150,18 +153,22 @@
             { name: "춘배", age: 3, speed: "보통", baseCatchRate: 0.5, isCaught: false },
             { name: "나비", age: 1, speed: "빠름", baseCatchRate: 0.3, isCaught: false }
         ];
+
         let itemCount = 1;
         let currentCat = null;
         let output = document.getElementById("output");
         let startTime = null;
         let turnCount = 0;
+
         const maxTurns = 100;
         const bgmFiles = ["bgm1.mp3", "bgm2.mp3"];
+
         function log(text, type = "") {
             const classMap = { success: "success", failure: "failure", info: "info" };
             output.innerHTML += `<span class="${classMap[type] || ''}">${text}</span>\n`;
             output.scrollTop = output.scrollHeight;
         }
+
         function playSound(type) {
             if (type === "meow") {
                 // Placholder for meow sound; replace with actual file path
@@ -177,14 +184,17 @@
                 new Audio(sounds[type]).play().catch(() => { });
             }
         }
+
         function updateProgress() {
             const caught = cats.filter(c => c.isCaught).length;
             document.getElementById("progress").textContent = `포획: ${caught}/3`;
             document.querySelector(".progress-fill").style.width = `${(caught / 3) * 100}%`;
         }
+
         function disableAllButtons() {
             document.querySelectorAll("#game button").forEach(btn => btn.disabled = true);
         }
+
         function checkGameEnd() {
             if (cats.every(c => c.isCaught)) {
                 const seconds = Math.floor((Date.now() - startTime) / 1000);
@@ -202,13 +212,14 @@
                 const seconds = Math.floor((Date.now() - startTime) / 1000);
                 const minutes = Math.floor(seconds / 60);
                 const hours = Math.floor(minutes / 60);
-                log(`실패.. 노력해주셔서 감사합니다.\n플레이 시간: ${hours}시간 ${minutes % 60}분 ${seconds % 60}초\n`, "failure");
                 showCaught();
                 disableAllButtons();
+                log(`실패.. 노력해주셔서 감사합니다.\n플레이 시간: ${hours}시간 ${minutes % 60}분 ${seconds % 60}초\n`, "failure");
                 return true;
             }
             return false;
         }
+
         function startGame() {
             playSound("click");
             document.getElementById("prologue").style.display = "none";
@@ -222,6 +233,7 @@
             log("게임을 시작하려면 [탐색] 버튼을 누르세요.", "info");
             updateProgress();
         }
+
         function searchCat() {
             playSound("click");
             turnCount++;
@@ -235,12 +247,18 @@
                     return;
                 }
                 playSound("meow");
-                log(`\n어둠 속에서 무언가가 나타났어요...\n${currentCat.name} (나이: ${currentCat.age}, 속도: ${currentCat.speed})\n\n[츄르 사용]으로 포획 시도 가능`, "success");
+                log(`\n어둠 속에서 무언가가 나타났어요...\n${currentCat.name} (나이: ${currentCat.age}, 속도: ${currentCat.speed})`, "success");
+                
+                if (itemCount > 0) {
+                    log(`\n[츄르 사용]으로 포획 시도 가능`, "");
+                } else {
+                    log(`\n[츄르]가 없어 포획 불가능`, "failure");
+                }
             } else {
                 const isGetItem = Math.random() < 0.24 && itemCount < 2;
                 if (isGetItem) {
                     itemCount++;
-                    log("\n익숙한 츄르가 보인다!", "success");
+                    log("\n익숙한 츄르가 보인다!\n츄르 1개 획득!", "");
                     document.getElementById("itemBtn").innerText = `츄르 사용 (${itemCount}개 남음)`;
                     document.getElementById("itemBtn").disabled = false;
                 } else {
@@ -249,6 +267,7 @@
                 currentCat = null;
             }
         }
+
         function useItem() {
             playSound("click");
             if (!currentCat) {
@@ -276,6 +295,7 @@
             updateProgress();
             checkGameEnd();
         }
+
         function showCaught() {
             playSound("click");
             const caught = cats.filter(c => c.isCaught);
@@ -289,6 +309,7 @@
                 log(msg, "info");
             }
         }
+
         function showGuide() {
             playSound("click");
             let msg = "📖 고양이 도감:\n";
@@ -303,7 +324,7 @@
             log(msg, "info");
         }
         // Initialize prologue output
-        output.innerHTML = `\n3마리 고양이가 사라졌어요! 찾아주세요!\n\n📜 게임 설명: \n1.탐색 버튼으로 고양이를 찾아보세요.\n2.츄르(1개)를 사용하면 포획 확률이 높아집니다.\n3.모든 고양이를 포획하면 승리!\n`;
+        output.innerHTML = `\n3마리 고양이가 사라졌어요!\n찾아주세요!\n\n📜 게임 설명: \n1.탐색 버튼으로 고양이를 찾아보세요.\n2.츄르(1개)를 사용하면 포획 확률이 높아집니다.\n3.모든 고양이를 포획하면 승리!\n`;
     </script>
 </body>
 
