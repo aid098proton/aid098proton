@@ -278,7 +278,7 @@
                 log("\n츄르가 없어요!", "failure");
                 return;
             }
-            const successChance = currentCat.baseCatchRate + 0.5;
+            const successChance = currentCat.baseCatchRate + 0.4;
             const result = Math.random() < successChance;
             if (result) {
                 currentCat.isCaught = true;
