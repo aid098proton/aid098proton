@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>사라진 고양이를 찾아라</title>
+    <link rel="stylesheet" href="../../css/common.css" />
+    <link rel="icon" type="image/png" sizes="180x180" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+    <style>
+        main {
+            flex: 1;
+            padding: 0rem;
+            padding-bottom: 0rem;
+            width: 100%;
+            line-height: 0;
+        }
+
+        body {
+            background: #1e1e1e;
+            color: #eee;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+        }
+
+        #output {
+            min-height: 324px;
+            max-height: 324px;
+            white-space: pre-wrap;
+            line-height: 2.0;
+            border: 1px solid #444;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #2a2a2a;
+            overflow-y: auto;
+
+        }
+
+        button {
+            background-color: #444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover:not(:disabled) {
+            background-color: #666;
+        }
+
+        button:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .success {
+            color: #0f0;
+        }
+
+        .failure {
+            color: #f00;
+        }
+
+        .info {
+            color: #00f;
+        }
+
+        #progress {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background: #444;
+            height: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #0f0;
+            width: 0%;
+        }
+
+        #prologue {
+            animation: fadeIn 1s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            button {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            #output {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>고양이를 찾아라</h1>
+            <a href="../../index.html" class="back-btn">뒤로</a>
+        </div>
+    </header>
+    <main>
+        <div id="prologue">
+            <div id="output"></div>
+            <button onclick="startGame()">시작</button>
+        </div>
+        <div id="game" style="display: none;">
+            <div id="progress">포획: 0/3</div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div id="output"></div>
+            <button onclick="searchCat()">탐색</button>
+            <button onclick="useItem()" id="itemBtn">츄르 사용 (1개 남음)</button>
+            <button onclick="showCaught()">포획 리스트</button>
+            <button onclick="showGuide()">고양이 도감</button>
+        </div>
+        <audio id="bgm" loop></audio>
+    </main>
+    <footer>
+        <div class="container">
+            한 걸음씩, 꿈을 향해 🌟
+        </div>
+    </footer>
+    <script>
+        const cats = [
+            { name: "춘식이", age: 2, speed: "느림", baseCatchRate: 0.7, isCaught: false },
+            { name: "춘배", age: 3, speed: "보통", baseCatchRate: 0.5, isCaught: false },
+            { name: "나비", age: 1, speed: "빠름", baseCatchRate: 0.3, isCaught: false }
+        ];
+        let itemCount = 1;
+        let currentCat = null;
+        let output = document.getElementById("output");
+        let startTime = null;
+        let turnCount = 0;
+        const maxTurns = 100;
+        const bgmFiles = ["bgm1.mp3", "bgm2.mp3"];
+        function log(text, type = "") {
+            const classMap = { success: "success", failure: "failure", info: "info" };
+            output.innerHTML += `<span class="${classMap[type] || ''}">${text}</span>\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+        function playSound(type) {
+            if (type === "meow") {
+                // Placholder for meow sound; replace with actual file path
+                new Audio("meow.mp3").play().catch(() => { });
+            }
+            // Other sounds (success, failure, click) commented out until files are available
+            const sounds = {
+                success: "success.mp3",
+                failure: "failure.mp3",
+                click: "click.mp3"
+            };
+            if (sounds[type]) {
+                new Audio(sounds[type]).play().catch(() => { });
+            }
+        }
+        function updateProgress() {
+            const caught = cats.filter(c => c.isCaught).length;
+            document.getElementById("progress").textContent = `포획: ${caught}/3`;
+            document.querySelector(".progress-fill").style.width = `${(caught / 3) * 100}%`;
+        }
+        function disableAllButtons() {
+            document.querySelectorAll("#game button").forEach(btn => btn.disabled = true);
+        }
+        function checkGameEnd() {
+            if (cats.every(c => c.isCaught)) {
+                const seconds = Math.floor((Date.now() - startTime) / 1000);
+                const minutes = Math.floor(seconds / 60);
+                const hours = Math.floor(minutes / 60);
+
+                showCaught();
+                disableAllButtons();
+
+                log(`✨성공✨ 모든 고양이를 찾았어요!\n플레이 시간: ${hours}시간 ${minutes % 60}분 ${seconds % 60}초\n`, "success");
+
+                return true;
+            }
+            if (turnCount >= maxTurns) {
+                const seconds = Math.floor((Date.now() - startTime) / 1000);
+                const minutes = Math.floor(seconds / 60);
+                const hours = Math.floor(minutes / 60);
+                log(`실패.. 노력해주셔서 감사합니다.\n플레이 시간: ${hours}시간 ${minutes % 60}분 ${seconds % 60}초\n`, "failure");
+                showCaught();
+                disableAllButtons();
+                return true;
+            }
+            return false;
+        }
+        function startGame() {
+            playSound("click");
+            document.getElementById("prologue").style.display = "none";
+            document.getElementById("game").style.display = "block";
+            output = document.querySelector("#game #output"); // Reassign output to game output
+            output.innerHTML = "";
+            startTime = Date.now();
+            const bgm = document.getElementById("bgm");
+            bgm.src = bgmFiles[Math.floor(Math.random() * bgmFiles.length)];
+            bgm.play().catch(() => log("음악 재생을 위해 한 번 더 클릭해주세요!", "info"));
+            log("게임을 시작하려면 [탐색] 버튼을 누르세요.", "info");
+            updateProgress();
+        }
+        function searchCat() {
+            playSound("click");
+            turnCount++;
+            if (checkGameEnd()) return;
+            const chance = Math.random();
+            if (chance < 0.6) {
+                currentCat = cats[Math.floor(Math.random() * cats.length)];
+                if (currentCat.isCaught) {
+                    log(`\n익숙한 고양이 ${currentCat.name}가 다시 나타났지만 이미 당신과 친구예요.`, "info");
+                    currentCat = null;
+                    return;
+                }
+                playSound("meow");
+                log(`\n어둠 속에서 무언가가 나타났어요...\n${currentCat.name} (나이: ${currentCat.age}, 속도: ${currentCat.speed})\n\n[츄르 사용]으로 포획 시도 가능`, "success");
+            } else {
+                const isGetItem = Math.random() < 0.24 && itemCount < 2;
+                if (isGetItem) {
+                    itemCount++;
+                    log("\n익숙한 츄르가 보인다!", "success");
+                    document.getElementById("itemBtn").innerText = `츄르 사용 (${itemCount}개 남음)`;
+                    document.getElementById("itemBtn").disabled = false;
+                } else {
+                    log("\n주위를 살펴보았지만 아무 고양이도 보이지 않아요...", "failure");
+                }
+                currentCat = null;
+            }
+        }
+        function useItem() {
+            playSound("click");
+            if (!currentCat) {
+                log("\n고양이가 없어요! 먼저 탐색을 해주세요.", "failure");
+                return;
+            }
+            if (itemCount <= 0) {
+                log("\n츄르가 없어요!", "failure");
+                return;
+            }
+            const successChance = currentCat.baseCatchRate + 0.5;
+            const result = Math.random() < successChance;
+            if (result) {
+                currentCat.isCaught = true;
+                playSound("success");
+                log(`\n성공! ${currentCat.name}가 당신에게 다가와 친구가 되었어요! 🎉`, "success");
+            } else {
+                playSound("failure");
+                log(`\n${currentCat.name}가 츄르를 보고도 도망쳤어요... 🐾`, "failure");
+            }
+            itemCount--;
+            document.getElementById("itemBtn").innerText = `츄르 사용 (${itemCount}개 남음)`;
+            document.getElementById("itemBtn").disabled = itemCount <= 0;
+            currentCat = null;
+            updateProgress();
+            checkGameEnd();
+        }
+        function showCaught() {
+            playSound("click");
+            const caught = cats.filter(c => c.isCaught);
+            if (caught.length === 0) {
+                log("\n아직 포획한 고양이가 없어요...", "info");
+            } else {
+                let msg = "\n📜 포획한 고양이 목록:\n";
+                caught.forEach(c => {
+                    msg += `- ${c.name} (나이: ${c.age}, 속도: ${c.speed})\n`;
+                });
+                log(msg, "info");
+            }
+        }
+        function showGuide() {
+            playSound("click");
+            let msg = "📖 고양이 도감:\n";
+            cats.forEach((cat, i) => {
+                msg += `${i + 1}. ${cat.name}\n`;
+                msg += `포획: ${cat.isCaught ? "O" : "X"}\n`;
+                if (cat.isCaught) {
+                    msg += `나이: ${cat.age}\n속도: ${cat.speed}\n`;
+                }
+                msg += "\n";
+            });
+            log(msg, "info");
+        }
+        // Initialize prologue output
+        output.innerHTML = `\n3마리 고양이가 사라졌어요! 찾아주세요!\n\n📜 게임 설명: \n1.탐색 버튼으로 고양이를 찾아보세요.\n2.츄르(1개)를 사용하면 포획 확률이 높아집니다.\n3.모든 고양이를 포획하면 승리!\n`;
+    </script>
+</body>
+
+</html>
