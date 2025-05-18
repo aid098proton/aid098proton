@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>강서폴리텍 매점</title>
+    <link rel="icon" type="image/png" sizes="180x180" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+    <link rel="stylesheet" href="../../css/common.css" />
+    <style>
+        /* 기본 리셋 및 공통 스타일 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 메인 콘텐츠 스타일 */
+        main {
+            padding: 30px 0;
+        }
+
+        /* 필터 및 검색 영역 */
+        .filter-container {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .search-container input:focus {
+            border-color: #4caf50;
+            outline: none;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            font-size: 0.9rem;
+            color: #333;
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+
+        select:focus {
+            border-color: #4caf50;
+            outline: none;
+        }
+
+        /* 상품 그리드 레이아웃 */
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        /* 상품 카드 스타일 */
+        .item-card {
+            background-color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .item-details {
+            padding: 20px;
+        }
+
+        .item-category {
+            font-size: 0.8rem;
+            color: #4caf50;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .items-list {
+            list-style-type: none;
+        }
+
+        .items-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .items-list li:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-weight: 500;
+        }
+
+        .item-price {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        /* 결과 없음 메시지 */
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* 반응형 스타일 */
+        @media (max-width: 768px) {
+            .items-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .filter-options {
+                flex-direction: column;
+            }
+
+            select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>강서폴리텍 매점</h1>
+            <a href="../index.html" class="back-btn">← 뒤로</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="filter-container">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="상품명 검색..." />
+                </div>
+                <div class="filter-options">
+                    <select id="categoryFilter">
+                        <option value="all">모든 카테고리</option>
+                        <option value="snack">과자/스낵</option>
+                        <option value="chocolate">초콜릿/사탕</option>
+                        <option value="ramen">라면/컵라면</option>
+                        <option value="drink">음료/생수</option>
+                        <option value="bread">빵/베이커리</option>
+                        <option value="icecream">아이스크림</option>
+                        <option value="others">기타</option>
+                    </select>
+                    <select id="sortOption">
+                        <option value="default">기본 정렬</option>
+                        <option value="priceAsc">가격 낮은순</option>
+                        <option value="priceDesc">가격 높은순</option>
+                        <option value="nameAsc">이름 오름차순</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="itemsContainer" class="items-grid">
+                <!-- 상품 목록이 JavaScript로 여기에 동적 생성됩니다 -->
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            한 걸음씩, 꿈을 향해 🌟
+        </div>
+    </footer>
+
+    <script>
+        // 상품 데이터
+        const storeItems = [
+            {
+                id: 1,
+                category: "chocolate",
+                image: "imgs/store002.jpg",
+                items: [
+                    { name: "하리보, 트롤리", price: 2200 },
+                    { name: "크런키", price: 1500 },
+                    { name: "가나 초코바", price: 1500 },
+                    { name: "가나 마일드", price: 1500 },
+                    { name: "자유시간", price: 1500 },
+                    { name: "자유시간 쿠키앤크림", price: 1500 }
+                ]
+            },
+            {
+                id: 2,
+                category: "chocolate",
+                image: "imgs/store003.jpg",
+                items: [
+                    { name: "하리보, 트롤리", price: 2200 },
+                    { name: "숏다리", price: 2200 },
+                    { name: "목캔디(믹스베리)", price: 1300 },
+                    { name: "목캔디(허브민트)", price: 1300 },
+                    { name: "왓따! 청포도", price: 1000 },
+                    { name: "왓따! 복숭아", price: 1000 },
+                    { name: "후라보노", price: 1000 },
+                    { name: "자일리톨", price: 1200 },
+                    { name: "프링글스", price: 3000 }
+                ]
+            },
+            {
+                id: 3,
+                category: "chocolate",
+                image: "imgs/store004.jpg",
+                items: [
+                    { name: "크런키 쿠키 앤 크림", price: 1500 },
+                    { name: "크런키", price: 1500 },
+                    { name: "빼빼로", price: 1900 },
+                    { name: "고래밥", price: 1200 }
+                ]
+            },
+            {
+                id: 4,
+                category: "snack",
+                image: "imgs/store005.jpg",
+                items: [
+                    { name: "아몬드 초코볼", price: 1900 },
+                    { name: "핫브레이크", price: 1500 },
+                    { name: "단백질 바", price: 1500 },
+                    { name: "닥터유 에너지 바", price: 1500 }
+                ]
+            },
+            {
+                id: 5,
+                category: "chocolate",
+                image: "imgs/store006.jpg",
+                items: [
+                    { name: "스키틀즈", price: 1500 },
+                    { name: "몰티저스 밀크", price: 1500 },
+                    { name: "해태 초코픽", price: 2100 },
+                    { name: "다이제 초코", price: 2500 },
+                    { name: "다이제 통밀", price: 2000 }
+                ]
+            },
+            {
+                id: 6,
+                category: "snack",
+                image: "imgs/store007.jpg",
+                items: [
+                    { name: "다이제 씬", price: 1500 },
+                    { name: "화이트하임", price: 1600 },
+                    { name: "쿠쿠다스", price: 1600 },
+                    { name: "칸초", price: 1600 }
+                ]
+            },
+            {
+                id: 7,
+                category: "snack",
+                image: "imgs/store008.jpg",
+                items: [
+                    { name: "칙촉", price: 2500 },
+                    { name: "초코칩 쿠키", price: 1800 },
+                    { name: "오레오", price: 2000 }
+                ]
+            },
+            {
+                id: 8,
+                category: "snack",
+                image: "imgs/store009.jpg",
+                items: [
+                    { name: "아이셔", price: 1400 },
+                    { name: "마이쮸", price: 1200 },
+                    { name: "밀크카라멜", price: 1200 },
+                    { name: "연양갱", price: 1300 },
+                    { name: "피넛칩", price: 1800 }
+                ]
+            },
+            {
+                id: 9,
+                category: "snack",
+                image: "imgs/store010.jpg",
+                items: [
+                    { name: "오징어 버터구이", price: 1700 },
+                    { name: "쫄병스낵", price: 1400 }
+                ]
+            },
+            {
+                id: 10,
+                category: "snack",
+                image: "imgs/store011.jpg",
+                items: [
+                    { name: "치토스 바베큐맛", price: 1800 },
+                    { name: "치토스 매운맛", price: 1800 }
+                ]
+            },
+            {
+                id: 11,
+                category: "snack",
+                image: "imgs/store012.jpg",
+                items: [
+                    { name: "양파링", price: 1900 },
+                    { name: "알새우칩", price: 1800 }
+                ]
+            },
+            {
+                id: 12,
+                category: "snack",
+                image: "imgs/store013.jpg",
+                items: [
+                    { name: "콘치 크림치즈맛", price: 1600 },
+                    { name: "카라멜 메이플콘", price: 1600 },
+                    { name: "새우깡", price: 1500 }
+                ]
+            },
+            {
+                id: 13,
+                category: "snack",
+                image: "imgs/store014.jpg",
+                items: [
+                    { name: "야채타임", price: 1700 },
+                    { name: "도리토스 나쵸치즈", price: 1800 },
+                    { name: "콘초", price: 1600 }
+                ]
+            },
+            {
+                id: 14,
+                category: "snack",
+                image: "imgs/store015.jpg",
+                items: [
+                    { name: "허니버터칩", price: 1800 },
+                    { name: "군옥수수꼬깔콘", price: 1800 },
+                    { name: "못말리는 신짱", price: 1600 }
+                ]
+            },
+            {
+                id: 15,
+                category: "snack",
+                image: "imgs/store016.jpg",
+                items: [
+                    { name: "포카칩", price: 1800 },
+                    { name: "맛동산", price: 2100 },
+                    { name: "꽃게랑 불짬뽕", price: 1700 }
+                ]
+            },
+            {
+                id: 16,
+                category: "snack",
+                image: "imgs/store017.jpg",
+                items: [
+                    { name: "오감자", price: 2400 },
+                    { name: "벌집핏자", price: 1800 },
+                    { name: "콘칩", price: 1600 }
+                ]
+            },
+            {
+                id: 17,
+                category: "snack",
+                image: "imgs/store018.jpg",
+                items: [
+                    { name: "터보라이터", price: 1300 },
+                    { name: "과트로 치즈", price: 1600 },
+                    { name: "천하장사 소세지", price: 1300 }
+                ]
+            },
+            {
+                id: 18,
+                category: "icecream",
+                image: "imgs/store019.jpg",
+                items: [
+                    { name: "옥수수, 와일드바디, 죠스, 옥동자, 스크류, 쌍쌍, 비비빅, 보석바, 바밤바, 돼지바, 샤인머스캣 청포도, 복숭아, 망고, 누가바", price: 1200 },
+                    { name: "왕포도알, 탱크보이, 더위사냥, 빠삐코", price: 1500 },
+                    { name: "빵빠레, 구구콘, 월드콘, 부라보콘, 슈퍼콘", price: 1900 },
+                    { name: "빵빠레 샌드, 와, 설레임, 군고구마, 국화빵, 붕어싸만코, 찰떡아이스", price: 2000 },
+                    { name: "바종류", price: 1200 },
+                    { name: "콘종류", price: 1900 }
+                ]
+            },
+            {
+                id: 19,
+                category: "icecream",
+                image: "imgs/store020.jpg",
+                items: [{ name: "준비 중", price: 0 }]
+            },
+            {
+                id: 20,
+                category: "icecream",
+                image: "imgs/store021.jpg",
+                items: [{ name: "준비 중", price: 0 }]
+            },
+            {
+                id: 21,
+                category: "icecream",
+                image: "imgs/store022.jpg",
+                items: [{ name: "준비 중", price: 0 }]
+            },
+            {
+                id: 22,
+                category: "ramen",
+                image: "imgs/store023.jpg",
+                items: [
+                    { name: "짜파구리", price: 1900 },
+                    { name: "짜파게티 큰사발", price: 1600 },
+                    { name: "튀김우동 큰사발", price: 1900 }
+                ]
+            },
+            {
+                id: 23,
+                category: "ramen",
+                image: "imgs/store024.jpg",
+                items: [
+                    { name: "불닭볶음면", price: 1800 },
+                    { name: "삼양컵라면", price: 1500 },
+                    { name: "신라면투움바", price: 1900 }
+                ]
+            },
+            {
+                id: 24,
+                category: "ramen",
+                image: "imgs/store025.jpg",
+                items: [
+                    { name: "진짬뽕", price: 2000 },
+                    { name: "신라면 큰사발", price: 1600 },
+                    { name: "무파마", price: 1800 }
+                ]
+            },
+            {
+                id: 25,
+                category: "ramen",
+                image: "imgs/store026.jpg",
+                items: [
+                    { name: "간짬뽕", price: 1700 },
+                    { name: "너구리", price: 1800 },
+                    { name: "참깨라면", price: 1800 }
+                ]
+            },
+            {
+                id: 26,
+                category: "ramen",
+                image: "imgs/store027.jpg",
+                items: [
+                    { name: "육계장", price: 1300 },
+                    { name: "새우탕", price: 1600 },
+                    { name: "사리곰탕", price: 1600 }
+                ]
+            },
+            {
+                id: 27,
+                category: "ramen",
+                image: "imgs/store028.jpg",
+                items: [
+                    { name: "볶음진짬뽕", price: 2000 },
+                    { name: "진라면 매운앗", price: 1500 },
+                    { name: "진라면 순한맛", price: 1500 }
+                ]
+            },
+            {
+                id: 28,
+                category: "ramen",
+                image: "imgs/store029.jpg",
+                items: [
+                    { name: "김치 왕뚜껑", price: 1600 },
+                    { name: "짬뽕 왕뚜껑", price: 1600 }
+                ]
+            },
+            {
+                id: 29,
+                category: "ramen",
+                image: "imgs/store030.jpg",
+                items: [{ name: "왕뚜껑", price: 1600 }]
+            },
+            {
+                id: 30,
+                category: "bread",
+                image: "imgs/store031.jpg",
+                items: [
+                    { name: "빵종류", price: 1700 },
+                    { name: "초코소라빵", price: 2000 }
+                ]
+            },
+            {
+                id: 31,
+                category: "bread",
+                image: "imgs/store032.jpg",
+                items: [
+                    { name: "빵종류", price: 3600 },
+                    { name: "촉촉카스테라", price: 6000 }
+                ]
+            },
+            {
+                id: 32,
+                category: "ramen",
+                image: "imgs/store033.jpg",
+                items: [
+                    { name: "치즈불닭볶음면", price: 1900 },
+                    { name: "까르보불닭볶음면", price: 1800 },
+                    { name: "라면볶이", price: 1800 }
+                ]
+            },
+            {
+                id: 33,
+                category: "ramen",
+                image: "imgs/store034.jpg",
+                items: [
+                    { name: "치즈볶이", price: 1800 },
+                    { name: "스파게티", price: 1800 },
+                    { name: "스낵면", price: 1700 }
+                ]
+            },
+            {
+                id: 34,
+                category: "ramen",
+                image: "imgs/store035.jpg",
+                items: [{ name: "김치맛 쌀국수", price: 1700 }]
+            },
+            {
+                id: 35,
+                category: "ramen",
+                image: "imgs/store036.jpg",
+                items: [
+                    { name: "얼큰한 쌀국수", price: 1700 },
+                    { name: "멸치맛 쌀국수", price: 1700 }
+                ]
+            },
+            {
+                id: 36,
+                category: "drink",
+                image: "imgs/store037.jpg",
+                items: [
+                    { name: "블랙 아메리카노", price: 1700 },
+                    { name: "헤이즐넛 아메리카노", price: 1700 }
+                ]
+            },
+            {
+                id: 37,
+                category: "others",
+                image: "imgs/store038.jpg",
+                items: [{ name: "물티슈", price: 1700 }]
+            },
+            {
+                id: 38,
+                category: "others",
+                image: "imgs/store039.jpg",
+                items: [{ name: "준비 중", price: 0 }]
+            },
+            {
+                id: 39,
+                category: "drink",
+                image: "imgs/store040.jpg",
+                items: [
+                    { name: "칠성사이다355ml", price: 1700 },
+                    { name: "밀키스340ml", price: 1600 },
+                    { name: "펩시콜라355ml", price: 1600 },
+                    { name: "마운틴듀355ml", price: 1700 }
+                ]
+            },
+            {
+                id: 40,
+                category: "drink",
+                image: "imgs/store041.jpg",
+                items: [
+                    { name: "더킹355ml", price: 2200 },
+                    { name: "더킹500ml", price: 2800 },
+                    { name: "칸타타 frown275ml", price: 2400 }
+                ]
+            },
+            {
+                id: 41,
+                category: "drink",
+                image: "imgs/store042.jpg",
+                items: [
+                    { name: "칠성사이다500ml", price: 2200 },
+                    { name: "펩시500ml", price: 2200 },
+                    { name: "트레비500ml", price: 1700 },
+                    { name: "탐스355ml", price: 1600 }
+                ]
+            },
+            {
+                id: 42,
+                category: "drink",
+                image: "imgs/store043.jpg",
+                items: [
+                    { name: "아이시스500ml", price: 1000 },
+                    { name: "밀키스500ml", price: 2000 },
+                    { name: "립튼복숭아500ml", price: 2000 },
+                    { name: "2프로500ml", price: 2000 },
+                    { name: "레몬워터500ml", price: 2000 },
+                    { name: "콘드라베이스500ml", price: 2700 },
+                    { name: "레스비500ml", price: 2500 }
+                ]
+            },
+            {
+                id: 43,
+                category: "drink",
+                image: "imgs/store044.jpg",
+                items: [
+                    { name: "칠성사이다1.5L", price: 4000 },
+                    { name: "펩시1.5L", price: 3900 },
+                    { name: "밀키스1.5L", price: 3900 }
+                ]
+            },
+            {
+                id: 44,
+                category: "drink",
+                image: "imgs/store046.jpg",
+                items: [
+                    { name: "코카콜라250ml", price: 1600 },
+                    { name: "몬스터500ml", price: 3000 }
+                ]
+            },
+            {
+                id: 45,
+                category: "drink",
+                image: "imgs/store047.jpg",
+                items: [{ name: "몬스터355ml", price: 2300 }]
+            },
+            {
+                id: 46,
+                category: "drink",
+                image: "imgs/store048.jpg",
+                items: [
+                    { name: "코카콜라500ml", price: 2300 },
+                    { name: "파워에이드500ml", price: 2200 }
+                ]
+            },
+            {
+                id: 47,
+                category: "drink",
+                image: "imgs/store049.jpg",
+                items: [
+                    { name: "스프라이트500ml", price: 2200 },
+                    { name: "암바사500ml", price: 2000 },
+                    { name: "환타600ml", price: 2200 }
+                ]
+            },
+            {
+                id: 48,
+                category: "drink",
+                image: "imgs/store050.jpg",
+                items: [
+                    { name: "코카콜라1.5L", price: 4200 },
+                    { name: "스프라이트1.5L", price: 3700 }
+                ]
+            },
+            {
+                id: 49,
+                category: "drink",
+                image: "imgs/store052.jpg",
+                items: [
+                    { name: "조지아470ml", price: 2700 },
+                    { name: "조지아240ml", price: 1400 },
+                    { name: "레쓰비175ml", price: 1200 }
+                ]
+            },
+            {
+                id: 50,
+                category: "drink",
+                image: "imgs/store053.jpg",
+                items: [
+                    { name: "환타350ml", price: 1700 },
+                    { name: "오라떼240ml", price: 1400 },
+                    { name: "컨피던스캔", price: 1500 }
+                ]
+            },
+            {
+                id: 51,
+                category: "drink",
+                image: "imgs/store054.jpg",
+                items: [
+                    { name: "코카콜라350ml", price: 1900 },
+                    { name: "파워에이드340ml", price: 1700 },
+                    { name: "토레타340ml", price: 1600 },
+                    { name: "스프라이트350ml", price: 1700 },
+                    { name: "닥터페퍼355ml", price: 1700 }
+                ]
+            },
+            {
+                id: 52,
+                category: "drink",
+                image: "imgs/store055.jpg",
+                items: [
+                    { name: "미닛메이드350ml", price: 2100 },
+                    { name: "태양마테차500ml", price: 1700 },
+                    { name: "토레타500ml", price: 2000 }
+                ]
+            },
+            {
+                id: 53,
+                category: "drink",
+                image: "imgs/store057.jpg",
+                items: [
+                    { name: "파워에이드1.5L", price: 4200 },
+                    { name: "토레타1.5L", price: 3900 },
+                    { name: "환타1.5L", price: 3900 },
+                    { name: "컨피던스병", price: 1700 }
+                ]
+            },
+            {
+                id: 54,
+                category: "drink",
+                image: "imgs/store059.jpg",
+                items: [
+                    { name: "바카스F", price: 1100 },
+                    { name: "오로나민C", price: 1200 },
+                    { name: "구론산", price: 1300 },
+                    { name: "나랑드사이다제로", price: 1400 }
+                ]
+            },
+            {
+                id: 55,
+                category: "drink",
+                image: "imgs/store060.jpg",
+                items: [
+                    { name: "포카리스웨트250ml", price: 1600 },
+                    { name: "데미소다250ml", price: 1400 },
+                    { name: "오란씨250ml", price: 1400 }
+                ]
+            },
+            {
+                id: 56,
+                category: "drink",
+                image: "imgs/store062.jpg",
+                items: [
+                    { name: "포카리스웨트500ml", price: 2400 },
+                    { name: "이온워터500ml", price: 2400 },
+                    { name: "오란씨파인500ml", price: 2000 },
+                    { name: "나랑드사이다500ml", price: 2000 }
+                ]
+            },
+            {
+                id: 57,
+                category: "drink",
+                image: "imgs/store063.jpg",
+                items: [
+                    { name: "옥수수 수염차", price: 1800 },
+                    { name: "황금보리", price: 1800 },
+                    { name: "아침헛개", price: 1800 },
+                    { name: "게토레이", price: 2200 },
+                    { name: "갈아만든 배", price: 2000 },
+                    { name: "아침에 사과", price: 2000 },
+                    { name: "마신다", price: 1000 }
+                ]
+            },
+            {
+                id: 58,
+                category: "drink",
+                image: "imgs/store064.jpg",
+                items: [
+                    { name: "포카리1.5L", price: 4200 },
+                    { name: "나랑드사이다1.5L", price: 3700 },
+                    { name: "오란씨1.5L", price: 3600 },
+                    { name: "마신다2L", price: 1500 }
+                ]
+            },
+            {
+                id: 59,
+                category: "drink",
+                image: "imgs/store066.jpg",
+                items: [
+                    { name: "스타벅스 모카", price: 3500 },
+                    { name: "스페셜티", price: 3000 }
+                ]
+            },
+            {
+                id: 60,
+                category: "drink",
+                image: "imgs/store067.jpg",
+                items: [
+                    { name: "준비 중", price: 0 }
+                ]
+            },
+            {
+                id: 61,
+                category: "drink",
+                image: "imgs/store068.jpg",
+                items: [
+                    { name: "쿨피스에이드", price: 1900 },
+                    { name: "감동란", price: 2400 }
+                ]
+            },
+            {
+                id: 62,
+                category: "drink",
+                image: "imgs/store069.jpg",
+                items: [
+                    { name: "더:단백20g", price: 3000 },
+                    { name: "테이크얼라이브", price: 1700 },
+                    { name: "아몬드브리지", price: 1500 },
+                    { name: "아몬드브리지 프로틴", price: 1600 }
+                ]
+            },
+            {
+                id: 63,
+                category: "drink",
+                image: "imgs/store071.jpg",
+                items: [
+                    { name: "연세두유", price: 1200 },
+                    { name: "빙그레 딸기타임", price: 1200 },
+                    { name: "빙그레 초코타임", price: 1200 },
+                    { name: "서울우유200ml", price: 1200 },
+                    { name: "바나나우유240g", price: 1800 }
+                ]
+            },
+            {
+                id: 64,
+                category: "others",
+                image: "imgs/store073.jpg",
+                items: [
+                    { name: "새콤치즈 핫도그", price: 2700 },
+                    { name: "새우야", price: 2700 },
+                    { name: "바삭바삭 치킨립", price: 2700 }
+                ]
+            },
+            {
+                id: 65,
+                category: "others",
+                image: "imgs/store074.jpg",
+                items: [
+                    { name: "새우버거", price: 3000 },
+                    { name: "더블디럭스버거", price: 3200 },
+                    { name: "우다치버거", price: 3200 },
+                    { name: "치즈벅", price: 2700 },
+                    { name: "치킨버거", price: 3200 }
+                ]
+            },
+            {
+                id: 66,
+                category: "others",
+                image: "imgs/store077.jpg",
+                items: [
+                    { name: "누텔라초코", price: 2400 }
+                ]
+            },
+            {
+                id: 67,
+                category: "others",
+                image: "imgs/store078.jpg",
+                items: [
+                    { name: "준비 중", price: 0 }
+                ]
+            },
+            {
+                id: 68,
+                category: "others",
+                image: "imgs/store079.jpg",
+                items: [
+                    { name: "어묵떡뽁이", price: 4300 },
+                    { name: "가쓰오우동", price: 4000 },
+                    { name: "라면쏘옥치즈", price: 1500 },
+                    { name: "닭가슴살통살구이", price: 4000 },
+                    { name: "닭가슴살스테이크", price: 4000 }
+                ]
+            }
+        ];
+
+        // 카테고리 한글 매핑
+        const categoryNames = {
+            snack: "과자/스낵",
+            chocolate: "초콜릿/사탕",
+            ramen: "라면/컵라면",
+            drink: "음료/생수",
+            bread: "빵/베이커리",
+            icecream: "아이스크림",
+            others: "기타"
+        };
+
+        // 상품 렌더링 함수
+        function renderItems(items) {
+            const container = document.getElementById('itemsContainer');
+            container.innerHTML = '';
+
+            if (items.length === 0) {
+                container.innerHTML = '<div class="no-results">검색 결과가 없습니다.</div>';
+                return;
+            }
+
+            items.forEach(item => {
+                if (item.items.length === 0 || (item.items.length === 1 && item.items[0].name === "준비 중")) {
+                    return; // 빈 항목 또는 준비 중인 항목은 렌더링하지 않음
+                }
+
+                const card = document.createElement('div');
+                card.className = 'item-card';
+
+                card.innerHTML = `
+                    <img src="${item.image}" alt="${categoryNames[item.category]} 진열장" class="item-image" loading="lazy">
+                    <div class="item-details">
+                        <div class="item-category">${categoryNames[item.category]}</div>
+                        <ul class="items-list" aria-label="${categoryNames[item.category]} 상품 목록">
+                            ${item.items.map(i => `
+                                <li>
+                                    <span class="item-name">${i.name}</span>
+                                    <span class="item-price">${i.price === 0 ? '가격 미정' : i.price.toLocaleString('ko-KR') + '원'}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        // 필터링 및 정렬 함수
+        function filterAndSortItems() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            const sortOption = document.getElementById('sortOption').value;
+
+            let filteredItems = storeItems.filter(item => {
+                if (category !== 'all' && item.category !== category) return false;
+                return item.items.some(i => i.name.toLowerCase().includes(searchText));
+            });
+
+            // 정렬
+            filteredItems = filteredItems.map(item => ({
+                ...item,
+                items: [...item.items].sort((a, b) => {
+                    if (sortOption === 'priceAsc') return a.price - b.price;
+                    if (sortOption === 'priceDesc') return b.price - a.price;
+                    if (sortOption === 'nameAsc') return a.name.localeCompare(b.name, 'ko');
+                    return 0;
+                })
+            }));
+
+            if (sortOption === 'default') {
+                filteredItems.sort((a, b) => a.id - b.id);
+            }
+
+            renderItems(filteredItems);
+        }
+
+        // 이벤트 리스너 설정
+        document.getElementById('searchInput').addEventListener('input', filterAndSortItems);
+        document.getElementById('categoryFilter').addEventListener('change', filterAndSortItems);
+        document.getElementById('sortOption').addEventListener('change', filterAndSortItems);
+
+        // 초기 렌더링
+        renderItems(storeItems);
+    </script>
+</body>
+
+</html>
