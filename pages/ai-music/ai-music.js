@@ -1,6 +1,14 @@
 // 음악 목록
 const musicList = [
     {
+        title: 'AI Music 20250519 1',
+        file: 'ai_music_20250519_1.mp3'
+    },
+    {
+        title: 'AI Music 20250519 2',
+        file: 'ai_music_20250519_2.mp3'
+    },
+    {
         title: 'AI Music 20250518 1',
         file: 'ai_music_20250518_1.mp3'
     },
