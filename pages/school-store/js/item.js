@@ -1,3 +1,14 @@
+// 카테고리 한글 매핑
+const categoryNames = {
+    snack: "과자/스낵",
+    chocolate: "초콜릿/사탕",
+    ramen: "라면/컵라면",
+    drink: "음료/생수",
+    bread: "빵/베이커리",
+    icecream: "아이스크림",
+    others: "기타"
+};
+
 // 상품 데이터
 const storeItems = [
     {
@@ -673,13 +684,3 @@ const storeItems = [
     }
 ];
 
-// 카테고리 한글 매핑
-const categoryNames = {
-    snack: "과자/스낵",
-    chocolate: "초콜릿/사탕",
-    ramen: "라면/컵라면",
-    drink: "음료/생수",
-    bread: "빵/베이커리",
-    icecream: "아이스크림",
-    others: "기타"
-};
