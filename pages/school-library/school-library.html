@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>강서폴리텍 도서관</title>
+    <link rel="icon" type="image/png" sizes="180x180" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+    <link rel="stylesheet" href="../../css/common.css" />
+    <style>
+        /* 반응형 테이블 스타일 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .search-filter {
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .search-filter input,
+        .search-filter select {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .search-filter input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            cursor: pointer;
+        }
+
+        th:hover {
+            background-color: #e0e0e0;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .pagination button {
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .pagination button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .pagination button:disabled {
+            background-color: #f4f4f4;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            th,
+            td {
+                min-width: 100px;
+            }
+
+            .search-filter {
+                flex-direction: column;
+            }
+
+            .search-filter input,
+            .search-filter select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>강서폴리텍 도서관</h1>
+            <a href="../../index.html" class="back-btn">← 뒤로</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="search-filter">
+                <input type="text" id="searchInput" placeholder="도서명, 저자, 발행처 검색">
+                <select id="yearFilter">
+                    <option value="">모든 발행년</option>
+                    <!-- JS에서 동적으로 채움 -->
+                </select>
+            </div>
+            <table id="bookTable">
+                <thead>
+                    <tr>
+                        <th data-sort="book_title">도서명</th>
+                        <th data-sort="author">저자</th>
+                        <th data-sort="publisher">발행처</th>
+                        <th data-sort="publish_year">발행년</th>
+                    </tr>
+                </thead>
+                <tbody id="bookBody"></tbody>
+            </table>
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            한 걸음씩, 꿈을 향해 🌟
+        </div>
+    </footer>
+
+    <script>
+        // JSON 데이터 로드
+        fetch('./js/books.json')
+            .then(response => response.json())
+            .then(data => {
+                let books = data;
+                let currentPage = 1;
+                const itemsPerPage = 50;
+                let filteredBooks = books;
+                let sortKey = 'book_title';
+                let sortOrder = 1;
+
+                // 발행년 옵션 동적 생성
+                const years = [...new Set(books.map(book => book.publish_year))].sort();
+                const yearFilter = document.getElementById('yearFilter');
+                years.forEach(year => {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    yearFilter.appendChild(option);
+                });
+
+                // 테이블 렌더링
+                function renderTable() {
+                    const tbody = document.getElementById('bookBody');
+                    tbody.innerHTML = '';
+                    const start = (currentPage - 1) * itemsPerPage;
+                    const end = start + itemsPerPage;
+                    const paginatedBooks = filteredBooks.slice(start, end);
+
+                    paginatedBooks.forEach(book => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${book.book_title}</td>
+                            <td>${book.author}</td>
+                            <td>${book.publisher}</td>
+                            <td>${book.publish_year}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+
+                    renderPagination();
+                }
+
+                // 페이지네이션 렌더링
+                function renderPagination() {
+                    const pagination = document.getElementById('pagination');
+                    pagination.innerHTML = '';
+                    const pageCount = Math.ceil(filteredBooks.length / itemsPerPage);
+
+                    const prevButton = document.createElement('button');
+                    prevButton.textContent = '이전';
+                    prevButton.disabled = currentPage === 1;
+                    prevButton.addEventListener('click', () => {
+                        if (currentPage > 1) {
+                            currentPage--;
+                            renderTable();
+                        }
+                    });
+                    pagination.appendChild(prevButton);
+
+                    for (let i = 1; i <= pageCount; i++) {
+                        const button = document.createElement('button');
+                        button.textContent = i;
+                        button.disabled = i === currentPage;
+                        button.addEventListener('click', () => {
+                            currentPage = i;
+                            renderTable();
+                        });
+                        pagination.appendChild(button);
+                    }
+
+                    const nextButton = document.createElement('button');
+                    nextButton.textContent = '다음';
+                    nextButton.disabled = currentPage === pageCount;
+                    nextButton.addEventListener('click', () => {
+                        if (currentPage < pageCount) {
+                            currentPage++;
+                            renderTable();
+                        }
+                    });
+                    pagination.appendChild(nextButton);
+                }
+
+                // 검색 및 필터링
+                function filterBooks() {
+                    const searchValue = document.getElementById('searchInput').value.toLowerCase();
+                    const yearValue = document.getElementById('yearFilter').value;
+
+                    filteredBooks = books.filter(book => {
+                        const matchesSearch = book.book_title.toLowerCase().includes(searchValue) ||
+                            book.author.toLowerCase().includes(searchValue) ||
+                            book.publisher.toLowerCase().includes(searchValue);
+                        const matchesYear = yearValue ? book.publish_year === yearValue : true;
+                        return matchesSearch && matchesYear;
+                    });
+
+                    // 정렬
+                    filteredBooks.sort((a, b) => {
+                        const valueA = a[sortKey].toString().toLowerCase();
+                        const valueB = b[sortKey].toString().toLowerCase();
+                        return sortOrder * (valueA > valueB ? 1 : valueA < valueB ? -1 : 0);
+                    });
+
+                    currentPage = 1;
+                    renderTable();
+                }
+
+                // 검색 입력 이벤트 (debounce)
+                let debounceTimeout;
+                document.getElementById('searchInput').addEventListener('input', () => {
+                    clearTimeout(debounceTimeout);
+                    debounceTimeout = setTimeout(filterBooks, 300);
+                });
+
+                // 발행년 필터 이벤트
+                document.getElementById('yearFilter').addEventListener('change', filterBooks);
+
+                // 테이블 헤더 정렬 이벤트
+                document.querySelectorAll('th[data-sort]').forEach(th => {
+                    th.addEventListener('click', () => {
+                        const newSortKey = th.dataset.sort;
+                        if (newSortKey === sortKey) {
+                            sortOrder *= -1;
+                        } else {
+                            sortKey = newSortKey;
+                            sortOrder = 1;
+                        }
+                        filterBooks();
+                    });
+                });
+
+                // 초기 렌더링
+                renderTable();
+            })
+            .catch(error => console.error('JSON 로드 실패:', error));
+    </script>
+</body>
+
+</html>
