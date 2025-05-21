@@ -118,12 +118,20 @@
             background-color: #f9f9f9;
         }
 
-        /* 카드 뷰 스타일 */
+        /* 테이블 td에 줄임표 적용 시 커서 포인터 */
+        td[data-fulltext][data-fulltext*='...'] {
+            cursor: pointer;
+        }
+
+
+        /* 카드 뷰 스타일 (빈 카드 추가를 위한) */
         .card-view {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
+            align-items: stretch;
+            /* 카드 높이를 동일하게 만듭니다 */
         }
 
         .book-card {
@@ -132,11 +140,35 @@
             padding: 15px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 150px;
+            /* 최소 높이 지정 */
         }
 
         .book-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .book-card.empty-card {
+            background-color: #f8f8f8;
+            border: 1px dashed #e0e0e0;
+            box-shadow: none;
+            cursor: default;
+            /* 빈 카드는 클릭 불가능 */
+            opacity: 0.7;
+        }
+
+        .book-card.empty-card:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* 빈 카드 내부 텍스트는 기본 커서 */
+        .book-card.empty-card div {
+            cursor: default;
         }
 
         .book-card .book-title {
@@ -163,6 +195,68 @@
             color: #3498db;
             cursor: pointer;
             font-size: 14px;
+        }
+
+        /* 카드 텍스트에 줄임표 적용 시 커서 포인터 (JS에서 동적으로 부여) */
+        /* .book-card .book-title[data-fulltext][data-fulltext*='...'], */
+        /* .book-card .book-author[data-fulltext][data-fulltext*='...'], */
+        /* .book-card .book-details div[data-fulltext][data-fulltext*='...'] { */
+        /* cursor: pointer; */
+        /* } */
+
+
+        /* CSV 다운로드 버튼 스타일 */
+        #downloadCsvBtn {
+            padding: 10px 15px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        #downloadCsvBtn:hover {
+            background-color: #229a53;
+        }
+
+        /* 모바일 반응형에서 토글 버튼 표시/숨김 */
+        @media (max-width: 768px) {
+            .book-card .toggle-details {
+                display: block;
+            }
+
+            .book-card .book-details {
+                display: none;
+            }
+
+            .book-card .book-details.expanded {
+                display: block;
+            }
+
+            /* 모바일에서 테이블 열 숨기기 */
+            table th:nth-child(3),
+            table th:nth-child(4),
+            table td:nth-child(3),
+            table td:nth-child(4) {
+                display: none;
+            }
+        }
+
+        @media (min-width: 769px) {
+
+            /* PC 버전 */
+            .book-card .toggle-details {
+                display: none;
+            }
+
+            .book-card .book-details {
+                display: block;
+            }
         }
 
         /* 페이지네이션 */
@@ -253,18 +347,6 @@
                 grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             }
 
-            .book-card .toggle-details {
-                display: block;
-            }
-
-            .book-card .book-details {
-                display: none;
-            }
-
-            .book-card .book-details.expanded {
-                display: block;
-            }
-
             /* 모바일에서 테이블 열 숨기기 */
             table th:nth-child(3),
             table th:nth-child(4),
@@ -312,17 +394,20 @@
 
     <main>
         <div class="container">
-            <!-- 검색 및 필터 영역 -->
             <div class="controls-area">
                 <div class="search-filter">
-                    <input type="text" id="searchInput" placeholder="도서명, 저자, 발행처 검색">
+                    <select id="searchCriteria">
+                        <option value="book_title" selected>도서명</option>
+                        <option value="author">저자</option>
+                        <option value="publisher">발행처</option>
+                    </select>
+                    <input type="text" id="searchInput" placeholder="검색어 입력하세요">
                     <select id="yearFilter">
                         <option value="">모든 발행년</option>
-                        <!-- JS에서 동적으로 채움 -->
                     </select>
                     <select id="itemsPerPage">
-                        <option value="10">10개</option>
-                        <option value="20" selected>20개</option>
+                        <option value="10" selected>10개</option>
+                        <option value="20">20개</option>
                         <option value="30">30개</option>
                         <option value="40">40개</option>
                         <option value="50">50개</option>
@@ -332,9 +417,11 @@
                         <option value="90">90개</option>
                         <option value="100">100개</option>
                     </select>
+                    <button id="downloadCsvBtn" title="현재 검색 결과 다운로드" disabled>
+                        <i class="fas fa-file-csv"></i> CSV 다운로드
+                    </button>
                 </div>
 
-                <!-- 뷰 전환 및 결과 정보 -->
                 <div class="view-toggle">
                     <div class="toggle-buttons">
                         <button id="tableViewBtn">
@@ -350,20 +437,17 @@
                 </div>
             </div>
 
-            <!-- 로딩 표시기 -->
             <div class="loader" id="loader">
                 <i class="fas fa-spinner fa-2x"></i>
                 <p>도서 목록을 불러오는 중...</p>
             </div>
 
-            <!-- 결과 없음 표시 -->
             <div class="no-results" id="noResults">
                 <i class="fas fa-search"></i>
                 <h3>검색 결과가 없습니다</h3>
                 <p>다른 검색어나 필터 조건을 시도해보세요.</p>
             </div>
 
-            <!-- 테이블 뷰 -->
             <div class="table-view" id="tableView" style="display: none;">
                 <table id="bookTable">
                     <thead>
@@ -378,30 +462,32 @@
                 </table>
             </div>
 
-            <!-- 카드 뷰 -->
             <div class="card-view" id="cardView"></div>
 
-            <!-- 페이지네이션 -->
             <div class="pagination" id="pagination"></div>
         </div>
     </main>
-
-    <footer>
-        <div class="container">
-            한 걸음씩, 꿈을 향해 🌟
-        </div>
-    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // 전역 변수
             let books = [];
             let currentPage = 1;
-            let itemsPerPage = 20; // 기본값 20
+            let itemsPerPage = 10;
             let filteredBooks = [];
             let sortKey = 'book_title';
-            let sortOrder = 1; // 1: 오름차순, -1: 내림차순
-            let currentView = window.innerWidth <= 768 ? 'card' : 'table'; // 모바일: 카드, PC: 테이블
+            let sortOrder = 1;
+            let currentView = window.innerWidth <= 768 ? 'card' : 'table';
+
+            // 텍스트 줄임표 적용할 최대 길이 상수
+            const TABLE_TITLE_MAX_LENGTH = 24;
+            const TABLE_AUTHOR_MAX_LENGTH = 6;
+            const TABLE_PUBLISHER_MAX_LENGTH = 6;
+            const TABLE_YEAR_MAX_LENGTH = 4;
+
+            const CARD_TITLE_MAX_LENGTH = 22;
+            const CARD_AUTHOR_MAX_LENGTH = 15;
+            const CARD_PUBLISHER_MAX_LENGTH = 15;
 
             // DOM 엘리먼트
             const tableView = document.getElementById('tableView');
@@ -414,6 +500,9 @@
             const loader = document.getElementById('loader');
             const noResults = document.getElementById('noResults');
             const itemsPerPageSelect = document.getElementById('itemsPerPage');
+            const downloadCsvBtn = document.getElementById('downloadCsvBtn');
+            const searchCriteria = document.getElementById('searchCriteria'); // 추가: 검색 기준 셀렉트박스
+            const pagination = document.getElementById('pagination');
 
             // 뷰 전환 이벤트
             tableViewBtn.addEventListener('click', () => setView('table'));
@@ -422,7 +511,6 @@
             // 뷰 설정 함수
             function setView(view) {
                 currentView = view;
-
                 if (view === 'table') {
                     tableView.style.display = 'block';
                     cardView.style.display = 'none';
@@ -434,17 +522,17 @@
                     tableViewBtn.classList.remove('active');
                     cardViewBtn.classList.add('active');
                 }
-
                 renderBooks();
             }
 
-            // 데이터 로딩 상태 표시
+            // 로더 표시
             function showLoader(show) {
                 loader.style.display = show ? 'block' : 'none';
                 if (show) {
                     tableView.style.display = 'none';
                     cardView.style.display = 'none';
                     noResults.style.display = 'none';
+                    pagination.style.display = 'none';
                 }
             }
 
@@ -461,7 +549,12 @@
             // JSON 데이터 로드
             showLoader(true);
             fetch('./js/books.json')
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     books = data;
                     filteredBooks = [...books];
@@ -469,6 +562,7 @@
                     // 발행년 옵션 동적 생성
                     const years = [...new Set(books.map(book => book.publish_year))].sort((a, b) => b - a);
                     const yearFilter = document.getElementById('yearFilter');
+                    yearFilter.innerHTML = '<option value="">전체</option>';
                     years.forEach(year => {
                         const option = document.createElement('option');
                         option.value = year;
@@ -476,10 +570,11 @@
                         yearFilter.appendChild(option);
                     });
 
-                    // 초기 뷰 설정
+                    // CSV 다운로드 버튼 활성화
+                    downloadCsvBtn.disabled = false; // 데이터 로드 완료 후 활성화
+
                     setView(currentView);
                     updateResultsInfo();
-                    renderBooks();
                     showLoader(false);
                 })
                 .catch(error => {
@@ -496,56 +591,159 @@
                 currentRange.textContent = filteredBooks.length > 0 ? `${start}-${end}` : '0-0';
             }
 
+            // 텍스트 줄임 함수
+            function truncateText(text, maxLength) {
+                if (text === null || text === undefined) {
+                    return '';
+                }
+                text = String(text);
+                if (text.length > maxLength) {
+                    return text.substring(0, maxLength) + '...';
+                }
+                return text;
+            }
+
             // 테이블 행 렌더링
-            function renderTableRows(books) {
+            function renderTableRows(booksToRender) {
                 const tbody = document.getElementById('bookBody');
                 tbody.innerHTML = '';
 
-                books.forEach(book => {
+                booksToRender.forEach(book => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                    <td>${book.book_title}</td>
-                    <td>${book.author}</td>
-                    <td>${book.publisher}</td>
-                    <td>${book.publish_year}</td>
-                `;
+                <td data-fulltext="${book.book_title}">${truncateText(book.book_title, TABLE_TITLE_MAX_LENGTH)}</td>
+                <td data-fulltext="${book.author}">${truncateText(book.author, TABLE_AUTHOR_MAX_LENGTH)}</td>
+                <td data-fulltext="${book.publisher}">${truncateText(book.publisher, TABLE_PUBLISHER_MAX_LENGTH)}</td>
+                <td>${truncateText(book.publish_year, TABLE_YEAR_MAX_LENGTH)}</td>
+            `;
                     tbody.appendChild(row);
+                });
+
+                // 빈 행 추가
+                const remainingRows = itemsPerPage - booksToRender.length;
+                for (let i = 0; i < remainingRows; i++) {
+                    const emptyRow = document.createElement('tr');
+                    emptyRow.innerHTML = `<td></td><td></td><td></td><td></td>`;
+                    tbody.appendChild(emptyRow);
+                }
+
+                // 텍스트 토글 이벤트
+                tbody.querySelectorAll('td[data-fulltext]').forEach(td => {
+                    const fullText = td.dataset.fulltext;
+                    if (td.textContent.endsWith('...') && fullText.length > td.textContent.length - 3) {
+                        td.style.cursor = 'pointer';
+                        td.addEventListener('click', function () {
+                            if (this.textContent.endsWith('...')) {
+                                this.textContent = fullText;
+                            } else {
+                                let maxLength;
+                                if (td.cellIndex === 0) maxLength = TABLE_TITLE_MAX_LENGTH;
+                                else if (td.cellIndex === 1) maxLength = TABLE_AUTHOR_MAX_LENGTH;
+                                else if (td.cellIndex === 2) maxLength = TABLE_PUBLISHER_MAX_LENGTH;
+                                this.textContent = truncateText(fullText, maxLength);
+                            }
+                        });
+                    } else {
+                        td.style.cursor = 'default';
+                    }
                 });
             }
 
             // 카드 렌더링
-            function renderCards(books) {
+            function renderCards(booksToRender) {
                 cardView.innerHTML = '';
 
-                books.forEach(book => {
+                booksToRender.forEach(book => {
                     const card = document.createElement('div');
                     card.className = 'book-card';
 
+                    const truncatedTitle = truncateText(book.book_title, CARD_TITLE_MAX_LENGTH);
+                    const truncatedAuthor = truncateText(book.author, CARD_AUTHOR_MAX_LENGTH);
+                    const truncatedPublisher = truncateText(book.publisher, CARD_PUBLISHER_MAX_LENGTH);
+
                     card.innerHTML = `
-                    <div class="book-title">${book.book_title}</div>
-                    <div class="book-author">${book.author}</div>
-                    <div class="toggle-details">자세히 보기 <i class="fas fa-chevron-down"></i></div>
-                    <div class="book-details">
-                        <div>발행처: ${book.publisher}</div>
-                        <div>발행년: ${book.publish_year}</div>
-                    </div>
-                `;
+                <div class="book-title" data-fulltext="${book.book_title}">${truncatedTitle}</div>
+                <div class="book-author" data-fulltext="${book.author}">${truncatedAuthor}</div>
+                <div class="toggle-details">자세히 보기 <i class="fas fa-chevron-down"></i></div>
+                <div class="book-details">
+                    <div data-label="발행처" data-fulltext="${book.publisher}">발행처: ${truncatedPublisher}</div>
+                    <div data-label="발행년">발행년: ${book.publish_year}</div>
+                </div>
+            `;
 
                     const toggleDetails = card.querySelector('.toggle-details');
                     const bookDetails = card.querySelector('.book-details');
 
-                    toggleDetails.addEventListener('click', function () {
-                        const expanded = bookDetails.classList.toggle('expanded');
-                        toggleDetails.innerHTML = expanded ?
-                            '접기 <i class="fas fa-chevron-up"></i>' :
-                            '자세히 보기 <i class="fas fa-chevron-down"></i>';
+                    if (window.innerWidth <= 768) {
+                        toggleDetails.addEventListener('click', function () {
+                            const expanded = bookDetails.classList.toggle('expanded');
+                            toggleDetails.innerHTML = expanded ?
+                                '접기 <i class="fas fa-chevron-up"></i>' :
+                                '자세히 보기 <i class="fas fa-chevron-down"></i>';
+                        });
+                    } else {
+                        toggleDetails.style.display = 'none';
+                        bookDetails.style.display = 'block';
+                    }
+
+                    card.querySelectorAll('[data-fulltext]').forEach(element => {
+                        const fullText = element.dataset.fulltext;
+                        let currentTruncateLength;
+
+                        if (element.classList.contains('book-title')) {
+                            currentTruncateLength = CARD_TITLE_MAX_LENGTH;
+                        } else if (element.classList.contains('book-author')) {
+                            currentTruncateLength = CARD_AUTHOR_MAX_LENGTH;
+                        } else if (element.dataset.label === '발행처') {
+                            currentTruncateLength = CARD_PUBLISHER_MAX_LENGTH;
+                        } else {
+                            return;
+                        }
+
+                        if (element.textContent.endsWith('...') && fullText.length > element.textContent.length - 3) {
+                            element.style.cursor = 'pointer';
+                            element.addEventListener('click', function () {
+                                if (this.textContent.endsWith('...')) {
+                                    if (this.dataset.label === '발행처') {
+                                        this.textContent = `발행처: ${fullText}`;
+                                    } else {
+                                        this.textContent = fullText;
+                                    }
+                                } else {
+                                    if (this.dataset.label === '발행처') {
+                                        this.textContent = `발행처: ${truncateText(fullText, currentTruncateLength)}`;
+                                    } else {
+                                        this.textContent = truncateText(fullText, currentTruncateLength);
+                                    }
+                                }
+                            });
+                        } else {
+                            element.style.cursor = 'default';
+                        }
                     });
 
                     cardView.appendChild(card);
                 });
+
+                // 빈 카드 추가
+                const remainingCards = itemsPerPage - booksToRender.length;
+                for (let i = 0; i < remainingCards; i++) {
+                    const emptyCard = document.createElement('div');
+                    emptyCard.className = 'book-card empty-card';
+                    emptyCard.innerHTML = `
+                <div class="book-title"></div>
+                <div class="book-author"></div>
+                <div class="toggle-details" style="display:none;"></div>
+                <div class="book-details">
+                    <div></div>
+                    <div></div>
+                </div>
+            `;
+                    cardView.appendChild(emptyCard);
+                }
             }
 
-            // 책 렌더링 (현재 뷰에 따라)
+            // 책 렌더링
             function renderBooks() {
                 if (filteredBooks.length === 0) {
                     showNoResults(true);
@@ -568,14 +766,11 @@
                 }
 
                 renderPagination();
-
-                // 스크롤을 검색창 상단으로 이동
                 document.querySelector('.controls-area').scrollIntoView({ behavior: 'smooth' });
             }
 
             // 페이지네이션 렌더링
             function renderPagination() {
-                const pagination = document.getElementById('pagination');
                 pagination.innerHTML = '';
                 const pageCount = Math.ceil(filteredBooks.length / itemsPerPage);
 
@@ -586,7 +781,6 @@
 
                 pagination.style.display = 'flex';
 
-                // 첫 페이지 버튼
                 const firstButton = document.createElement('button');
                 firstButton.classList.add('first');
                 firstButton.innerHTML = '«';
@@ -597,7 +791,6 @@
                 });
                 pagination.appendChild(firstButton);
 
-                // 이전 버튼
                 const prevButton = document.createElement('button');
                 prevButton.classList.add('prev');
                 prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
@@ -610,8 +803,7 @@
                 });
                 pagination.appendChild(prevButton);
 
-                // 페이지 번호 버튼
-                const maxVisible = window.innerWidth > 768 ? 10 : 5; // PC: 10개, 모바일: 5개
+                const maxVisible = window.innerWidth > 768 ? 10 : 5;
                 let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
                 let endPage = Math.min(pageCount, startPage + maxVisible - 1);
 
@@ -630,7 +822,6 @@
                     pagination.appendChild(button);
                 }
 
-                // 다음 버튼
                 const nextButton = document.createElement('button');
                 nextButton.classList.add('next');
                 nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
@@ -643,7 +834,6 @@
                 });
                 pagination.appendChild(nextButton);
 
-                // 마지막 페이지 버튼
                 const lastButton = document.createElement('button');
                 lastButton.classList.add('last');
                 lastButton.innerHTML = '»';
@@ -655,24 +845,22 @@
                 pagination.appendChild(lastButton);
             }
 
-            // 검색 및 필터링
+            // 검색 및 필터링 (수정됨)
             function filterBooks() {
                 const searchValue = document.getElementById('searchInput').value.toLowerCase();
                 const yearValue = document.getElementById('yearFilter').value;
+                const criteria = searchCriteria.value; // 선택된 검색 기준
 
                 filteredBooks = books.filter(book => {
-                    const matchesSearch = searchValue === '' ||
-                        book.book_title.toLowerCase().includes(searchValue) ||
-                        book.author.toLowerCase().includes(searchValue) ||
-                        book.publisher.toLowerCase().includes(searchValue);
-                    const matchesYear = yearValue === '' || book.publish_year === yearValue;
+                    const fieldValue = book[criteria] ? String(book[criteria]).toLowerCase() : '';
+                    const bookYear = book.publish_year ? String(book.publish_year) : '';
+
+                    const matchesSearch = searchValue === '' || fieldValue.includes(searchValue);
+                    const matchesYear = yearValue === '' || bookYear === yearValue;
                     return matchesSearch && matchesYear;
                 });
 
-                // 정렬
                 sortBooks();
-
-                // 첫 페이지로 돌아가기
                 currentPage = 1;
                 renderBooks();
             }
@@ -680,9 +868,12 @@
             // 도서 정렬
             function sortBooks() {
                 filteredBooks.sort((a, b) => {
-                    const valueA = a[sortKey].toString().toLowerCase();
-                    const valueB = b[sortKey].toString().toLowerCase();
-                    return sortOrder * (valueA > valueB ? 1 : valueA < valueB ? -1 : 0);
+                    const valueA = (a[sortKey] || '').toString().toLowerCase();
+                    const valueB = (b[sortKey] || '').toString().toLowerCase();
+
+                    if (valueA < valueB) return sortOrder * -1;
+                    if (valueA > valueB) return sortOrder * 1;
+                    return 0;
                 });
             }
 
@@ -690,6 +881,7 @@
             function updateSortIndicators() {
                 document.querySelectorAll('th i').forEach(icon => {
                     icon.className = 'fas fa-sort';
+                    icon.classList.remove('active');
                 });
 
                 const currentTh = document.querySelector(`th[data-sort="${sortKey}"]`);
@@ -699,24 +891,50 @@
                 }
             }
 
-            // 검색 입력 이벤트 (debounce)
+            // CSV 다운로드 (수정됨)
+            function downloadCsv() {
+                if (filteredBooks.length === 0) {
+                    alert('다운로드할 데이터가 없습니다.');
+                    return;
+                }
+
+                const headers = ['도서명', '저자', '발행처', '발행년'];
+                const rows = filteredBooks.map(book => [
+                    `"${(book.book_title || '').replace(/"/g, '""')}"`,
+                    `"${(book.author || '').replace(/"/g, '""')}"`,
+                    `"${(book.publisher || '').replace(/"/g, '""')}"`,
+                    (book.publish_year || '')
+                ]);
+
+                let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + headers.join(',') + '\n';
+                rows.forEach(row => {
+                    csvContent += row.join(',') + '\n';
+                });
+
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement('a');
+                link.setAttribute('href', encodedUri);
+                link.setAttribute('download', '강서폴리텍_도서_목록.csv');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
+            // 이벤트 리스너
             let debounceTimeout;
             document.getElementById('searchInput').addEventListener('input', () => {
                 clearTimeout(debounceTimeout);
                 debounceTimeout = setTimeout(filterBooks, 300);
             });
 
-            // 발행년 필터 이벤트
+            searchCriteria.addEventListener('change', filterBooks); // 추가: 검색 기준 변경 시 필터링
             document.getElementById('yearFilter').addEventListener('change', filterBooks);
-
-            // 줄 수 선택 이벤트
             itemsPerPageSelect.addEventListener('change', () => {
                 itemsPerPage = parseInt(itemsPerPageSelect.value);
                 currentPage = 1;
                 renderBooks();
             });
 
-            // 테이블 헤더 정렬 이벤트
             document.querySelectorAll('th[data-sort]').forEach(th => {
                 th.addEventListener('click', () => {
                     const newSortKey = th.dataset.sort;
@@ -726,13 +944,22 @@
                         sortKey = newSortKey;
                         sortOrder = 1;
                     }
-
                     updateSortIndicators();
                     filterBooks();
                 });
             });
+
+            downloadCsvBtn.addEventListener('click', downloadCsv);
+
+            updateSortIndicators();
         });
     </script>
+
+    <footer>
+        <div class="container">
+            한 걸음씩, 꿈을 향해 🌟
+        </div>
+    </footer>
 </body>
 
 </html>
