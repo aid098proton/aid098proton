@@ -207,16 +207,14 @@
 
         /* CSV 다운로드 버튼 스타일 */
         #downloadCsvBtn {
-            /* ↓ 20250521수 CSV 다운로드 전체 로드가 실패인지 버그가 있어 표시하지 않았다.*/
-            display: none;
-            /* display: flex; */
+            display: flex;
             padding: 10px 15px;
             background-color: #27ae60;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;            
+            font-size: 16px;
             align-items: center;
             gap: 8px;
             transition: background-color 0.2s;
@@ -895,7 +893,7 @@
 
             // CSV 다운로드 (수정됨)
             function downloadCsv() {
-                if (filteredBooks.length === 0) {
+                if (!filteredBooks || filteredBooks.length === 0) {
                     alert('다운로드할 데이터가 없습니다.');
                     return;
                 }
@@ -908,18 +906,26 @@
                     (book.publish_year || '')
                 ]);
 
-                let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + headers.join(',') + '\n';
+                // CSV 문자열 생성 (UTF-8 with BOM)
+                let csvContent = '\uFEFF' + headers.join(',') + '\n';
                 rows.forEach(row => {
                     csvContent += row.join(',') + '\n';
                 });
 
-                const encodedUri = encodeURI(csvContent);
+                // Blob 객체 생성
+                const blob = new Blob([csvContent], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+
+                // 다운로드 링크 생성 및 클릭
                 const link = document.createElement('a');
-                link.setAttribute('href', encodedUri);
+                link.setAttribute('href', url);
                 link.setAttribute('download', '강서폴리텍_도서_목록.csv');
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+
+                // 메모리 해제
+                URL.revokeObjectURL(url);
             }
 
             // 이벤트 리스너
