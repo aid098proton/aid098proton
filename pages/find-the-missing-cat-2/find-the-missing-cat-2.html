@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>사라진 고양이를 찾아라 2</title>
+    <link rel="stylesheet" href="../../css/common.css" />
+    <link rel="icon" type="image/png" sizes="180x180" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+    <style>
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 100px);
+            position: relative;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        canvas {
+            border: 1px solid #333;
+            max-width: 100%;
+            max-height: 60vh;
+            background: #000;
+        }
+
+        .status {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 880px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .controls {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            max-width: 880px;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .move-controls,
+        .battle-controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .controls button {
+            padding: 20px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            touch-action: manipulation;
+            min-width: 80px;
+        }
+
+        .controls button:active {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                display: flex;
+            }
+
+            canvas {
+                max-height: 50vh;
+            }
+        }
+
+        .fade {
+            transition: opacity 0.5s;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>고양이를 찾아라 2</h1>
+            <a href="../../index.html" class="back-btn">뒤로</a>
+        </div>
+    </header>
+
+    <main>
+        <canvas id="gameCanvas" width="880" height="720"></canvas>
+        <div class="status" id="status"></div>
+        <div class="controls" style="z-index: 1000;">
+            <div class="move-controls" id="moveControls">
+                <button id="startGame">시작</button>
+                <button id="moveUp" style="display: none;">↑</button>
+                <button id="moveLeft" style="display: none;">←</button>
+                <button id="moveDown" style="display: none;">↓</button>
+                <button id="moveRight" style="display: none;">→</button>
+                <button id="changeSpeed" style="display: none;">속도 변경</button>
+            </div>
+            <div class="battle-controls" id="battleControls" style="display: none;">
+                <button id="attack">[A] Attack</button>
+                <button id="potion">[P]otion</button>
+                <button id="blazegem">[B]laze</button>
+                <button id="run">[R]un</button>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 100px);
+            position: relative;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        canvas {
+            border: 1px solid #333;
+            max-width: 100%;
+            max-height: 60vh;
+            background: #000;
+        }
+
+        .status {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 880px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .controls {
+            display: flex;
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            max-width: 880px;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .move-controls,
+        .battle-controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .controls button {
+            padding: 20px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            touch-action: manipulation;
+            min-width: 80px;
+        }
+
+        .controls button:active {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            canvas {
+                max-height: 50vh;
+            }
+        }
+
+        .fade {
+            transition: opacity 0.5s;
+        }
+    </style>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const statusDiv = document.getElementById('status');
+        const moveControls = document.getElementById('moveControls');
+        const battleControls = document.getElementById('battleControls');
+
+        // 상태 변수 초기화
+        let speed = 1, idx = 0, tmr = 0, floor = 0, fl_max = 1, welcome = 0;
+        let pl_x = 0, pl_y = 0, pl_d = 0, pl_a = 0, pl_lifemax = 0, pl_life = 0, pl_str = 0;
+        let food = 0, potion = 0, blazegem = 0, treasure = 0;
+        let emy_name = '', emy_lifemax = 0, emy_life = 0, emy_str = 0, emy_x = 0, emy_y = 0;
+        let emy_step = 0, emy_blink = 0, dmg_eff = 0, btl_cmd = 0;
+        const MAZE_W = 11, MAZE_H = 9, DUNGEON_W = MAZE_W * 3, DUNGEON_H = MAZE_H * 3;
+        let maze = Array(MAZE_H).fill().map(() => Array(MAZE_W).fill(0));
+        let dungeon = Array(DUNGEON_H).fill().map(() => Array(DUNGEON_W).fill(0));
+        let message = Array(10).fill('');
+
+        // 색상 및 상수
+        const COLORS = { WHITE: '#FFF', BLACK: '#000', RED: '#F00', CYAN: '#0FF' };
+        const BLINK = ['#E0FFFF', '#C0F0FF', '#80E0FF', '#40C0FF', '#80E0FF', '#C0F0FF'];
+        const COMMAND = ['[A] Attack', '[P]otion', '[B]laze gem', '[R]un'];
+        const TRE_NAME = ['Potion', 'Blaze gem', 'Food spoiled.', 'Food +20', 'Food +100'];
+        const EMY_NAME = ['Green slime', 'Red slime', 'Axe beast', 'Ogre', 'Sword man', 'Death hornet', 'Signal slime', 'Devil plant', 'Twin killer', 'Hell'];
+
+        // 이미지 로드
+        const images = {
+            title: { src: 'image/title.png', width: 800, height: 360 },
+            wall: { src: 'image/wall.png', width: 80, height: 120 },
+            wall2: { src: 'image/wall2.png', width: 80, height: 40 },
+            floor: { src: 'image/floor.png', width: 80, height: 80 },
+            stairs: { src: 'image/stairs.png', width: 80, height: 80 },
+            tbox: { src: 'image/tbox.png', width: 80, height: 80 },
+            cocoon: { src: 'image/cocoon.png', width: 80, height: 80 },
+            mychr0: { src: 'image/mychr0.png', width: 80, height: 120 },
+            mychr1: { src: 'image/mychr1.png', width: 80, height: 120 },
+            mychr2: { src: 'image/mychr2.png', width: 80, height: 120 },
+            mychr3: { src: 'image/mychr3.png', width: 80, height: 120 },
+            mychr4: { src: 'image/mychr4.png', width: 80, height: 120 },
+            mychr5: { src: 'image/mychr5.png', width: 80, height: 120 },
+            mychr6: { src: 'image/mychr6.png', width: 80, height: 120 },
+            mychr7: { src: 'image/mychr7.png', width: 80, height: 120 },
+            mychr8: { src: 'image/mychr8.png', width: 80, height: 120 },
+            apple: { src: 'image/apple.png', width: 48, height: 60 },
+            blaze_gem: { src: 'image/blaze_gem.png', width: 48, height: 60 },
+            potion: { src: 'image/potion.png', width: 48, height: 60 },
+            spoiled: { src: 'image/spoiled.png', width: 48, height: 60 },
+            meat: { src: 'image/meat.png', width: 48, height: 60 },
+            btlbg: { src: 'image/btlbg.png', width: 880, height: 720 },
+            dark: { src: 'image/dark.png', width: 880, height: 720 },
+            parameter: { src: 'image/parameter.png', width: 300, height: 84 },
+            effect_a: { src: 'image/effect_a.png', width: 200, height: 200 },
+            effect_b: { src: 'image/effect_b.png', width: 500, height: 500 },
+            enemy0: { src: 'image/enemy0.png', width: 175, height: 230 },
+            enemy1: { src: 'image/enemy1.png', width: 175, height: 230 },
+            enemy2: { src: 'image/enemy2.png', width: 285, height: 320 },
+            enemy3: { src: 'image/enemy3.png', width: 305, height: 480 },
+            enemy4: { src: 'image/enemy4.png', width: 300, height: 460 },
+            enemy5: { src: 'image/enemy5.png', width: 440, height: 540 },
+            enemy6: { src: 'image/enemy6.png', width: 525, height: 230 },
+            enemy7: { src: 'image/enemy7.png', width: 280, height: 510 },
+            enemy8: { src: 'image/enemy8.png', width: 500, height: 460 },
+            enemy9: { src: 'image/enemy9.png', width: 800, height: 600 }
+        };
+
+        Object.keys(images).forEach(key => {
+            images[key].img = new Image();
+            images[key].img.src = images[key].src;
+            images[key].img.onerror = () => console.error(`이미지 로드 실패: ${images[key].src}`);
+        });
+
+        // 사운드 로드
+        const se = [
+            new Audio('sound/ohd_se_attack.ogg'),
+            new Audio('sound/ohd_se_blaze.ogg'),
+            new Audio('sound/ohd_se_potion.ogg'),
+            new Audio('sound/ohd_jin_gameover.ogg'),
+            new Audio('sound/ohd_jin_levup.ogg'),
+            new Audio('sound/ohd_jin_win.ogg')
+        ];
+        const bgm = {
+            title: new Audio('sound/ohd_bgm_title.ogg'),
+            field: new Audio('sound/ohd_bgm_field.ogg'),
+            battle: new Audio('sound/ohd_bgm_battle.ogg')
+        };
+        Object.values(bgm).forEach(b => b.loop = true);
+        let audioEnabled = false;
+
+        // 버튼 이벤트 바인딩
+        function bindButtonEvents() {
+            document.getElementById('moveUp').onclick = () => movePlayer('up');
+            document.getElementById('moveLeft').onclick = () => movePlayer('left');
+            document.getElementById('moveDown').onclick = () => movePlayer('down');
+            document.getElementById('moveRight').onclick = () => movePlayer('right');
+            document.getElementById('changeSpeed').onclick = changeSpeed;
+            document.getElementById('attack').onclick = () => battleCommand('attack');
+            document.getElementById('potion').onclick = () => battleCommand('potion');
+            document.getElementById('blazegem').onclick = () => battleCommand('blazegem');
+            document.getElementById('run').onclick = () => battleCommand('run');
+        }
+
+        // 속도 변경
+        function changeSpeed() {
+            speed = (speed % 3) + 1;
+            statusDiv.innerHTML = `Speed: ${speed} | Floor: ${floor} | Life: ${pl_life}/${pl_lifemax} | Str: ${pl_str} | Food: ${food} | Potion: ${potion} | Blaze: ${blazegem}`;
+        }
+
+        // 던전 생성
+        function makeDungeon() {
+            const XP = [0, 1, 0, -1], YP = [-1, 0, 1, 0];
+            for (let x = 0; x < MAZE_W; x++) maze[0][x] = maze[MAZE_H - 1][x] = 1;
+            for (let y = 1; y < MAZE_H - 1; y++) maze[y][0] = maze[y][MAZE_W - 1] = 1;
+            for (let y = 1; y < MAZE_H - 1; y++) for (let x = 1; x < MAZE_W - 1; x++) maze[y][x] = 0;
+            for (let y = 2; y < MAZE_H - 2; y += 2) for (let x = 2; x < MAZE_W - 2; x += 2) maze[y][x] = 1;
+            for (let y = 2; y < MAZE_H - 2; y += 2) for (let x = 2; x < MAZE_W - 2; x += 2) {
+                let d = x > 2 ? Math.floor(Math.random() * 3) : Math.floor(Math.random() * 4);
+                maze[y + YP[d]][x + XP[d]] = 1;
+            }
+            for (let y = 0; y < DUNGEON_H; y++) for (let x = 0; x < DUNGEON_W; x++) dungeon[y][x] = 9;
+            for (let y = 1; y < MAZE_H - 1; y++) for (let x = 1; x < MAZE_W - 1; x++) {
+                let dx = x * 3 + 1, dy = y * 3 + 1;
+                if (maze[y][x] === 0) {
+                    if (Math.random() * 100 < 20) for (let ry = -1; ry <= 1; ry++) for (let rx = -1; rx <= 1; rx++) dungeon[dy + ry][dx + rx] = 0;
+                    else {
+                        dungeon[dy][dx] = 0;
+                        if (maze[y - 1][x] === 0) dungeon[dy - 1][dx] = 0;
+                        if (maze[y + 1][x] === 0) dungeon[dy + 1][dx] = 0;
+                        if (maze[y][x - 1] === 0) dungeon[dy][dx - 1] = 0;
+                        if (maze[y][x + 1] === 0) dungeon[dy][dx + 1] = 0;
+                    }
+                }
+            }
+        }
+
+        // 이벤트 배치
+        function putEvent() {
+            while (true) {
+                let x = Math.floor(Math.random() * (DUNGEON_W - 7)) + 3;
+                let y = Math.floor(Math.random() * (DUNGEON_H - 7)) + 3;
+                if (dungeon[y][x] === 0) {
+                    for (let ry = -1; ry <= 1; ry++) for (let rx = -1; rx <= 1; rx++) dungeon[y + ry][x + rx] = 0;
+                    dungeon[y][x] = 3;
+                    break;
+                }
+            }
+            for (let i = 0; i < 60; i++) {
+                let x = Math.floor(Math.random() * (DUNGEON_W - 7)) + 3;
+                let y = Math.floor(Math.random() * (DUNGEON_H - 7)) + 3;
+                if (dungeon[y][x] === 0) dungeon[y][x] = [1, 2, 2, 2, 2][Math.floor(Math.random() * 5)];
+            }
+            while (true) {
+                pl_x = Math.floor(Math.random() * (DUNGEON_W - 7)) + 3;
+                pl_y = Math.floor(Math.random() * (DUNGEON_H - 7)) + 3;
+                if (dungeon[pl_y][pl_x] === 0) break;
+            }
+            pl_d = 1; pl_a = 2;
+        }
+
+        // 플레이어 이동
+        function movePlayer(dir) {
+            if (idx !== 1) {
+                console.log(`movePlayer 호출 실패: idx=${idx}`);
+                return;
+            }
+            let x = pl_x, y = pl_y;
+            if (dir === 'up' && dungeon[pl_y - 1][pl_x] !== 9) { pl_y -= 1; pl_d = 0; }
+            if (dir === 'down' && dungeon[pl_y + 1][pl_x] !== 9) { pl_y += 1; pl_d = 1; }
+            if (dir === 'left' && dungeon[pl_y][pl_x - 1] !== 9) { pl_x -= 1; pl_d = 2; }
+            if (dir === 'right' && dungeon[pl_y][pl_x + 1] !== 9) { pl_x += 1; pl_d = 3; }
+            pl_a = pl_d * 2 + (tmr % 2);
+            if (pl_x !== x || pl_y !== y) {
+                console.log(`플레이어 이동: (${pl_x}, ${pl_y})`);
+                food -= 1;
+                if (food > 0 && pl_life < pl_lifemax) pl_life += 1;
+                else if (food <= 0) {
+                    pl_life -= 5;
+                    if (pl_life <= 0) {
+                        pl_life = 0;
+                        bgm.field.pause();
+                        idx = 9; tmr = 0;
+                    }
+                }
+                if (dungeon[pl_y][pl_x] === 1) {
+                    dungeon[pl_y][pl_x] = 0;
+                    treasure = [0, 0, 0, 1, 1, 1, 1, 1, 1, 2][Math.floor(Math.random() * 10)];
+                    if (treasure === 0) potion += 1;
+                    if (treasure === 1) blazegem += 1;
+                    if (treasure === 2) food = Math.floor(food / 2);
+                    idx = 3; tmr = 0;
+                    if (!audioEnabled) { audioEnabled = true; bgm.field.play(); }
+                } else if (dungeon[pl_y][pl_x] === 2) {
+                    dungeon[pl_y][pl_x] = 0;
+                    if (Math.random() * 100 < 40) {
+                        treasure = [3, 3, 3, 4][Math.floor(Math.random() * 4)];
+                        if (treasure === 3) food += 20;
+                        if (treasure === 4) food += 100;
+                        idx = 3; tmr = 0;
+                    } else {
+                        idx = 10; tmr = 0;
+                    }
+                } else if (dungeon[pl_y][pl_x] === 3) {
+                    idx = 2; tmr = 0;
+                }
+            }
+        }
+
+        // 텍스트 그리기
+        function drawText(txt, x, y, col) {
+            ctx.fillStyle = '#000';
+            ctx.fillText(txt, x + 1, y + 2);
+            ctx.fillStyle = col;
+            ctx.fillText(txt, x, y);
+        }
+
+        // 상태 표시
+        function drawStatus() {
+            if (images.parameter.img.complete) {
+                ctx.drawImage(images.parameter.img, 440 - images.parameter.width / 2, 720 - images.parameter.height, images.parameter.width, images.parameter.height);
+            }
+            let col = pl_life < 10 && tmr % 2 === 0 ? COLORS.RED : COLORS.WHITE;
+            drawText(`${pl_life}/${pl_lifemax}`, 460, 660, col);
+            drawText(`${pl_str}`, 460, 690, COLORS.WHITE);
+            col = food === 0 && tmr % 2 === 0 ? COLORS.RED : COLORS.WHITE;
+            drawText(`${food}`, 460, 720, col);
+            drawText(`${potion}`, 600, 660, COLORS.WHITE);
+            drawText(`${blazegem}`, 600, 690, COLORS.WHITE);
+        }
+
+        // 전투 초기화
+        function initBattle() {
+            let typ = Math.floor(Math.random() * (floor >= 10 ? 10 : floor + 1));
+            let lev = Math.floor(Math.random() * floor) + 1;
+            emy_name = `${EMY_NAME[typ]} LV${lev}`;
+            emy_lifemax = 60 * (typ + 1) + (lev - 1) * 10;
+            emy_life = emy_lifemax;
+            emy_str = Math.floor(emy_lifemax / 8);
+            emy_x = 440 - images[`enemy${typ}`].width / 2;
+            emy_y = 560 - images[`enemy${typ}`].height;
+        }
+
+        // 게이지 그리기
+        function drawBar(x, y, w, h, val, max) {
+            ctx.strokeStyle = COLORS.WHITE;
+            ctx.strokeRect(x - 2, y - 2, w + 4, h + 4);
+            ctx.fillStyle = COLORS.BLACK;
+            ctx.fillRect(x, y, w, h);
+            if (val > 0) {
+                ctx.fillStyle = '#0080FF';
+                ctx.fillRect(x, y, w * val / max, h);
+            }
+        }
+
+        // 전투 화면 그리기
+        function drawBattle() {
+            if (images.btlbg.img.complete) {
+                ctx.drawImage(images.btlbg.img, 0, 0, images.btlbg.width, images.btlbg.height);
+            } else {
+                ctx.fillStyle = COLORS.BLACK;
+                ctx.fillRect(0, 0, 880, 720);
+            }
+            let bx = 0, by = 0;
+            if (dmg_eff > 0) {
+                dmg_eff -= 1;
+                bx = Math.floor(Math.random() * 41) - 20;
+                by = Math.floor(Math.random() * 21) - 10;
+            }
+            let typ = EMY_NAME.indexOf(emy_name.split(' LV')[0]);
+            let enemyImg = images[`enemy${typ}`].img;
+            if (emy_life > 0 && emy_blink % 2 === 0 && enemyImg.complete) {
+                ctx.drawImage(enemyImg, emy_x + bx, emy_y + by + emy_step, images[`enemy${typ}`].width, images[`enemy${typ}`].height);
+            }
+            drawBar(340, 580, 200, 10, emy_life, emy_lifemax);
+            if (emy_blink > 0) emy_blink -= 1;
+            for (let i = 0; i < 10; i++) drawText(message[i], 600, 100 + i * 50, COLORS.WHITE);
+            drawStatus();
+        }
+
+        // 전투 명령
+        function battleCommand(cmd) {
+            if (idx !== 11) {
+                console.log(`battleCommand 호출 실패: idx=${idx}`);
+                return;
+            }
+            if (cmd === 'attack') btl_cmd = 0;
+            if (cmd === 'potion') btl_cmd = 1;
+            if (cmd === 'blazegem') btl_cmd = 2;
+            if (cmd === 'run') btl_cmd = 3;
+            if (btl_cmd === 0) { idx = 12; tmr = 0; }
+            if (btl_cmd === 1 && potion > 0) { idx = 20; tmr = 0; }
+            if (btl_cmd === 2 && blazegem > 0) { idx = 21; tmr = 0; }
+            if (btl_cmd === 3) { idx = 14; tmr = 0; }
+            battleControls.style.display = 'none';
+        }
+
+        // 메시지 초기화
+        function initMessage() { message.fill(''); }
+
+        // 메시지 설정
+        function setMessage(msg) {
+            for (let i = 0; i < 10; i++) if (!message[i]) { message[i] = msg; return; }
+            for (let i = 0; i < 9; i++) message[i] = message[i + 1];
+            message[9] = msg;
+        }
+
+        // 던전 그리기
+        function drawDungeon() {
+            ctx.clearRect(0, 0, 880, 720); // 캔버스 완전히 지우기
+            for (let y = -4; y <= 5; y++) for (let x = -5; x <= 5; x++) {
+                let X = (x + 5) * 80, Y = (y + 4) * 80;
+                let dx = pl_x + x, dy = pl_y + y;
+                if (dx >= 0 && dx < DUNGEON_W && dy >= 0 && dy < DUNGEON_H) {
+                    if (dungeon[dy][dx] === 0 && images.floor.img.complete) {
+                        ctx.drawImage(images.floor.img, X, Y, images.floor.width, images.floor.height);
+                    } else if (dungeon[dy][dx] === 9 && images.wall.img.complete) {
+                        ctx.drawImage(images.wall.img, X, Y - 40, images.wall.width, images.wall.height);
+                    } else if (dungeon[dy][dx] === 1 && images.tbox.img.complete) {
+                        ctx.drawImage(images.tbox.img, X, Y, images.tbox.width, images.tbox.height);
+                    } else if (dungeon[dy][dx] === 2 && images.cocoon.img.complete) {
+                        ctx.drawImage(images.cocoon.img, X, Y, images.cocoon.width, images.cocoon.height);
+                    } else if (dungeon[dy][dx] === 3 && images.stairs.img.complete) {
+                        ctx.drawImage(images.stairs.img, X, Y, images.stairs.width, images.stairs.height);
+                    } else {
+                        ctx.fillStyle = dungeon[dy][dx] === 0 ? '#888' : '#555';
+                        ctx.fillRect(X, Y, 80, 80);
+                    }
+                    if (x === 0 && y === 0) {
+                        let chrImg = images[`mychr${pl_a}`].img;
+                        if (chrImg.complete) {
+                            ctx.drawImage(chrImg, X, Y - 40, images.mychr0.width, images.mychr0.height);
+                        } else {
+                            ctx.fillStyle = 'blue';
+                            ctx.fillRect(X, Y - 40, 50, 50);
+                        }
+                    }
+                }
+            }
+            if (images.dark.img.complete) {
+                ctx.drawImage(images.dark.img, 0, 0, images.dark.width, images.dark.height);
+            }
+            drawStatus();
+        }
+
+        // 메인 루프
+        function main() {
+            tmr += speed;
+            ctx.font = '30px Arial';
+            canvas.classList.add('fade');
+
+            // 기존 main 함수의 idx === 0 부분을 다음과 같이 교체
+            if (idx === 0) {
+                bgm.field.pause(); bgm.battle.pause();
+                ctx.clearRect(0, 0, 880, 720);
+                if (images.title.img.complete) {
+                    ctx.drawImage(images.title.img, 40, 60, images.title.width, images.title.height);
+                } else {
+                    ctx.fillStyle = COLORS.BLACK;
+                    ctx.fillRect(0, 0, 880, 720);
+                    drawText('One Hour Dungeon', 300, 200, COLORS.CYAN);
+                }
+                if (fl_max >= 2) drawText(`You reached floor ${fl_max}.`, 300, 460, COLORS.CYAN);
+                drawText('Press Start button', 280, 560, BLINK[tmr % 6]);
+                moveControls.style.display = 'flex';
+                battleControls.style.display = 'none';
+                document.getElementById('startGame').style.display = 'inline-block';
+                document.getElementById('moveUp').style.display = 'none';
+                document.getElementById('moveLeft').style.display = 'none';
+                document.getElementById('moveDown').style.display = 'none';
+                document.getElementById('moveRight').style.display = 'none';
+                document.getElementById('changeSpeed').style.display = 'none';
+                document.getElementById('startGame').onclick = () => {
+                    if (idx === 0) {
+                        makeDungeon(); putEvent();
+                        floor = 1; welcome = 15;
+                        pl_lifemax = 300; pl_life = pl_lifemax; pl_str = 100;
+                        food = 300; potion = 0; blazegem = 0;
+                        idx = 1; audioEnabled = true; bgm.field.play();
+                        document.getElementById('startGame').style.display = 'none';
+                        document.getElementById('moveUp').style.display = 'inline-block';
+                        document.getElementById('moveLeft').style.display = 'inline-block';
+                        document.getElementById('moveDown').style.display = 'inline-block';
+                        document.getElementById('moveRight').style.display = 'inline-block';
+                        document.getElementById('changeSpeed').style.display = 'inline-block';
+                    }
+                };
+            } else if (idx === 1) {
+                battleControls.style.display = 'none';
+                moveControls.style.display = 'flex';
+                if (audioEnabled) bgm.title.pause();
+                drawDungeon();
+                drawText(`Floor ${floor} (${pl_x},${pl_y})`, 60, 40, COLORS.WHITE);
+                if (welcome > 0) { welcome -= 1; drawText(`Welcome to floor ${floor}.`, 300, 180, COLORS.CYAN); }
+            } else if (idx === 2) {
+                drawDungeon();
+                if (tmr >= 1 && tmr <= 5) {
+                    let h = 80 * tmr;
+                    ctx.fillStyle = COLORS.BLACK;
+                    ctx.fillRect(0, 0, 880, h);
+                    ctx.fillRect(0, 720 - h, 880, h);
+                }
+                if (tmr === 5) { floor += 1; if (floor > fl_max) fl_max = floor; welcome = 15; makeDungeon(); putEvent(); }
+                if (tmr >= 6 && tmr <= 9) {
+                    let h = 80 * (10 - tmr);
+                    ctx.fillStyle = COLORS.BLACK;
+                    ctx.fillRect(0, 0, 880, h);
+                    ctx.fillRect(0, 720 - h, 880, h);
+                }
+                if (tmr === 10) { idx = 1; tmr = 0; }
+            } else if (idx === 3) {
+                drawDungeon();
+                let imgKey = { 0: 'potion', 1: 'blaze_gem', 2: 'spoiled', 3: 'apple', 4: 'meat' }[treasure];
+                if (images[imgKey].img.complete) {
+                    ctx.drawImage(images[imgKey].img, 320, 220, images[imgKey].width, images[imgKey].height);
+                } else {
+                    ctx.fillStyle = treasure === 0 ? COLORS.RED : treasure === 1 ? COLORS.CYAN : COLORS.YELLOW;
+                    ctx.fillRect(320, 220, 50, 50);
+                }
+                drawText(TRE_NAME[treasure], 380, 240, COLORS.WHITE);
+                if (tmr >= 10) {
+                    idx = 1; // 이동 가능 상태로 복귀
+                    tmr = 0;
+                    moveControls.style.display = 'flex';
+                }
+            } else if (idx === 9) {
+                const PL_TURN = [2, 4, 0, 6];
+                if (tmr <= 30) {
+                    pl_a = tmr === 30 ? 8 : PL_TURN[tmr % 4];
+                    drawDungeon();
+                } else if (tmr === 31) {
+                    if (audioEnabled) se[3].play();
+                    drawText('You died.', 360, 240, COLORS.RED);
+                    drawText('Game over.', 360, 380, COLORS.RED);
+                } else if (tmr === 100) { idx = 0; tmr = 0; }
+            } else if (idx === 10) {
+                moveControls.style.display = 'none';
+                if (tmr === 1) { if (audioEnabled) { bgm.field.pause(); bgm.battle.play(); } initBattle(); initMessage(); }
+                else if (tmr <= 4) {
+                    ctx.clearRect(0, 0, 880, 720);
+                    if (images.btlbg.img.complete) {
+                        ctx.drawImage(images.btlbg.img, 0, 0, images.btlbg.width, images.btlbg.height);
+                    } else {
+                        ctx.fillStyle = COLORS.BLACK;
+                        ctx.fillRect(0, 0, 880, 720);
+                    }
+                    drawText('Encounter!', 350, 200, COLORS.WHITE);
+                } else if (tmr <= 16) {
+                    drawBattle();
+                    drawText(`${emy_name} appear!`, 300, 200, COLORS.WHITE);
+                } else { idx = 11; tmr = 0; }
+            } else if (idx === 11) {
+                moveControls.style.display = 'none';
+                battleControls.style.display = 'flex';
+                drawBattle();
+                if (tmr === 1) setMessage('Your turn.');
+                for (let i = 0; i < 4; i++) drawText(COMMAND[i], 20, 360 + i * 60, btl_cmd === i ? BLINK[tmr % 6] : COLORS.WHITE);
+            } else if (idx === 12) {
+                drawBattle();
+                let lastDmg = 0;
+                if (tmr === 1) {
+                    setMessage('You attack!');
+                    if (audioEnabled) se[0].play();
+                    lastDmg = pl_str + Math.floor(Math.random() * 10);
+                }
+                if (tmr >= 2 && tmr <= 4) {
+                    if (images.effect_a.img.complete) {
+                        ctx.drawImage(images.effect_a.img, 700 - tmr * 120, -100 + tmr * 120, images.effect_a.width, images.effect_a.height);
+                    } else {
+                        ctx.fillStyle = COLORS.YELLOW;
+                        ctx.fillRect(700 - tmr * 120, -100 + tmr * 120, 50, 50);
+                    }
+                }
+                if (tmr === 5) {
+                    emy_blink = 5;
+                    setMessage(`${lastDmg}pts of damage!`);
+                    emy_life -= lastDmg; // 체력 감소
+                    console.log(`적 체력 감소: ${emy_life}/${emy_lifemax}`);
+                }
+                if (tmr === 11) {
+                    if (emy_life <= 0) {
+                        emy_life = 0;
+                        idx = 16;
+                        tmr = 0;
+                    } else {
+                        idx = 13;
+                        tmr = 0;
+                    }
+                }
+            }
+            // idx === 13
+            else if (idx === 13) {
+                drawBattle();
+                let lastDmg = 0;
+                if (tmr === 1) setMessage('Enemy turn.');
+                if (tmr === 5) { setMessage(`${emy_name} attack!`); if (audioEnabled) se[0].play(); emy_step = 30; }
+                if (tmr === 9) {
+                    lastDmg = emy_str + Math.floor(Math.random() * 10);
+                    setMessage(`${lastDmg}pts of damage!`);
+                    dmg_eff = 5; emy_step = 0;
+                    if (images.effect_b.img.complete) {
+                        ctx.drawImage(images.effect_b.img, 400 - images.effect_b.width / 2, 640 - images.effect_b.height, images.effect_b.width, images.effect_b.height);
+                    }
+                    pl_life -= lastDmg; // 플레이어 체력 감소
+                    console.log(`플레이어 체력 감소: ${pl_life}/${pl_lifemax}`);
+                }
+                if (tmr === 15) {
+                    if (pl_life <= 0) {
+                        pl_life = 0;
+                        idx = 15;
+                        tmr = 0;
+                    } else {
+                        idx = 11;
+                        tmr = 0;
+                    }
+                }
+            } else if (idx === 14) {
+                drawBattle();
+                if ([1, 2, 3, 4, 5].includes(tmr)) setMessage('.'.repeat(tmr * 2));
+                if (tmr === 5) { if (Math.random() * 100 < 60) idx = 22; else setMessage('You failed to flee.'); }
+                if (tmr === 10) { idx = 13; tmr = 0; }
+            } else if (idx === 15) {
+                drawBattle();
+                if (tmr === 1) { if (audioEnabled) bgm.battle.pause(); setMessage('You lose.'); }
+                if (tmr === 11) { idx = 9; tmr = 29; }
+            } else if (idx === 16) {
+                drawBattle();
+                if (tmr === 1) { setMessage('You win!'); if (audioEnabled) { bgm.battle.pause(); se[5].play(); } }
+                if (tmr === 28) { idx = 22; if (Math.random() * emy_lifemax > Math.random() * pl_lifemax) { idx = 17; tmr = 0; } }
+            } else if (idx === 17) {
+                drawBattle();
+                let lif_p = 0, str_p = 0;
+                if (tmr === 1) { setMessage('Level up!'); if (audioEnabled) se[4].play(); lif_p = Math.floor(Math.random() * 11) + 10; str_p = Math.floor(Math.random() * 6) + 5; }
+                if (tmr === 21) { setMessage(`Max life + ${lif_p}`); pl_lifemax += lif_p; }
+                if (tmr === 26) { setMessage(`Str + ${str_p}`); pl_str += str_p; }
+                if (tmr === 50) idx = 22;
+            } else if (idx === 20) {
+                drawBattle();
+                if (tmr === 1) { setMessage('Potion!'); if (audioEnabled) se[2].play(); }
+                if (tmr === 6) { pl_life = pl_lifemax; potion -= 1; }
+                if (tmr === 11) { idx = 13; tmr = 0; }
+            } else if (idx === 21) {
+                drawBattle();
+                let lastDmg = 0;
+                if (tmr === 1) { setMessage('Blaze gem!'); if (audioEnabled) se[1].play(); }
+                if (tmr === 6) blazegem -= 1;
+                if (tmr === 11) { lastDmg = 1000; idx = 12; tmr = 4; }
+            } else if (idx === 22) {
+                if (audioEnabled) { bgm.battle.pause(); bgm.field.play(); }
+                idx = 1;
+            }
+
+            statusDiv.innerHTML = `Speed: ${speed} | Floor: ${floor} | Life: ${pl_life}/${pl_lifemax} | Str: ${pl_str} | Food: ${food} | Potion: ${potion} | Blaze: ${blazegem}`;
+            requestAnimationFrame(main);
+        }
+
+        // 이미지 로드 완료 후 게임 시작
+        let imagesLoaded = 0;
+        const totalImages = Object.keys(images).length;
+        Object.values(images).forEach(img => {
+            img.img.onload = () => {
+                imagesLoaded++;
+                if (imagesLoaded === totalImages) {
+                    bindButtonEvents();
+                    main();
+                }
+            };
+        });
+    </script>
+
+    <footer>
+        <div class="container">
+            한 걸음씩, 꿈을 향해 🌟
+        </div>
+    </footer>
+</body>
+
+</html>
