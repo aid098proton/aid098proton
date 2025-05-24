@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>대학별 평균등록금</title>
+    <link rel="icon" type="image/png" sizes="180x180" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+    <link rel="stylesheet" href="../../css/common.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>대학별 평균등록금</h1>
+            <a href="../../index.html" class="back-btn">← 뒤로</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="controls-area">
+                <div class="search-filter">
+                    <select id="categoryFilter">
+                        <option value="">학제별: 전체</option>
+                        <option value="대학">대학</option>
+                        <option value="전문대학">전문대학</option>
+                    </select>
+                    <select id="establishmentFilter">
+                        <option value="">설립별: 전체</option>
+                        <option value="국공립">국공립</option>
+                        <option value="사립">사립</option>
+                    </select>
+                    <input type="text" id="searchInput" placeholder="대학명 검색">
+                    <select id="regionFilter">
+                        <option value="">지역별: 전체</option>
+                        <option value="강원">강원</option>
+                        <option value="경기">경기</option>
+                        <option value="경남">경남</option>
+                        <option value="경북">경북</option>
+                        <option value="광주">광주</option>
+                        <option value="대구">대구</option>
+                        <option value="대전">대전</option>
+                        <option value="부산">부산</option>
+                        <option value="서울">서울</option>
+                        <option value="세종">세종</option>
+                        <option value="울산">울산</option>
+                        <option value="인천">인천</option>
+                        <option value="전남">전남</option>
+                        <option value="전북">전북</option>
+                        <option value="제주">제주</option>
+                        <option value="충남">충남</option>
+                        <option value="충북">충북</option>
+                    </select>
+                    <select id="itemsPerPage">
+                        <option value="10" selected>10개</option>
+                        <option value="20">20개</option>
+                        <option value="30">30개</option>
+                        <option value="50">50개</option>
+                    </select>
+                    <button id="downloadCsvBtn" title="데이터 다운로드" disabled>
+                        <i class="fas fa-file-csv"></i> CSV 다운로드
+                    </button>
+                </div>
+                <div class="results-info" id="resultsInfo">
+                    총 <span id="totalCount">0</span>개 중 <span id="currentRange">0-0</span>개 표시 중
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="regionChart"></canvas>
+            </div>
+            <div class="loader" id="loader">
+                <i class="fas fa-spinner fa-2x"></i>
+                <p>데이터를 불러오는 중...</p>
+            </div>
+            <div class="no-results" id="noResults">
+                <i class="fas fa-search"></i>
+                <h3>검색 결과가 없습니다</h3>
+                <p>다른 검색어나 필터 조건을 시도해보세요.</p>
+            </div>
+            <div class="table-view" id="tableView">
+                <table id="universityTable">
+                    <thead>
+                        <tr>
+                            <th data-sort="학제별">학제별 <i class="fas fa-sort"></i></th>
+                            <th data-sort="설립별">설립별 <i class="fas fa-sort"></i></th>
+                            <th data-sort="대학명">대학명 <i class="fas fa-sort"></i></th>
+                            <th data-sort="지역별">지역별 <i class="fas fa-sort"></i></th>
+                            <th data-sort="입학정원">입학정원 <i class="fas fa-sort"></i></th>
+                            <th data-sort="평균입학금">평균입학금 <i class="fas fa-sort"></i></th>
+                            <th data-sort="평균등록금(원)">평균등록금(원) <i class="fas fa-sort"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </main>
+
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .controls-area {
+            margin-bottom: 20px;
+        }
+
+        .search-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-filter input,
+        .search-filter select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .search-filter input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        #downloadCsvBtn {
+            padding: 10px 15px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #downloadCsvBtn:hover {
+            background-color: #229a53;
+        }
+
+        .results-info {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .chart-container {
+            margin-bottom: 20px;
+            max-width: 100%;
+            height: 300px;
+        }
+
+        .table-view {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+
+        th,
+        td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background-color: #e0e0e0;
+        }
+
+        th i {
+            margin-left: 5px;
+            opacity: 0.5;
+        }
+
+        th i.active {
+            opacity: 1;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        td[data-fulltext] {
+            cursor: pointer;
+        }
+
+        .loader {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        .loader i {
+            animation: spin 1s infinite linear;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .no-results i {
+            font-size: 48px;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+
+        th[data-sort="대학명"],
+        td:nth-child(3) {
+            min-width: 200px;
+        }
+
+        @media (max-width: 768px) {
+            .search-filter {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-filter input,
+            .search-filter select {
+                width: 100%;
+            }
+
+            th,
+            td {
+                padding: 8px;
+                font-size: 14px;
+            }
+
+            .pagination button:not(.prev):not(.next):not(.active) {
+                display: none;
+            }
+        }
+    </style>
+
+    <!-- Chart.js CDN (버전 4.x 기준 최신) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        let universities = [];
+        let filteredUniversities = [];
+        let currentPage = 1;
+        let itemsPerPage = 10;
+        let sortKey = '대학명';
+        let sortOrder = 1;
+
+        const tableBody = document.getElementById('tableBody');
+        const tableView = document.getElementById('tableView');
+        const loader = document.getElementById('loader');
+        const noResults = document.getElementById('noResults');
+        const resultsInfo = document.getElementById('resultsInfo');
+        const totalCount = document.getElementById('totalCount');
+        const currentRange = document.getElementById('currentRange');
+        const pagination = document.getElementById('pagination');
+        const downloadCsvBtn = document.getElementById('downloadCsvBtn');
+        const ctx = document.getElementById('regionChart').getContext('2d');
+        let chartInstance = null;
+
+        function showLoader(show) {
+            loader.style.display = show ? 'block' : 'none';
+            tableView.style.display = show ? 'none' : 'block';
+            noResults.style.display = 'none';
+            pagination.style.display = show ? 'none' : 'flex';
+        }
+
+        function showNoResults(show) {
+            noResults.style.display = show ? 'block' : 'none';
+            tableView.style.display = show ? 'none' : 'block';
+            pagination.style.display = show ? 'none' : 'flex';
+        }
+
+        function updateResultsInfo() {
+            totalCount.textContent = filteredUniversities.length;
+            const start = (currentPage - 1) * itemsPerPage + 1;
+            const end = Math.min(start + itemsPerPage - 1, filteredUniversities.length);
+            currentRange.textContent = filteredUniversities.length > 0 ? `${start}-${end}` : '0-0';
+        }
+
+        function truncateText(text, maxLength) {
+            if (text.length > maxLength) {
+                return text.substring(0, maxLength) + '...';
+            }
+            return text;
+        }
+
+        function renderTableRows(universitiesToRender) {
+            tableBody.innerHTML = '';
+            const isMobile = window.innerWidth <= 768;
+            const maxLengths = {
+                '학제별': 10,
+                '설립별': 10,
+                '대학명': 20,
+                '지역별': 10,
+                '입학정원': 10,
+                '평균입학금': 10,
+                '평균등록금(원)': 12
+            };
+
+            universitiesToRender.forEach(univ => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+        <td data-fulltext="${univ['학제별']}">${isMobile ? truncateText(univ['학제별'], maxLengths['학제별']) : univ['학제별']}</td>
+        <td data-fulltext="${univ['설립별']}">${isMobile ? truncateText(univ['설립별'], maxLengths['설립별']) : univ['설립별']}</td>
+        <td data-fulltext="${univ['대학명']}">${isMobile ? truncateText(univ['대학명'], maxLengths['대학명']) : univ['대학명']}</td>
+        <td data-fulltext="${univ['지역별']}">${isMobile ? truncateText(univ['지역별'], maxLengths['지역별']) : univ['지역별']}</td>
+        <td data-fulltext="${univ['입학정원'].toLocaleString()}">${isMobile ? truncateText(univ['입학정원'].toLocaleString(), maxLengths['입학정원']) : univ['입학정원'].toLocaleString()}</td>
+        <td data-fulltext="${univ['평균입학금'].toLocaleString()}">${isMobile ? truncateText(univ['평균입학금'].toLocaleString(), maxLengths['평균입학금']) : univ['평균입학금'].toLocaleString()}</td>
+        <td data-fulltext="${Math.floor(univ['평균등록금(원)']).toLocaleString()}">${isMobile ? truncateText(Math.floor(univ['평균등록금(원)']).toLocaleString(), maxLengths['평균등록금(원)']) : Math.floor(univ['평균등록금(원)']).toLocaleString()}</td>
+      `;
+                row.querySelectorAll('td[data-fulltext]').forEach(td => {
+                    if (isMobile && td.textContent.endsWith('...')) {
+                        td.style.cursor = 'pointer';
+                        td.addEventListener('click', () => {
+                            td.textContent = td.textContent.endsWith('...') ? td.dataset.fulltext : truncateText(td.dataset.fulltext, maxLengths[td.cellIndex]);
+                        });
+                    }
+                });
+                tableBody.appendChild(row);
+            });
+        }
+
+        function renderPagination() {
+            pagination.innerHTML = '';
+            const pageCount = Math.ceil(filteredUniversities.length / itemsPerPage);
+            if (pageCount <= 1) {
+                pagination.style.display = 'none';
+                return;
+            }
+            pagination.style.display = 'flex';
+
+            const prevButton = document.createElement('button');
+            prevButton.classList.add('prev');
+            prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevButton.disabled = currentPage === 1;
+            prevButton.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderUniversities();
+                }
+            });
+            pagination.appendChild(prevButton);
+
+            const maxVisible = window.innerWidth > 768 ? 10 : 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+            let endPage = Math.min(pageCount, startPage + maxVisible - 1);
+            if (endPage - startPage + 1 < maxVisible) {
+                startPage = Math.max(1, endPage - maxVisible + 1);
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.classList.toggle('active', i === currentPage);
+                button.addEventListener('click', () => {
+                    currentPage = i;
+                    renderUniversities();
+                });
+                pagination.appendChild(button);
+            }
+
+            const nextButton = document.createElement('button');
+            nextButton.classList.add('next');
+            nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            nextButton.disabled = currentPage === pageCount;
+            nextButton.addEventListener('click', () => {
+                if (currentPage < pageCount) {
+                    currentPage++;
+                    renderUniversities();
+                }
+            });
+            pagination.appendChild(nextButton);
+        }
+
+        function renderUniversities() {
+            if (filteredUniversities.length === 0) {
+                showNoResults(true);
+                return;
+            }
+            showNoResults(false);
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedUniversities = filteredUniversities.slice(start, end);
+            renderTableRows(paginatedUniversities);
+            updateResultsInfo();
+            renderPagination();
+            updateChart();
+        }
+
+        function filterUniversities() {
+            const category = document.getElementById('categoryFilter').value;
+            const establishment = document.getElementById('establishmentFilter').value;
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const region = document.getElementById('regionFilter').value;
+
+            filteredUniversities = universities.filter(univ => {
+                return (!category || univ['학제별'] === category) &&
+                    (!establishment || univ['설립별'] === establishment) &&
+                    (!searchValue || univ['대학명'].toLowerCase().includes(searchValue)) &&
+                    (!region || univ['지역별'] === region);
+            });
+
+            sortUniversities();
+            currentPage = 1;
+            renderUniversities();
+        }
+
+        function sortUniversities() {
+            filteredUniversities.sort((a, b) => {
+                const valueA = a[sortKey] || '';
+                const valueB = b[sortKey] || '';
+                if (sortKey === '입학정원' || sortKey === '평균입학금' || sortKey === '평균등록금(원)') {
+                    return sortOrder * (valueA - valueB);
+                }
+                return sortOrder * valueA.toString().localeCompare(valueB.toString());
+            });
+        }
+
+        function updateSortIndicators() {
+            document.querySelectorAll('th i').forEach(icon => {
+                icon.className = 'fas fa-sort';
+                icon.classList.remove('active');
+            });
+            const currentTh = document.querySelector(`th[data-sort="${sortKey}"]`);
+            if (currentTh) {
+                const icon = currentTh.querySelector('i');
+                icon.className = sortOrder === 1 ? 'fas fa-sort-up active' : 'fas fa-sort-down active';
+            }
+        }
+
+        function formatDateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            return `${year}${month}${day}_${hours}${minutes}${seconds}`;
+        }
+
+        function downloadCsv() {
+            if (!filteredUniversities.length) {
+                alert('다운로드할 데이터가 없습니다.');
+                return;
+            }
+            const headers = ['학제별', '설립별', '대학명', '지역별', '입학정원', '평균입학금', '평균등록금(원)'];
+            const rows = filteredUniversities.map(univ => [
+                `"${univ['학제별'].replace(/"/g, '""')}"`,
+                `"${univ['설립별'].replace(/"/g, '""')}"`,
+                `"${univ['대학명'].replace(/"/g, '""')}"`,
+                `"${univ['지역별'].replace(/"/g, '""')}"`,
+                univ['입학정원'],
+                univ['평균입학금'],
+                Math.floor(univ['평균등록금(원)'])
+            ]);
+            let csvContent = '\uFEFF' + headers.join(',') + '\n';
+            rows.forEach(row => csvContent += row.join(',') + '\n');
+            const blob = new Blob([csvContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `대학별_평균등록금_${formatDateTime()}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function updateChart() {
+            const regions = [...new Set(universities.map(u => u['지역별']))].sort();
+            const regionAverages = regions.map(region => {
+                const regionData = filteredUniversities.filter(u => u['지역별'] === region);
+                const totalTuition = regionData.reduce((sum, u) => sum + u['평균등록금(원)'], 0);
+                return regionData.length ? Math.floor(totalTuition / regionData.length) : 0;
+            });
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: regions,
+                    datasets: [{
+                        label: '평균 등록금 (원)',
+                        data: regionAverages,
+                        backgroundColor: '#3498db',
+                        borderColor: '#2980b9',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: '평균 등록금 (원)' }
+                        },
+                        x: {
+                            title: { display: true, text: '지역' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        showLoader(true);
+        fetch('./js/universities.json')
+            .then(response => response.json())
+            .then(data => {
+                universities = data;
+                filteredUniversities = [...universities];
+                downloadCsvBtn.disabled = false;
+                filterUniversities();
+                showLoader(false);
+            })
+            .catch(error => {
+                console.error('JSON 로드 실패:', error);
+                showLoader(false);
+                showNoResults(true);
+            });
+
+        document.getElementById('categoryFilter').addEventListener('change', filterUniversities);
+        document.getElementById('establishmentFilter').addEventListener('change', filterUniversities);
+        document.getElementById('searchInput').addEventListener('input', () => {
+            clearTimeout(window.debounceTimeout);
+            window.debounceTimeout = setTimeout(filterUniversities, 300);
+        });
+        document.getElementById('regionFilter').addEventListener('change', filterUniversities);
+        document.getElementById('itemsPerPage').addEventListener('change', () => {
+            itemsPerPage = parseInt(document.getElementById('itemsPerPage').value);
+            currentPage = 1;
+            renderUniversities();
+        });
+        document.querySelectorAll('th[data-sort]').forEach(th => {
+            th.addEventListener('click', () => {
+                const newSortKey = th.dataset.sort;
+                if (newSortKey === sortKey) {
+                    sortOrder *= -1;
+                } else {
+                    sortKey = newSortKey;
+                    sortOrder = 1;
+                }
+                updateSortIndicators();
+                filterUniversities();
+            });
+        });
+        downloadCsvBtn.addEventListener('click', downloadCsv);
+        updateSortIndicators();
+    </script>
+
+    <footer>
+        <div class="container">
+            한 걸음씩, 꿈을 향해 🌟
+        </div>
+    </footer>
+</body>
+
+</html>
