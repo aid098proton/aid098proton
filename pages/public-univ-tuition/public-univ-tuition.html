@@ -95,7 +95,6 @@
                             <th data-sort="대학명">대학명 <i class="fas fa-sort"></i></th>
                             <th data-sort="지역별">지역별 <i class="fas fa-sort"></i></th>
                             <th data-sort="입학정원">입학정원 <i class="fas fa-sort"></i></th>
-                            <th data-sort="평균입학금">평균입학금 <i class="fas fa-sort"></i></th>
                             <th data-sort="평균등록금(원)">평균등록금(원) <i class="fas fa-sort"></i></th>
                         </tr>
                     </thead>
@@ -331,7 +330,7 @@
                 '대학명': 20,
                 '지역별': 10,
                 '입학정원': 10,
-                '평균입학금': 10,
+                
                 '평균등록금(원)': 12
             };
 
@@ -343,7 +342,7 @@
         <td data-fulltext="${univ['대학명']}">${isMobile ? truncateText(univ['대학명'], maxLengths['대학명']) : univ['대학명']}</td>
         <td data-fulltext="${univ['지역별']}">${isMobile ? truncateText(univ['지역별'], maxLengths['지역별']) : univ['지역별']}</td>
         <td data-fulltext="${univ['입학정원'].toLocaleString()}">${isMobile ? truncateText(univ['입학정원'].toLocaleString(), maxLengths['입학정원']) : univ['입학정원'].toLocaleString()}</td>
-        <td data-fulltext="${univ['평균입학금'].toLocaleString()}">${isMobile ? truncateText(univ['평균입학금'].toLocaleString(), maxLengths['평균입학금']) : univ['평균입학금'].toLocaleString()}</td>
+        
         <td data-fulltext="${Math.floor(univ['평균등록금(원)']).toLocaleString()}">${isMobile ? truncateText(Math.floor(univ['평균등록금(원)']).toLocaleString(), maxLengths['평균등록금(원)']) : Math.floor(univ['평균등록금(원)']).toLocaleString()}</td>
       `;
                 row.querySelectorAll('td[data-fulltext]').forEach(td => {
@@ -447,7 +446,7 @@
             filteredUniversities.sort((a, b) => {
                 const valueA = a[sortKey] || '';
                 const valueB = b[sortKey] || '';
-                if (sortKey === '입학정원' || sortKey === '평균입학금' || sortKey === '평균등록금(원)') {
+                if (sortKey === '입학정원' || sortKey === '평균등록금(원)') {
                     return sortOrder * (valueA - valueB);
                 }
                 return sortOrder * valueA.toString().localeCompare(valueB.toString());
@@ -482,14 +481,13 @@
                 alert('다운로드할 데이터가 없습니다.');
                 return;
             }
-            const headers = ['학제별', '설립별', '대학명', '지역별', '입학정원', '평균입학금', '평균등록금(원)'];
+            const headers = ['학제별', '설립별', '대학명', '지역별', '입학정원', '평균등록금(원)'];
             const rows = filteredUniversities.map(univ => [
                 `"${univ['학제별'].replace(/"/g, '""')}"`,
                 `"${univ['설립별'].replace(/"/g, '""')}"`,
                 `"${univ['대학명'].replace(/"/g, '""')}"`,
                 `"${univ['지역별'].replace(/"/g, '""')}"`,
                 univ['입학정원'],
-                univ['평균입학금'],
                 Math.floor(univ['평균등록금(원)'])
             ]);
             let csvContent = '\uFEFF' + headers.join(',') + '\n';
