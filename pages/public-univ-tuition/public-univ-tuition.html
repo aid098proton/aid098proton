@@ -74,34 +74,48 @@
                     총 <span id="totalCount">0</span>개 중 <span id="currentRange">0-0</span>개 표시 중
                 </div>
             </div>
-            <div class="chart-container">
-                <canvas id="regionChart"></canvas>
+
+            <div class="chart-section">
+                <h3 class="chart-title">지역별 평균 등록금 현황</h3>
+                <div class="chart-container">
+                    <canvas id="regionChart"></canvas>
+                </div>
             </div>
+
             <div class="loader" id="loader">
-                <i class="fas fa-spinner fa-2x"></i>
+                <div class="spinner">
+                    <i class="fas fa-spinner fa-2x"></i>
+                </div>
                 <p>데이터를 불러오는 중...</p>
             </div>
+
             <div class="no-results" id="noResults">
-                <i class="fas fa-search"></i>
+                <div class="no-results-icon">
+                    <i class="fas fa-search"></i>
+                </div>
                 <h3>검색 결과가 없습니다</h3>
                 <p>다른 검색어나 필터 조건을 시도해보세요.</p>
             </div>
-            <div class="table-view" id="tableView">
-                <table id="universityTable">
-                    <thead>
-                        <tr>
-                            <th data-sort="학제별">학제별 <i class="fas fa-sort"></i></th>
-                            <th data-sort="설립별">설립별 <i class="fas fa-sort"></i></th>
-                            <th data-sort="대학명">대학명 <i class="fas fa-sort"></i></th>
-                            <th data-sort="지역별">지역별 <i class="fas fa-sort"></i></th>
-                            <th data-sort="입학정원">입학정원 <i class="fas fa-sort"></i></th>
-                            <th data-sort="평균등록금(원)">평균등록금(원) <i class="fas fa-sort"></i></th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody"></tbody>
-                </table>
+
+            <div class="table-section" id="tableView">
+                <div class="table-container">
+                    <table id="universityTable">
+                        <thead>
+                            <tr>
+                                <th data-sort="학제별">학제별 <i class="fas fa-sort"></i></th>
+                                <th data-sort="설립별">설립별 <i class="fas fa-sort"></i></th>
+                                <th data-sort="대학명">대학명 <i class="fas fa-sort"></i></th>
+                                <th data-sort="지역별">지역별 <i class="fas fa-sort"></i></th>
+                                <th data-sort="입학정원">입학정원 <i class="fas fa-sort"></i></th>
+                                <th data-sort="평균등록금(원)">평균등록금(원) <i class="fas fa-sort"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="pagination" id="pagination"></div>
             </div>
-            <div class="pagination" id="pagination"></div>
         </div>
     </main>
 
@@ -109,100 +123,188 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px;
         }
 
         .controls-area {
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e9ecef;
         }
 
         .search-filter {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
             align-items: center;
+            margin-bottom: 16px;
         }
 
         .search-filter input,
         .search-filter select {
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 12px 16px;
+            font-size: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: white;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .search-filter input:focus,
+        .search-filter select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
         }
 
         .search-filter input {
-            flex: 1;
-            min-width: 200px;
+            grid-column: span 2;
+            min-width: 250px;
         }
 
         #downloadCsvBtn {
-            padding: 10px 15px;
-            background-color: #27ae60;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(39, 174, 96, 0.3);
         }
 
-        #downloadCsvBtn:hover {
-            background-color: #229a53;
+        #downloadCsvBtn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #229a53 0%, #27ae60 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(39, 174, 96, 0.4);
+        }
+
+        #downloadCsvBtn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
         .results-info {
             font-size: 14px;
-            color: #666;
-            margin-top: 10px;
+            color: #6c757d;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+            display: inline-block;
+        }
+
+        .chart-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e9ecef;
+        }
+
+        .chart-title {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 20px 0;
+            text-align: center;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e9ecef;
         }
 
         .chart-container {
-            margin-bottom: 20px;
-            max-width: 100%;
-            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 350px;
+            width: 100%;
+            position: relative;
         }
 
-        .table-view {
+        .chart-container canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e9ecef;
+        }
+
+        .table-container {
             overflow-x: auto;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin: 0;
             background-color: white;
         }
 
         th,
         td {
-            padding: 12px 15px;
+            padding: 16px 20px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #f1f3f4;
         }
 
         th {
-            background-color: #f4f4f4;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             cursor: pointer;
             user-select: none;
+            font-weight: 600;
+            color: #2c3e50;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            transition: background-color 0.2s ease;
         }
 
         th:hover {
-            background-color: #e0e0e0;
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
         }
 
         th i {
-            margin-left: 5px;
+            margin-left: 8px;
             opacity: 0.5;
+            transition: all 0.2s ease;
         }
 
         th i.active {
             opacity: 1;
+            color: #3498db;
         }
 
-        tr:hover {
-            background-color: #f9f9f9;
+        tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #fdfdfd;
+        }
+
+        tbody tr:nth-child(even):hover {
+            background-color: #f8f9fa;
         }
 
         td[data-fulltext] {
@@ -211,12 +313,27 @@
 
         .loader {
             text-align: center;
-            padding: 20px;
+            padding: 60px 20px;
             display: none;
+            background: white;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            display: inline-block;
+            margin-bottom: 16px;
         }
 
         .loader i {
             animation: spin 1s infinite linear;
+            color: #3498db;
+        }
+
+        .loader p {
+            color: #6c757d;
+            font-size: 16px;
+            margin: 0;
         }
 
         @keyframes spin {
@@ -231,16 +348,32 @@
 
         .no-results {
             text-align: center;
-            padding: 40px 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 12px;
             display: none;
+            margin: 20px 0;
+        }
+
+        .no-results-icon {
+            margin-bottom: 20px;
         }
 
         .no-results i {
-            font-size: 48px;
-            color: #ddd;
-            margin-bottom: 15px;
+            font-size: 64px;
+            color: #bdc3c7;
+        }
+
+        .no-results h3 {
+            color: #2c3e50;
+            margin: 0 0 12px 0;
+            font-size: 24px;
+        }
+
+        .no-results p {
+            color: #6c757d;
+            margin: 0;
+            font-size: 16px;
         }
 
         th[data-sort="대학명"],
@@ -248,25 +381,134 @@
             min-width: 200px;
         }
 
+        /* 페이지네이션 스타일 개선 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 24px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 0 0 12px 12px;
+            margin: 0;
+        }
+
+        .pagination button {
+            padding: 10px 14px;
+            border: 2px solid #e9ecef;
+            background: white;
+            color: #495057;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            min-width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            border-color: #3498db;
+            color: #3498db;
+            background: #f8f9fa;
+            transform: translateY(-1px);
+        }
+
+        .pagination button.active {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border-color: #3498db;
+            box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .pagination button.prev,
+        .pagination button.next {
+            font-weight: 600;
+        }
+
+        /* 반응형 디자인 개선 */
         @media (max-width: 768px) {
-            .search-filter {
-                flex-direction: column;
-                align-items: stretch;
+            .container {
+                padding: 0 16px;
             }
 
-            .search-filter input,
-            .search-filter select {
-                width: 100%;
+            .controls-area {
+                padding: 20px;
+                margin-bottom: 24px;
+            }
+
+            .search-filter {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .search-filter input {
+                grid-column: span 1;
+                min-width: auto;
+            }
+
+            .chart-section {
+                padding: 20px;
+                margin-bottom: 24px;
+            }
+
+            .chart-title {
+                font-size: 16px;
+            }
+
+            .chart-container {
+                height: 280px;
             }
 
             th,
             td {
-                padding: 8px;
+                padding: 12px 8px;
                 font-size: 14px;
             }
 
-            .pagination button:not(.prev):not(.next):not(.active) {
+            .pagination {
+                padding: 16px;
+                gap: 4px;
+            }
+
+            .pagination button {
+                padding: 8px 10px;
+                min-width: 36px;
+                height: 36px;
+                font-size: 13px;
+            }
+
+            /* 모바일에서 일부 페이지 번호 숨기기 */
+            .pagination button:not(.prev):not(.next):not(.active):nth-child(n+6):nth-last-child(n+6) {
                 display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .chart-container {
+                height: 240px;
+            }
+
+            th,
+            td {
+                padding: 10px 6px;
+                font-size: 13px;
+            }
+
+            .pagination button {
+                padding: 6px 8px;
+                min-width: 32px;
+                height: 32px;
+                font-size: 12px;
             }
         }
     </style>
@@ -298,13 +540,11 @@
             loader.style.display = show ? 'block' : 'none';
             tableView.style.display = show ? 'none' : 'block';
             noResults.style.display = 'none';
-            pagination.style.display = show ? 'none' : 'flex';
         }
 
         function showNoResults(show) {
             noResults.style.display = show ? 'block' : 'none';
             tableView.style.display = show ? 'none' : 'block';
-            pagination.style.display = show ? 'none' : 'flex';
         }
 
         function updateResultsInfo() {
@@ -330,7 +570,6 @@
                 '대학명': 20,
                 '지역별': 10,
                 '입학정원': 10,
-                
                 '평균등록금(원)': 12
             };
 
@@ -342,7 +581,6 @@
         <td data-fulltext="${univ['대학명']}">${isMobile ? truncateText(univ['대학명'], maxLengths['대학명']) : univ['대학명']}</td>
         <td data-fulltext="${univ['지역별']}">${isMobile ? truncateText(univ['지역별'], maxLengths['지역별']) : univ['지역별']}</td>
         <td data-fulltext="${univ['입학정원'].toLocaleString()}">${isMobile ? truncateText(univ['입학정원'].toLocaleString(), maxLengths['입학정원']) : univ['입학정원'].toLocaleString()}</td>
-        
         <td data-fulltext="${Math.floor(univ['평균등록금(원)']).toLocaleString()}">${isMobile ? truncateText(Math.floor(univ['평균등록금(원)']).toLocaleString(), maxLengths['평균등록금(원)']) : Math.floor(univ['평균등록금(원)']).toLocaleString()}</td>
       `;
                 row.querySelectorAll('td[data-fulltext]').forEach(td => {
@@ -522,29 +760,75 @@
                     datasets: [{
                         label: '평균 등록금 (원)',
                         data: regionAverages,
-                        backgroundColor: '#3498db',
-                        borderColor: '#2980b9',
-                        borderWidth: 1
+                        backgroundColor: 'rgba(52, 152, 219, 0.8)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 2,
+                        borderRadius: 4,
+                        borderSkipped: false,
                     }]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: 'rgba(52, 152, 219, 1)',
+                            borderWidth: 1,
+                            cornerRadius: 6,
+                            displayColors: false,
+                            callbacks: {
+                                label: function (context) {
+                                    return `평균 등록금: ${context.parsed.y.toLocaleString()}원`;
+                                }
+                            }
+                        }
+                    },
                     scales: {
                         y: {
                             beginAtZero: true,
-                            title: { display: true, text: '평균 등록금 (원)' }
+                            title: {
+                                display: true,
+                                text: '평균 등록금 (원)',
+                                font: { size: 14, weight: 'bold' },
+                                color: '#2c3e50'
+                            },
+                            ticks: {
+                                callback: function (value) {
+                                    return value.toLocaleString() + '원';
+                                },
+                                color: '#6c757d'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
                         },
                         x: {
-                            title: { display: true, text: '지역' }
+                            title: {
+                                display: true,
+                                text: '지역',
+                                font: { size: 14, weight: 'bold' },
+                                color: '#2c3e50'
+                            },
+                            ticks: {
+                                color: '#6c757d'
+                            },
+                            grid: {
+                                display: false
+                            }
                         }
                     },
-                    plugins: {
-                        legend: { display: false }
+                    animation: {
+                        duration: 800,
+                        easing: 'easeOutQuart'
                     }
                 }
             });
         }
 
-        showLoader(true);
         fetch('./js/universities.json')
             .then(response => response.json())
             .then(data => {
