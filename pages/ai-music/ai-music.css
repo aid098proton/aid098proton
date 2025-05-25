@@ -8,7 +8,6 @@
 }
 
 body {
-    font-family: 'Inter', 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
     background-color: var(--background-color);
     margin: 0;
     padding: 0;
