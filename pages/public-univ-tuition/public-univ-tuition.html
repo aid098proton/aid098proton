@@ -604,10 +604,26 @@
             }
             pagination.style.display = 'flex';
 
+            // 맨 처음 버튼
+            const firstButton = document.createElement('button');
+            firstButton.classList.add('first');
+            firstButton.innerHTML = '<i class="fas fa-angle-double-left"></i>';
+            firstButton.disabled = currentPage === 1;
+            firstButton.title = '첫 페이지';
+            firstButton.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage = 1;
+                    renderUniversities();
+                }
+            });
+            pagination.appendChild(firstButton);
+
+            // 이전 버튼
             const prevButton = document.createElement('button');
             prevButton.classList.add('prev');
             prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
             prevButton.disabled = currentPage === 1;
+            prevButton.title = '이전 페이지';
             prevButton.addEventListener('click', () => {
                 if (currentPage > 1) {
                     currentPage--;
@@ -634,10 +650,12 @@
                 pagination.appendChild(button);
             }
 
+            // 다음 버튼
             const nextButton = document.createElement('button');
             nextButton.classList.add('next');
             nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
             nextButton.disabled = currentPage === pageCount;
+            nextButton.title = '다음 페이지';
             nextButton.addEventListener('click', () => {
                 if (currentPage < pageCount) {
                     currentPage++;
@@ -645,6 +663,20 @@
                 }
             });
             pagination.appendChild(nextButton);
+
+            // 맨 끝 버튼
+            const lastButton = document.createElement('button');
+            lastButton.classList.add('last');
+            lastButton.innerHTML = '<i class="fas fa-angle-double-right"></i>';
+            lastButton.disabled = currentPage === pageCount;
+            lastButton.title = '마지막 페이지';
+            lastButton.addEventListener('click', () => {
+                if (currentPage < pageCount) {
+                    currentPage = pageCount;
+                    renderUniversities();
+                }
+            });
+            pagination.appendChild(lastButton);
         }
 
         function renderUniversities() {
