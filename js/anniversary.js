@@ -45,4 +45,17 @@ function calculateAnniversaryDates() {
     } else {
         daysUntilEndElement.textContent = `D-${daysUntilEnd}`;
     }
+
+    // 🔹 자퇴일 관련 계산
+    const dropoutDate = new Date('2025-05-28');
+    const daysSinceDropout = Math.floor((today - dropoutDate) / (1000 * 60 * 60 * 24)) + 1;
+
+    const daysSinceDropoutElement = document.getElementById('days-since-dropout');
+    if (daysSinceDropoutElement) {
+        if (daysSinceDropout < 1) {
+            daysSinceDropoutElement.textContent = `자퇴 D-${Math.abs(daysSinceDropout) + 1}`;
+        } else {
+            daysSinceDropoutElement.textContent = `${daysSinceDropout}일째`;
+        }
+    }
 }

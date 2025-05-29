@@ -159,7 +159,9 @@ section h2 {
 }
 
 /* 버튼 스타일 */
-.primary-btn, .secondary-btn, .refresh-btn {
+.primary-btn,
+.secondary-btn,
+.refresh-btn {
     padding: 0.8rem 1.8rem;
     border-radius: 30px;
     font-weight: 600;
@@ -190,7 +192,8 @@ section h2 {
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
-.primary-btn:hover, .refresh-btn:hover {
+.primary-btn:hover,
+.refresh-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
 }
@@ -229,34 +232,36 @@ section h2 {
     main {
         padding: 2rem 1rem;
     }
-    
+
     main .container {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
-    
+
     section {
         padding: 1.5rem;
     }
-    
+
     .welcome-section {
         padding: 2rem 1.5rem;
     }
-    
+
     .welcome-section h2 {
         font-size: 1.8rem;
     }
-    
+
     .welcome-section .section-description {
         font-size: 1rem;
     }
-    
+
     .welcome-actions {
         flex-direction: column;
         gap: 1rem;
     }
-    
-    .primary-btn, .secondary-btn, .refresh-btn {
+
+    .primary-btn,
+    .secondary-btn,
+    .refresh-btn {
         width: 100%;
         justify-content: center;
     }
@@ -305,8 +310,12 @@ section h2 {
         flex-direction: column;
         gap: 1rem;
     }
-    
+
     .timeline-item {
         width: 100%;
     }
+}
+
+div#days-since-dropout {
+    color: #148627;
 }
