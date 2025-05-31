@@ -1,6 +1,14 @@
 // 음악 목록
 const musicList = [
     {
+        title: 'AI Music 20250601 1',
+        file: 'ai_music_20250601_1.mp3'
+    },
+    {
+        title: 'AI Music 20250601 2',
+        file: 'ai_music_20250601_2.mp3'
+    },
+    {
         title: '아띠 베이커리의 꿈 1',
         file: '아띠_베이커리의_꿈_1.mp3'
     },
