@@ -1,6 +1,15 @@
 // 음악 목록
 const musicList = [
     {
+        title: '아띠 베이커리의 꿈 1',
+        file: '아띠_베이커리의_꿈_1.mp3'
+    },
+    {
+        title: '아띠 베이커리의 꿈 2',
+        file: '아띠_베이커리의_꿈_2.mp3'
+    },
+
+    {
         title: 'AI Music 20250531 1',
         file: 'ai_music_20250531_1.mp3'
     },
