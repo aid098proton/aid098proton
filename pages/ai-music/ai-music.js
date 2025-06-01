@@ -1,6 +1,14 @@
 // 음악 목록
 const musicList = [
     {
+        title: '부드럽게 부푼 꿈 1',
+        file: '250601_부드럽게_부푼_꿈_1.mp3'
+    },
+    {
+        title: '부드럽게 부푼 꿈 2',
+        file: '250601_부드럽게_부푼_꿈_2.mp3'
+    },
+    {
         title: 'AI Music 20250601 1',
         file: 'ai_music_20250601_1.mp3'
     },
@@ -10,11 +18,11 @@ const musicList = [
     },
     {
         title: '아띠 베이커리의 꿈 1',
-        file: '아띠_베이커리의_꿈_1.mp3'
+        file: '250531_아띠_베이커리의_꿈_1.mp3'
     },
     {
         title: '아띠 베이커리의 꿈 2',
-        file: '아띠_베이커리의_꿈_2.mp3'
+        file: '250531_아띠_베이커리의_꿈_2.mp3'
     },
 
     {
@@ -288,7 +296,7 @@ let currentAudio = null;
 let currentIndex = null;
 let currentPlayingItem = null;
 let isRandom = false;
-let isAutoplay = false;
+let isAutoplay = true;
 
 // DOM 요소 가져오기
 const volumeControl = document.getElementById('volume');
@@ -298,6 +306,9 @@ const randomToggle = document.getElementById('random-toggle');
 const autoplayToggle = document.getElementById('autoplay-toggle');
 const prevButton = document.getElementById('prev-button');
 const nextButton = document.getElementById('next-button');
+
+// 자동 재생 클릭
+autoplayToggle.classList.toggle('active', isAutoplay);
 
 // 볼륨 컨트롤
 volumeControl.addEventListener('input', (e) => {
