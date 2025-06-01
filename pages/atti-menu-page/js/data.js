@@ -1,6 +1,83 @@
 const data = {
     menu: [
         {
+            category: "식빵 종류",
+            items: [
+                {
+                    name: "쌀 식빵",
+                    price: 4300,
+                },
+                {
+                    name: "잡곡 식빵",
+                    price: 5500,
+                },
+                {
+                    name: "우유 식빵",
+                    price: 4600,
+                },
+                {
+                    name: "밤 식빵",
+                    price: 6800,
+                }
+            ]
+        },
+        {
+            category: "빵 종류",
+            items: [
+                {
+                    name: "쑥 찐빵 (3개입)",
+                    price: 3000,
+                },
+                {
+                    name: "팥빵 (2개입)",
+                    price: 3900,
+                },
+                {
+                    name: "당뇨에 좋은빵",
+                    price: 6000,
+                }
+            ]
+        },
+        {
+            category: "카스테라 종류",
+            items: [
+                {
+                    name: "옥수수 카스테라",
+                    price: 6500,
+                }
+            ]
+        },
+        {
+            category: "케이크 종류",
+            items: [
+                {
+                    name: "미니 케이크",
+                    price: 20000,
+                },
+                {
+                    name: "생크림 케이크 2호",
+                    price: 32000,
+                },
+                {
+                    name: "초코 롤 케이크",
+                    price: 20000,
+                },
+                {
+                    name: "화이트 롤 케이크",
+                    price: 18000,
+                },
+                {
+                    name: "시몬 케이크",
+                    price: 5500,
+                },
+                {
+                    name: "초코 파운드 케이크",
+                    price: 4800,
+                }
+            ]
+        },
+
+        {
             category: "팥빙수",
             items: [
                 {
@@ -8,36 +85,6 @@ const data = {
                     price: 10000,
                     origin: "팥(국내산), 우유(국내산)",
                     packagingExtra: 6000
-                }
-            ]
-        },
-        {
-            category: "우유류",
-            items: [
-                {
-                    name: "우유 식빵",
-                    price: 0,
-                    origin: "밀가루(캐나다), 우유(국내산)"
-                },
-                {
-                    name: "우유 소보로",
-                    price: 0,
-                    origin: "밀가루(캐나다), 우유(국내산), 설탕(국내산)"
-                }
-            ]
-        },
-        {
-            category: "천연발효빵",
-            items: [
-                {
-                    name: "천연발효 깜빠뉴",
-                    price: 5800,
-                    origin: "밀가루(프랑스), 천연발효종, 소금(국내산)"
-                },
-                {
-                    name: "호밀빵",
-                    price: 6200,
-                    origin: "호밀가루(독일), 천연발효종"
                 }
             ]
         },
