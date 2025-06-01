@@ -32,6 +32,10 @@
             margin-left: 1rem;
         }
 
+        .menu-item p {
+            margin: 0.3rem 0;
+        }
+
         .highlight {
             font-weight: bold;
             color: #c0392b;
@@ -119,7 +123,7 @@
                 let priceStr = item.price > 0 ? `${item.price.toLocaleString()}원` : "가격 미정";
                 let packagingStr = item.packagingExtra ? ` (포장 시 +${item.packagingExtra.toLocaleString()}원)` : "";
                 itemEl.innerHTML = `
-          <p><strong>${item.name}</strong>: ${priceStr}${packagingStr}<br>
+          <p><strong>${item.name}</strong> : ${priceStr}${packagingStr}<br>
           `; // <span class="origin">원재료: ${item.origin}</span></p>
                 catEl.appendChild(itemEl);
             });
@@ -148,6 +152,7 @@
         // data.gallery.forEach(img => {
         //     const image = document.createElement("img");
         //     image.src = img.url;
+        //     image.src = img;
         //     image.alt = img.caption || "아띠 이미지";
         //     galleryEl.appendChild(image);
         // });
