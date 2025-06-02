@@ -245,6 +245,7 @@ const data = {
         },
         {
             category: "팥빙수",
+            special: true,
             items: [
                 {
                     name: "아띠 팥빙수",
@@ -337,33 +338,6 @@ const data = {
                     price: 4500,
                 }
             ]
-        }
-    ],
-    store: {
-        address: "서울 양천구 신월로 300",
-        phone: "02-2651-4094",
-        direction: "신정네거리역 3번 출구 앞 사거리에서 우회전 후 100m 지점",
-        hours: {
-            weekdays: "08:00 - 20:00",
-            weekend: "09:00 - 18:00",
-            closed: "매주 월요일"
-        }
-    },
-    gallery: [
-        "images/storefront.jpg",
-        "images/bingsu.jpg",
-        "images/bread.jpg"
-    ],
-    events: [
-        {
-            title: "여름 한정 빙수 할인",
-            description: "아띠 팥빙수 포장 시 1,000원 할인!",
-            period: "2025년 6월 1일 ~ 2025년 8월 31일"
-        },
-        {
-            title: "리뷰 이벤트",
-            description: "리뷰 작성 시 쿠키 1개 증정",
-            period: "상시 진행"
         }
     ]
 };

@@ -6,156 +6,370 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>아띠 베이커리 메뉴</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Pretendard', sans-serif;
-            padding: 2rem;
-            background: #fff9f3;
-            color: #333;
+            background: linear-gradient(135deg, #fff5eb 0%, #ffe4d1 100%);
+            color: #2c1810;
             line-height: 1.6;
-        }
-
-        h1,
-        h2,
-        h3 {
-            color: #a0522d;
-        }
-
-        .section {
-            margin-bottom: 2rem;
-        }
-
-        .menu-category {
-            margin-bottom: 1rem;
-        }
-
-        .menu-item {
-            margin-left: 1rem;
-        }
-
-        .menu-item p {
-            margin: 0.3rem 0;
-        }
-
-        .highlight {
-            font-weight: bold;
-            color: #c0392b;
-        }
-
-        .origin {
-            font-size: 0.9em;
-            color: #555;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 720px;
-            margin: auto;
-            background: #fff;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
             padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            border-radius: 20px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(139, 69, 19, 0.3);
         }
 
-        .gallery img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 1rem;
-            border-radius: 0.5rem;
-        }
-
-        .event-item {
-            padding: 0.5rem;
-            border-left: 4px solid #a0522d;
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
-            background: #fffaf5;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .brand-intro {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #D2691E;
+        }
+
+        .brand-intro p {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: #4a4a4a;
+        }
+
+        .brand-intro .highlight {
+            color: #8B4513;
+            font-weight: 600;
+            background: linear-gradient(120deg, #FFE4B5 0%, #FFDAB9 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .menu-category {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .menu-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-header {
+            background: linear-gradient(135deg, #D2691E 0%, #CD853F 100%);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .category-header h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu-items {
+            padding: 1.5rem;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s ease;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:hover {
+            background-color: #fdf8f3;
+            margin: 0 -1rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            border-radius: 8px;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: #2c1810;
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .item-detail {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .item-price {
+            font-weight: 700;
+            color: #D2691E;
+            font-size: 1.1rem;
+            white-space: nowrap;
+        }
+
+        .price-unavailable {
+            color: #999;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        .packaging-note {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 0.2rem;
+        }
+
+        .store-info {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+
+        .store-info h2 {
+            color: #8B4513;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .store-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .store-detail-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .store-detail-label {
+            font-weight: 600;
+            color: #8B4513;
+            min-width: 80px;
+        }
+
+        .store-detail-value {
+            color: #4a4a4a;
+        }
+
+        .special-menu {
+            background: linear-gradient(135deg, #FFE4B5 0%, #FFDAB9 100%);
+            border: 2px solid #D2691E;
+        }
+
+        .special-menu .category-header {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem 0.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .menu-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .item-price {
+                align-self: flex-end;
+            }
+        }
+
+        .floating-action {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, #D2691E 0%, #8B4513 100%);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(210, 105, 30, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1.2rem;
+        }
+
+        .floating-action:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(210, 105, 30, 0.6);
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>아띠 베이커리</h1>
+        <div class="header">
+            <h1>아띠 베이커리</h1>
+            <div class="subtitle">정성스럽게 구운 건강한 맛</div>
+        </div>
 
-        <div class="section">
-            <h2>브랜드 소개</h2>
-            <p>‘아띠’는 <span class="highlight">친한 친구</span> 또는 <span class="highlight">사랑 가득한 무리</span>를 뜻하는 순우리말입니다.</p>
+        <div class="brand-intro">
+            <p>'아띠'는 <span class="highlight">친한 친구</span> 또는 <span class="highlight">사랑 가득한 무리</span>를 뜻하는 순우리말입니다.</p>
             <p>아띠 베이커리는 <span class="highlight">제과 기능장 백시종</span> 선생님이 축적해온 전문성과 철학을 바탕으로, 정직한 재료와 정성으로 건강한 맛을 전합니다.</p>
         </div>
 
-        <div class="section">
-            <h2>메뉴</h2>
-            <div id="menu"></div>
-        </div>
+        <div class="menu-grid" id="menu"></div>
 
-        <!-- <div class="section">
-            <h2>영업시간</h2>
-            <div id="hours"></div>
-        </div> -->
-
-        <div class="section">
+        <div class="store-info">
             <h2>매장 정보</h2>
-            <p><strong>영업시간:</strong> 07:00 ~ 22:00</p>
-            <p><strong>전화번호:</strong> 02-2651-4094</p>
-            <p><strong>주소:</strong> 서울 양천구 신월로 300</p>
-            <p><strong>찾아가는 길:</strong> 신정네거리역 3번 출구 앞 사거리에서 우회전 후 100m 지점</p>
+            <div class="store-details">
+                <div class="store-detail-item">
+                    <span class="store-detail-label">영업시간:</span>
+                    <span class="store-detail-value">07:00 ~ 22:00</span>
+                </div>
+                <div class="store-detail-item">
+                    <span class="store-detail-label">주소:</span>
+                    <span class="store-detail-value">서울 양천구 신월로 300</span>
+                </div>
+                <div class="store-detail-item">
+                    <span class="store-detail-label">찾아가는 길:</span>
+                    <span class="store-detail-value">신정네거리역 3번 출구 앞 사거리에서 우회전 후 100m 지점</span>
+                </div>
+            </div>
         </div>
-
-        <!-- <div class="section">
-            <h2>이벤트</h2>
-            <div id="events"></div>
-        </div> -->
-
-        <!-- <div class="section gallery">
-            <h2>이미지 갤러리</h2>
-            <div id="gallery"></div>
-        </div> -->
     </div>
+
+    <button class="floating-action" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="맨 위로">↑</button>
 
     <script src="./js/data.js"></script>
     <script>
         const menuContainer = document.getElementById("menu");
+
         data.menu.forEach(cat => {
             const catEl = document.createElement("div");
-            catEl.className = "menu-category";
-            catEl.innerHTML = `<h3>${cat.category}</h3>`;
+            catEl.className = `menu-category ${cat.special ? 'special-menu' : ''}`;
+
+            const headerEl = document.createElement("div");
+            headerEl.className = "category-header";
+            headerEl.innerHTML = `<h3>${cat.category}</h3>`;
+
+            const itemsEl = document.createElement("div");
+            itemsEl.className = "menu-items";
+
             cat.items.forEach(item => {
                 const itemEl = document.createElement("div");
                 itemEl.className = "menu-item";
-                let priceStr = item.price > 0 ? `${item.price.toLocaleString()}원` : "가격 미정";
-                let packagingStr = item.packagingExtra ? ` (포장 시 +${item.packagingExtra.toLocaleString()}원)` : "";
+
+                let priceDisplay = "";
+                if (item.price > 0) {
+                    priceDisplay = `<div class="item-price">${item.price.toLocaleString()}원</div>`;
+                    if (item.packagingExtra) {
+                        priceDisplay += `<div class="packaging-note">포장 시 +${item.packagingExtra.toLocaleString()}원</div>`;
+                    }
+                } else {
+                    priceDisplay = `<div class="item-price price-unavailable">가격 문의</div>`;
+                }
+
                 itemEl.innerHTML = `
-          <p><strong>${item.name}</strong> : ${priceStr}${packagingStr}<br>
-          `; // <span class="origin">원재료: ${item.origin}</span></p>
-                catEl.appendChild(itemEl);
+                    <div class="item-info">
+                        <div class="item-name">${item.name}</div>
+                    </div>
+                    <div class="price-info">
+                        ${priceDisplay}
+                    </div>
+                `;
+
+                itemsEl.appendChild(itemEl);
             });
+
+            catEl.appendChild(headerEl);
+            catEl.appendChild(itemsEl);
             menuContainer.appendChild(catEl);
         });
-
-        // // 영업시간
-        // const hoursEl = document.getElementById("hours");
-        // Object.entries(data.store.hours).forEach(([day, hours]) => {
-        //     const p = document.createElement("p");
-        //     p.textContent = `${day}: ${hours}`;
-        //     hoursEl.appendChild(p);
-        // });
-
-        // // 이벤트
-        // const eventsEl = document.getElementById("events");
-        // data.events.forEach(ev => {
-        //     const div = document.createElement("div");
-        //     div.className = "event-item";
-        //     div.innerHTML = `<strong>${ev.title}</strong><br><span>${ev.description}</span>`;
-        //     eventsEl.appendChild(div);
-        // });
-
-        // // 갤러리
-        // const galleryEl = document.getElementById("gallery");
-        // data.gallery.forEach(img => {
-        //     const image = document.createElement("img");
-        //     image.src = img.url;
-        //     image.src = img;
-        //     image.alt = img.caption || "아띠 이미지";
-        //     galleryEl.appendChild(image);
-        // });
     </script>
 </body>
 
