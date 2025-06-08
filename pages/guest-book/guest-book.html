@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>방명록 - aid098proton</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        p.description {
+            text-align: center;
+            color: #555;
+            margin-bottom: 2rem;
+        }
+
+        #disqus_thread {
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>방명록</h1>
+        <p class="description">자유롭게 인사말과 의견을 남겨주세요.</p>
+
+        <!-- Disqus 댓글 영역 -->
+        <div id="disqus_thread"></div>
+        <script>
+            var disqus_config = function () {
+                this.page.url = window.location.href;  // 현재 페이지 URL
+                this.page.identifier = "guest-book";   // 페이지 고유 식별자
+            };
+
+            (function () {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://aid098proton.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>댓글을 보시려면 자바스크립트를 활성화해주세요.</noscript>
+    </div>
+
+    <!-- Disqus 카운트 스크립트 (필요시) -->
+    <script id="dsq-count-scr" src="//aid098proton.disqus.com/count.js" async></script>
+</body>
+
+</html>
