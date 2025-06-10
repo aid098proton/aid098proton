@@ -1,6 +1,14 @@
 // 음악 목록
 const musicList = [
     {
+        title: '너의 방식 1',
+        file: '250611_너의_방식_1.mp3'
+    },
+    {
+        title: '너의 방식 2',
+        file: '250611_너의_방식_2.mp3'
+    },
+    {
         title: '진짜 나 1',
         file: '250610_진짜_나_1.mp3'
     },
@@ -81,12 +89,12 @@ const musicList = [
         file: '250601_부드럽게_부푼_꿈_2.mp3'
     },
     {
-        title: 'AI Music 20250601 1',
-        file: 'ai_music_20250601_1.mp3'
+        title: '너의 마음속 어딘가 1',
+        file: '250601_너의_마음속_어딘가_1.mp3'
     },
     {
-        title: 'AI Music 20250601 2',
-        file: 'ai_music_20250601_2.mp3'
+        title: '너의 마음속 어딘가 2',
+        file: '250601_너의_마음속_어딘가_2.mp3'
     },
     {
         title: '아띠 베이커리의 꿈 1',
@@ -98,59 +106,59 @@ const musicList = [
     },
 
     {
-        title: 'AI Music 20250531 1',
+        title: '내가 살아 있는 감각 1',
         file: 'ai_music_20250531_1.mp3'
     },
     {
-        title: 'AI Music 20250531 2',
+        title: '내가 살아 있는 감각 2',
         file: 'ai_music_20250531_2.mp3'
     },
     {
-        title: 'AI Music 20250530 1',
+        title: '빛나는 등불 1',
         file: 'ai_music_20250530_1.mp3'
     },
     {
-        title: 'AI Music 20250530 2',
+        title: '빛나는 등불 2',
         file: 'ai_music_20250530_2.mp3'
     },
     {
-        title: 'AI Music 20250529 1',
+        title: '괜찮아, 너는 잘하고 있어 1',
         file: 'ai_music_20250529_1.mp3'
     },
     {
-        title: 'AI Music 20250529 2',
+        title: '괜찮아, 너는 잘하고 있어 2',
         file: 'ai_music_20250529_2.mp3'
     },
     {
-        title: 'AI Music 20250528 1',
+        title: '당신은 대단해요 1',
         file: 'ai_music_20250528_1.mp3'
     },
     {
-        title: 'AI Music 20250528 2',
+        title: '당신은 대단해요 2',
         file: 'ai_music_20250528_2.mp3'
     },
     {
-        title: 'AI Music 20250527 1',
+        title: '충분히 아름다워 1',
         file: 'ai_music_20250527_1.mp3'
     },
     {
-        title: 'AI Music 20250527 2',
+        title: '충분히 아름다워 2',
         file: 'ai_music_20250527_2.mp3'
     },
     {
-        title: 'AI Music 20250526 1',
+        title: '진심으로 도망가고 싶다 1',
         file: 'ai_music_20250526_1.mp3'
     },
     {
-        title: 'AI Music 20250526 2',
+        title: '진심으로 도망가고 싶다 2',
         file: 'ai_music_20250526_2.mp3'
     },
     {
-        title: 'AI Music 20250525 1',
+        title: '함께 걸어가요 1',
         file: 'ai_music_20250525_1.mp3'
     },
     {
-        title: 'AI Music 20250525 2',
+        title: '함께 걸어가요 2',
         file: 'ai_music_20250525_2.mp3'
     },
     {
