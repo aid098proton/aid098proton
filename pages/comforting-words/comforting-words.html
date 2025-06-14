@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>코딩하며 꿈을 키우는 곳</title>
+    <link rel="icon" type="image/png" sizes="180x180" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .container>a {
+            margin-top: 10px;
+        }
+
+        section.quote-section.section-card {
+            margin-top: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 학습 일정 정보 개선 */
+        .study-timeline {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .timeline-item:last-child {
+            border-bottom: none;
+        }
+
+        .timeline-label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .timeline-value {
+            font-size: 1rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        /* 섹션 스타일 */
+        section {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 중요도별 색상 - 파스텔 톤 */
+        .priority-high {
+            border-left: 5px solid #a8e6cf;
+            background: linear-gradient(135deg, rgba(168, 230, 207, 0.1) 0%, rgba(255, 255, 255, 0.9) 100%);
+        }
+
+        .priority-medium {
+            border-left: 5px solid #ffd3a5;
+            background: linear-gradient(135deg, rgba(255, 211, 165, 0.1) 0%, rgba(255, 255, 255, 0.9) 100%);
+        }
+
+        .priority-low {
+            border-left: 5px solid #d4c5f9;
+            background: linear-gradient(135deg, rgba(212, 197, 249, 0.1) 0%, rgba(255, 255, 255, 0.9) 100%);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-description {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            color: #999;
+            font-weight: normal;
+        }
+
+        /* 랜덤 인용구 특별 스타일 */
+        .quote-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none !important;
+        }
+
+        .quote-section .section-title,
+        .quote-section .section-description {
+            color: white;
+        }
+
+        #random-quote {
+            font-size: 1.1rem;
+            font-style: italic;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .refresh-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 3rem;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .timeline-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.3rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>오늘의 위로</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- 특별 섹션: 랜덤 인용구 -->
+            <section class="quote-section section-card">
+                <h2 class="section-title">오늘의 위로</h2>
+                <p class="section-description">하루를 견디는 당신에게, 작은 응원의 한마디를 전합니다.</p>
+                <p id="random-quote"></p>
+                <button onclick="showQuote()" class="refresh-btn">다른 위로 보기</button>
+            </section>
+        </div>
+    </main>
+</body>
+<script>
+    // 랜덤 인용구
+    const quotes = [
+        "오늘 하루도 수고했어요. 작은 진전도 큰 의미가 있어요.",
+        "완벽하지 않아도 괜찮아요. 지금 이 순간의 당신도 충분해요.",
+        "힘든 시간이 당신을 더 강하게 만들고 있어요.",
+        "한 걸음씩 나아가는 것만으로도 충분히 대단해요.",
+        "실수는 성장의 기회예요. 자신에게 너그러워져 보세요.",
+        "지금 당신이 하고 있는 노력들이 언젠가 빛을 발할 거예요.",
+        "쉬어가는 것도 앞으로 나아가는 방법 중 하나예요.",
+        "당신의 속도로 가는 것이 가장 확실한 방법이에요.",
+        "오늘의 작은 노력이 내일의 큰 성공이 된다.",
+        "지금은 느려 보여도, 네 속도는 틀리지 않아.",
+        "운구기일이라도 괜찮아. 계속 가는 게 중요한 거야.",
+        "지록위마 같은 현실이어도, 넌 진실을 본다.",
+        "너무 잘하려고 하지 마. '지금' 하는 것만으로도 대단해.",
+        "주화입마? 개발은 마음을 다스리는 수련이야.",
+        "네가 만든 작은 기능이 누군가에겐 큰 도움이 될 수 있어.",
+        "재미없어도 괜찮아. 의미 있고, 네가 하고 있으니까.",
+        "개발은 결국 사람을 위한 일. 따뜻한 마음이 코드를 만든다.",
+        "포기할 이유보다, 계속할 이유가 하나만 있어도 충분해.",
+        "나도 누군가에게는 잊히지 않을 의미가 되고 싶다.",
+        "이 길이 맞을까 걱정돼도, 너는 분명히 앞으로 가고 있어.",
+        "개발은 '재미'가 아니라 '의미'로 버티는 거야.",
+        "다들 잘해 보여도, 사실은 다들 배우는 중이야.",
+        "오늘 할 수 있는 것만 해도 충분해.",
+        "네가 걷는 이 길엔, 반드시 의미가 있어.",
+        "힘들면, 잠깐 멈춰서 쉬어도 괜찮아.",
+        "일단 시작했다는 것 자체가 용기야.",
+        "남들보다 늦어도, 방향이 맞으면 언젠간 도착해.",
+        "너무 조급해하지 마. 성장은 시간과 함께 와.",
+        "의심하지 말자. 이미 너는 잘하고 있어.",
+        "세상에 의미 없는 시도는 없어.",
+        "너만의 속도로 충분히 잘하고 있어.",
+        "비교보다 중요한 건 너의 방향이야.",
+        "깃허브에 남겨진 커밋 로그, 그건 너의 일기야.",
+        "처음부터 잘하는 사람은 없어. 너도 예외가 아니야.",
+        "의심하지 말고, 너 자신을 믿어봐.",
+        "소소한 성취가 모이면, 결국 거대한 성장이 돼.",
+        "배운 것을 잊어도 괜찮아. 다시 배울 수 있으니까.",
+        "다른 누구보다, 너 자신을 실망시키지 마.",
+        "혼자라서 외로울 수 있지만, 혼자니까 자유로워.",
+        "시작하지 않았으면, 후회할 뻔했잖아?",
+        "중요한 건 얼마나 잘했냐보다, 얼마나 진심이었냐야.",
+        "깃허브에 오늘도 기록을 남겼다면, 충분히 잘한 하루야.",
+        "넌 분명히 의미 있는 사람이고, 의미 있는 개발을 하고 있어.",
+        "남들 기준보다 네 기준을 믿자.",
+        "실수해도 괜찮아. 네가 사람이라는 증거니까.",
+        "노력은 배신하지 않아. 다만, 시간이 걸릴 뿐.",
+        "멈추지 말고, 네 호흡대로 계속 가자.",
+        "지금 하는 작은 선택들이, 너의 미래를 바꿔줄 거야.",
+        "늘 정답이 있는 건 아니야. 때로는 네가 정답이야.",
+        "무언가를 만들고 있다는 것, 그 자체가 존경받을 일이다.",
+        "개발이 어렵다고 느껴진다면, 그만큼 성장하고 있다는 증거야.",
+        "네 코드가 완벽하지 않아도, 너는 충분히 괜찮은 사람이야.",
+        "스스로에게 자주 말해줘. '난 잘하고 있어.'",
+        "혼자 걷는 길이라도, 넌 혼자가 아니야.",
+        "너는 의미 있는 하나의 존재야.",
+        "천천히 가도 돼, 넌 괜찮아. 흔들리는 지금도 좋아. 틀려도 돼, 멈춰도 돼. 사람인 너, 그게 참 멋져! 그걸 잊지 말아줘",
+        "몰라도 괜찮아. 근데 멈추진 말자. 이건 성장통이지, 나랑 안 맞는 게 아니야. 이해 못했어도, 적어놓고 내일 다시 보면 달라져. 이런 말 한 줄이 당황해서 무너지는 걸 막는 방패가 됩니다.",
+        "지식보다 태도. 정답보다 적응력이 훨씬 더 중요해요.",
+        "혼자서도 해보려는 끈기. 모자란 실력이라도 멈추지 않고 쌓아가는 마음. 다른 사람과 맞춰가는 협업 능력. 그리고, 도망가지 않는 멘탈. 이걸 꾸준히 훈련받는 사람은, 결국 어디서든 ‘필요한 사람’이 됩니다.",
+        "실력뿐만 아니라, 함께 배우는 태도, 배려심, 소통 능력이 기업에서 말하는 인성이라고 해요.",
+        "당황하거나 도망가기보다, “한 줄이라도 더 파보자”는 태도를 배우는 중...",
+        "사람마다 출발점이 달라요. 남들 기준의 ‘잘함’보다 ‘내가 지금 할 수 있는 걸 반복해서 하는 것’이 더 멀리 데려다줄 수 있어요."
+    ];
+
+    function showQuote() {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        document.getElementById('random-quote').textContent = quotes[randomIndex];
+    }
+
+    // 페이지 로드 시 실행
+    window.addEventListener('load', function () {
+        showQuote();
+    });
+</script>
+
+</html>

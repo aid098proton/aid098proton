@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>강서폴리텍 일정</title>
+    <link rel="icon" type="image/png" sizes="180x180" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .container>a {
+            margin-top: 10px;
+        }
+
+        section.quote-section.section-card {
+            margin-top: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 학습 일정 정보 개선 */
+        .study-timeline {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .timeline-item:last-child {
+            border-bottom: none;
+        }
+
+        .timeline-label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .timeline-value {
+            font-size: 1rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        /* 섹션 스타일 */
+        section {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 중요도별 색상 - 파스텔 톤 */
+        .priority-high {
+            border-left: 5px solid #a8e6cf;
+            background: linear-gradient(135deg, rgba(168, 230, 207, 0.1) 0%, rgba(255, 255, 255, 0.9) 100%);
+        }
+
+        .priority-medium {
+            border-left: 5px solid #ffd3a5;
+            background: linear-gradient(135deg, rgba(255, 211, 165, 0.1) 0%, rgba(255, 255, 255, 0.9) 100%);
+        }
+
+        .priority-low {
+            border-left: 5px solid #d4c5f9;
+            background: linear-gradient(135deg, rgba(212, 197, 249, 0.1) 0%, rgba(255, 255, 255, 0.9) 100%);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-description {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            color: #999;
+            font-weight: normal;
+        }
+
+        /* 랜덤 인용구 특별 스타일 */
+        .quote-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none !important;
+        }
+
+        .quote-section .section-title,
+        .quote-section .section-description {
+            color: white;
+        }
+
+        #random-quote {
+            font-size: 1.1rem;
+            font-style: italic;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .refresh-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 3rem;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .timeline-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.3rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>강서폴리텍 일정</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- 학습 일정 정보 -->
+            <div class="study-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-label">전환점이 된 날(2025.05.28.수)부터</div>
+                    <div class="timeline-value" id="days-since-dropout">-일째</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-label">입학일(2025.03.04)로부터</div>
+                    <div class="timeline-value" id="days-since-start">계산 중...</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-label">수료일(2026.02.04)까지</div>
+                    <div class="timeline-value" id="days-until-end">계산 중...</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-label">2025.7.12(토) 하계방학</div>
+                    <div class="timeline-value">2025.8.18(월) 2학기 개강</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-label">2025.12.3(수) 동계방학</div>
+                    <div class="timeline-value">2026.2.4(수) 수료식</div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+<script>
+    // 날짜 계산 함수들
+    function calculateDays() {
+        // const today = new Date();
+        // const startDate = new Date('2025-03-04');
+        // const endDate = new Date('2026-02-04');
+        // const dropoutDate = new Date('2025-05-28');
+
+        // const daysSinceStart = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+        // const daysUntilEnd = Math.floor((endDate - today) / (1000 * 60 * 60 * 24));
+        // const daysSinceDropout = Math.floor((today - dropoutDate) / (1000 * 60 * 60 * 24));
+
+        // document.getElementById('days-since-start').textContent = daysSinceStart + '일째';
+        // document.getElementById('days-until-end').textContent = 'D-' + daysUntilEnd;
+        // document.getElementById('days-since-dropout').textContent = daysSinceDropout + '일째';
+
+        // 입학일과 수료일 설정
+        const startDate = new Date('2025-03-04');
+        const endDate = new Date('2026-02-04');
+
+        // 오늘 날짜 (시간은 00:00:00으로 설정하여 일수만 정확히 계산)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // 입학일부터 지난 일수 계산 (당일은 1일차로 계산)
+        const daysSinceStart = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
+
+        // 수료일까지 남은 일수 계산 (당일은 D-day로 계산)
+        const daysUntilEnd = Math.floor((endDate - today) / (1000 * 60 * 60 * 24));
+
+        // HTML 요소에 결과 표시
+        const daysSinceStartElement = document.getElementById('days-since-start');
+        const daysUntilEndElement = document.getElementById('days-until-end');
+
+        // 음수 일수 처리 (아직 입학전이거나 이미 수료한 경우)
+        if (daysSinceStart < 1) {
+            daysSinceStartElement.textContent = `입학 D-${Math.abs(daysSinceStart) + 1}`;
+        } else {
+            daysSinceStartElement.textContent = `${daysSinceStart}일째`;
+        }
+
+        if (daysUntilEnd < 0) {
+            daysUntilEndElement.textContent = `수료 완료!`;
+        } else if (daysUntilEnd === 0) {
+            daysUntilEndElement.textContent = `오늘이 D-day!`;
+        } else {
+            daysUntilEndElement.textContent = `D-${daysUntilEnd}`;
+        }
+
+        // 🔹 자퇴일 관련 계산
+        const dropoutDate = new Date('2025-05-28');
+        const daysSinceDropout = Math.floor((today - dropoutDate) / (1000 * 60 * 60 * 24)) + 1;
+
+        const daysSinceDropoutElement = document.getElementById('days-since-dropout');
+        if (daysSinceDropoutElement) {
+            if (daysSinceDropout < 1) {
+                daysSinceDropoutElement.textContent = `자퇴 D-${Math.abs(daysSinceDropout) + 1}`;
+            } else {
+                daysSinceDropoutElement.textContent = `${daysSinceDropout}일째`;
+            }
+        }
+    }
+
+    // 페이지 로드 시 실행
+    window.addEventListener('load', function () {
+        calculateDays();
+    });
+</script>
+
+</html>

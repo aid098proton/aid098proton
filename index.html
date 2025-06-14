@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>코딩하며 꿈을 키우는 곳</title>
+    <title>필요에 맞춰 구현하는 웹 페이지</title>
     <link rel="icon" type="image/png" sizes="180x180" href="/favicon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
     <style>
@@ -213,59 +213,17 @@
 </head>
 
 <body>
-    <header>
-        <div class="container">
-            <h1>코딩하며 꿈을 키우는 곳</h1>
-        </div>
-    </header>
-
     <main>
         <div class="container">
-            <!-- 학습 일정 정보 -->
-            <div class="study-timeline">
-                <div class="timeline-item">
-                    <div class="timeline-label">전환점이 된 날(2025.05.28.수)부터</div>
-                    <div class="timeline-value" id="days-since-dropout">-일째</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-label">입학일(2025.03.04)로부터</div>
-                    <div class="timeline-value" id="days-since-start">계산 중...</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-label">수료일(2026.02.04)까지</div>
-                    <div class="timeline-value" id="days-until-end">계산 중...</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-label">2025.7.12(토) 하계방학</div>
-                    <div class="timeline-value">2025.8.18(월) 2학기 개강</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-label">2025.12.3(수) 동계방학</div>
-                    <div class="timeline-value">2026.2.4(수) 수료식</div>
-                </div>
-            </div>
-
-            <!-- 중요한 페이지들 -->
-            <a href="./pages/atti-menu-page/atti-menu-page.html" class="section-card priority-high">
-                <h2 class="section-title">아띠 베이커리 메뉴</h2>
-                <p class="section-description">정성으로 만든 빵과 디저트 메뉴를 소개합니다.</p>
-            </a>
-
-            <a href="./pages/nambu-meal/nambu-meal.html" class="section-card priority-high">
-                <h2 class="section-title">남부고용센터 7층 주간식단표</h2>
-                <p class="section-description">2025-06-09-월~06-13-금</p>
-            </a>
-
-            <a href="./pages/meal/meal-info.html" class="section-card priority-high">
-                <h2 class="section-title">서울강서캠퍼스 식단정보 <span class="subtitle">(매주 업데이트)</span></h2>
-                <p class="section-description">운영시간: 11:40~13:40 | 학생 1,300원 / 일반 3,700원 (카드결제만)</p>
-            </a>
-
             <a href="./pages/ai-music/ai-music.html" class="section-card priority-high">
                 <h2 class="section-title">AI 노래들</h2>
                 <p class="section-description">인공지능이 만든 창의적인 음악을 감상해보세요.</p>
             </a>
 
+            <a href="./pages/atti-menu-page/atti-menu-page.html" class="section-card priority-high">
+                <h2 class="section-title">아띠 베이커리 메뉴</h2>
+                <p class="section-description">정성으로 만든 빵과 디저트 메뉴를 소개합니다.</p>
+            </a>
 
             <a href="./pages/guest-book/guest-book.html" class="section-card priority-high">
                 <h2 class="section-title">방명록 공간</h2>
@@ -277,10 +235,17 @@
                 <p class="section-description">누구나 편하게 참여할 수 있는 채팅 공간입니다.</p>
             </a>
 
-            
-            
-
             <!-- 중간 중요도 페이지들 -->
+            <a href="./pages/school-schedule/school-schedule.html" class="section-card priority-medium">
+                <h2 class="section-title">서울강서캠퍼스 일정</h2>
+                <p class="section-description">입학, 방학, 수료 일정</p>
+            </a>
+
+            <a href="./pages/meal/meal-info.html" class="section-card priority-medium">
+                <h2 class="section-title">서울강서캠퍼스 식단정보 <span class="subtitle">(매주 업데이트)</span></h2>
+                <p class="section-description">운영시간: 11:40~13:40 | 학생 1,300원 / 일반 3,700원 (카드결제만)</p>
+            </a>
+
             <a href="./pages/school-store/school-store.html" class="section-card priority-medium">
                 <h2 class="section-title">서울강서캠퍼스 매점</h2>
                 <p class="section-description">무인 결제 시스템 운영 중 (카드결제만)</p>
@@ -306,129 +271,13 @@
                 <p class="section-description">텍스트 어드벤처 게임으로 고양이를 찾아 나서는 여정</p>
             </a>
 
-            <!-- 특별 섹션: 랜덤 인용구 -->
-            <section class="quote-section section-card">
+            <a href="./pages/comforting-words/comforting-words.html" class="section-card priority-medium">
                 <h2 class="section-title">오늘의 위로</h2>
-                <p class="section-description">하루를 견디는 당신에게, 작은 응원의 한마디를 전합니다.</p>
-                <p id="random-quote"></p>
-                <button onclick="showQuote()" class="refresh-btn">다른 위로 보기</button>
-            </section>
-
-            <!-- 덜 중요한 페이지들 -->
-            <a href="./pages/today-dev/today-dev.html" class="section-card priority-low">
-                <h2 class="section-title">개발 뉴스 <span class="subtitle">(네이버 API)</span></h2>
-                <p class="section-description">최신 개발자 뉴스와 기술 트렌드를 확인하세요.</p>
+                <p class="section-description">오늘의 위로</p>
             </a>
 
-            <a href="./pages/three-cats-miracle/page.html" class="section-card priority-low">
-                <h2 class="section-title">세 고양이의 기적</h2>
-                <p class="section-description">Twine으로 만든 인터랙티브 텍스트 게임</p>
-            </a>
-
-            <a href="./pages/code-share/code-share.html" class="section-card priority-low">
-                <h2 class="section-title">코드/텍스트 공유 <span class="subtitle">(운영 중단)</span></h2>
-                <p class="section-description">코드와 텍스트를 쉽게 공유할 수 있는 플랫폼</p>
-            </a>
-
-            <a href="./pages/rps/rps.html" class="section-card priority-low">
-                <h2 class="section-title">가위바위보</h2>
-                <p class="section-description">짧은 휴식이 필요할 때 즐겨보세요.</p>
-            </a>
         </div>
     </main>
-
-    <footer>
-        <div class="container">
-            한 걸음씩, 꿈을 향해 🌟
-        </div>
-    </footer>
-
-    <script>
-        // 날짜 계산 함수들
-        function calculateDays() {
-            // const today = new Date();
-            // const startDate = new Date('2025-03-04');
-            // const endDate = new Date('2026-02-04');
-            // const dropoutDate = new Date('2025-05-28');
-
-            // const daysSinceStart = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-            // const daysUntilEnd = Math.floor((endDate - today) / (1000 * 60 * 60 * 24));
-            // const daysSinceDropout = Math.floor((today - dropoutDate) / (1000 * 60 * 60 * 24));
-
-            // document.getElementById('days-since-start').textContent = daysSinceStart + '일째';
-            // document.getElementById('days-until-end').textContent = 'D-' + daysUntilEnd;
-            // document.getElementById('days-since-dropout').textContent = daysSinceDropout + '일째';
-
-            // 입학일과 수료일 설정
-            const startDate = new Date('2025-03-04');
-            const endDate = new Date('2026-02-04');
-
-            // 오늘 날짜 (시간은 00:00:00으로 설정하여 일수만 정확히 계산)
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            // 입학일부터 지난 일수 계산 (당일은 1일차로 계산)
-            const daysSinceStart = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
-
-            // 수료일까지 남은 일수 계산 (당일은 D-day로 계산)
-            const daysUntilEnd = Math.floor((endDate - today) / (1000 * 60 * 60 * 24));
-
-            // HTML 요소에 결과 표시
-            const daysSinceStartElement = document.getElementById('days-since-start');
-            const daysUntilEndElement = document.getElementById('days-until-end');
-
-            // 음수 일수 처리 (아직 입학전이거나 이미 수료한 경우)
-            if (daysSinceStart < 1) {
-                daysSinceStartElement.textContent = `입학 D-${Math.abs(daysSinceStart) + 1}`;
-            } else {
-                daysSinceStartElement.textContent = `${daysSinceStart}일째`;
-            }
-
-            if (daysUntilEnd < 0) {
-                daysUntilEndElement.textContent = `수료 완료!`;
-            } else if (daysUntilEnd === 0) {
-                daysUntilEndElement.textContent = `오늘이 D-day!`;
-            } else {
-                daysUntilEndElement.textContent = `D-${daysUntilEnd}`;
-            }
-
-            // 🔹 자퇴일 관련 계산
-            const dropoutDate = new Date('2025-05-28');
-            const daysSinceDropout = Math.floor((today - dropoutDate) / (1000 * 60 * 60 * 24)) + 1;
-
-            const daysSinceDropoutElement = document.getElementById('days-since-dropout');
-            if (daysSinceDropoutElement) {
-                if (daysSinceDropout < 1) {
-                    daysSinceDropoutElement.textContent = `자퇴 D-${Math.abs(daysSinceDropout) + 1}`;
-                } else {
-                    daysSinceDropoutElement.textContent = `${daysSinceDropout}일째`;
-                }
-            }
-        }
-
-        // 랜덤 인용구
-        const quotes = [
-            "오늘 하루도 수고했어요. 작은 진전도 큰 의미가 있어요.",
-            "완벽하지 않아도 괜찮아요. 지금 이 순간의 당신도 충분해요.",
-            "힘든 시간이 당신을 더 강하게 만들고 있어요.",
-            "한 걸음씩 나아가는 것만으로도 충분히 대단해요.",
-            "실수는 성장의 기회예요. 자신에게 너그러워져 보세요.",
-            "지금 당신이 하고 있는 노력들이 언젠가 빛을 발할 거예요.",
-            "쉬어가는 것도 앞으로 나아가는 방법 중 하나예요.",
-            "당신의 속도로 가는 것이 가장 확실한 방법이에요."
-        ];
-
-        function showQuote() {
-            const randomIndex = Math.floor(Math.random() * quotes.length);
-            document.getElementById('random-quote').textContent = quotes[randomIndex];
-        }
-
-        // 페이지 로드 시 실행
-        window.addEventListener('load', function () {
-            calculateDays();
-            showQuote();
-        });
-    </script>
 </body>
 
 </html>
