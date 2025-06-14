@@ -4,518 +4,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>나의 고군분투 빵집 만화</title>
+    <title>나의 웹툰 목록</title>
     <style>
-        /* 기본 스타일 */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
             color: #333;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            /* 전체 화면 높이 사용 */
-        }
-
-        header {
-            background-color: #ffeadb;
-            /* 빵집 분위기 색상 */
-            padding: 15px 20px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        header h1 {
-            margin: 0;
-            color: #d66;
-            /* 빵집 폰트 색상 */
-        }
-
-        nav {
-            background-color: #fff;
-            padding: 10px 20px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        nav button {
-            background-color: #ffb74d;
-            /* 주황색 버튼 */
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            margin: 0 5px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: background-color 0.3s ease;
-        }
-
-        nav button:hover {
-            background-color: #ffa033;
         }
 
         .container {
-            flex-grow: 1;
-            /* 남은 공간을 컨테이너가 채우도록 */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            max-width: 960px;
+            margin: 0 auto;
+            background-color: #fff;
             padding: 20px;
-        }
-
-        /* 만화 뷰어 스타일 */
-        .comic-viewer {
-            width: 100%;
-            max-width: 800px;
-            /* PC에서 최대 너비 */
-            background-color: #fff;
-            border: 1px solid #ddd;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
-            /* 페이지 넘김 버튼 위치를 위해 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            /* 이미지가 뷰어 밖으로 나가지 않도록 */
-            aspect-ratio: 1 / 1.414;
-            /* A4 비율 (예시, 만화 페이지 비율에 맞게 조정) */
-            margin-bottom: 20px;
-        }
-
-        .comic-viewer img {
-            max-width: 100%;
-            max-height: 100%;
-            display: block;
-            object-fit: contain;
-            /* 이미지가 뷰어에 꽉 차게 */
-        }
-
-        /* 페이지 이동 버튼 */
-        .page-nav-buttons {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 50%;
-            /* 좌우 클릭 영역 */
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .page-nav-buttons.left {
-            left: 0;
-        }
-
-        .page-nav-buttons.right {
-            right: 0;
-        }
-
-        /* 컨트롤 패널 스타일 */
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            /* 모바일에서 버튼이 줄바꿈 되도록 */
-            justify-content: center;
-            align-items: center;
-            background-color: #fff;
-            padding: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            gap: 10px;
-            /* 버튼 사이 간격 */
-            width: 100%;
-            max-width: 800px;
         }
 
-        .controls button,
-        .controls select {
-            background-color: #6c757d;
-            /* 회색 버튼 */
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 5px;
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .episode-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .episode-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
             cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s ease;
-            white-space: nowrap;
-            /* 버튼 텍스트 줄바꿈 방지 */
         }
 
-        .controls button:hover,
-        .controls select:hover {
-            background-color: #5a6268;
+        .episode-item:hover {
+            transform: translateY(-5px);
         }
 
-        .controls select {
-            appearance: none;
-            /* 기본 셀렉트 박스 스타일 제거 */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            padding-right: 35px;
-            /* 화살표 공간 확보 */
+        .episode-item img {
+            width: 100%;
+            height: 180px;
+            /* 썸네일 높이 고정 */
+            object-fit: cover;
+            /* 이미지가 잘리지 않고 비율 유지 */
+            display: block;
         }
 
-        .page-info {
-            font-weight: bold;
-            color: #555;
-            margin: 0 10px;
-            min-width: 80px;
-            /* 글자 길이에 따라 흔들리지 않도록 */
-            text-align: center;
-        }
-
-        footer {
-            margin-top: auto;
-            /* 푸터를 하단에 고정 */
+        .episode-info {
             padding: 15px;
-            text-align: center;
-            background-color: #eee;
-            color: #777;
-            font-size: 0.8em;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
         }
 
-        /* 모바일 반응형 (화면 너비 768px 이하) */
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 1.5em;
-            }
+        .episode-info h2 {
+            font-size: 1.3em;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #34495e;
+        }
 
-            nav button {
-                padding: 6px 10px;
-                font-size: 0.8em;
-            }
-
-            .comic-viewer {
-                border-radius: 5px;
-            }
-
-            .controls {
-                flex-direction: row;
-                /* 모바일에서 가로 정렬 */
-                justify-content: center;
-                gap: 5px;
-                padding: 10px;
-            }
-
-            .controls button,
-            .controls select {
-                padding: 8px 12px;
-                font-size: 0.9em;
-            }
-
-            .page-nav-buttons {
-                width: 30%;
-                /* 모바일에서 좌우 클릭 영역 줄이기 */
-            }
+        .episode-info p {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.5;
+            min-height: 40px;
+            /* 설명이 없는 경우를 대비하여 최소 높이 지정 */
         }
     </style>
 </head>
 
 <body>
-
-    <header>
-        <h1>나의 고군분투 빵집 만화</h1>
-    </header>
-
-    <nav>
-        <button id="show-comic-list">만화 목록 보기</button>
-    </nav>
-
-    <main class="container">
-        <section id="comic-list-section"
-            style="display: none; max-width: 800px; width: 100%; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-            <h2>만화 목록</h2>
-            <ul id="comic-episode-list" style="list-style: none; padding: 0;">
-            </ul>
-            <button id="close-comic-list"
-                style="background-color: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-top: 15px;">닫기</button>
-        </section>
-
-        <section id="comic-viewer-section"
-            style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-            <div class="comic-viewer">
-                <img id="comic-page-image" src="" alt="만화 페이지">
-                <div class="page-nav-buttons left" onclick="prevPage()"></div>
-                <div class="page-nav-buttons right" onclick="nextPage()"></div>
-            </div>
-
-            <div class="controls">
-                <button id="first-page">첫화</button>
-                <button id="prev-3-pages">-3</button>
-                <button id="prev-page">이전</button>
-                <span class="page-info"><span id="current-page-display">1</span> / <span
-                        id="total-pages-display">1</span></span>
-                <button id="next-page">다음</button>
-                <button id="next-3-pages">+3</button>
-                <button id="last-page">마지막화</button>
-                <select id="episode-select"></select>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        &copy; 2025 나의 고군분투 빵집 만화. All rights reserved.
-    </footer>
+    <div class="container">
+        <h1>나의 웹툰 컬렉션</h1>
+        <div id="episodeList" class="episode-list">
+        </div>
+    </div>
 
     <script>
-        // -------------------- 만화 데이터 설정 --------------------
-        // 각 에피소드의 페이지 이미지 경로를 배열로 정의합니다.
-        // 선생님의 실제 이미지 경로로 변경해주세요!
-        const comicData = [
-            {
-                title: "1화: 빵 냄새를 쫓아서",
-                pages: [
-                    "images/ep1_p01.webp",
-                    "images/ep1_p02.webp",
-                    "images/ep1_p03.webp",
-                    "images/ep1_p04.webp"
-                ]
-            },
-            {
-                title: "2화: 밀가루와의 전쟁",
-                pages: [
-                    "images/ep2_p01.webp",
-                    "images/ep2_p02.webp",
-                    "images/ep2_p03.webp",
-                    "images/ep2_p04.webp",
-                    "images/ep2_p05.webp"
-                ]
-            },
-            {
-                title: "3화: 새벽의 동료",
-                pages: [
-                    "images/ep3_p01.webp",
-                    "images/ep3_p02.webp",
-                    "images/ep3_p03.webp"
-                ]
-            }
-            // 필요한 만큼 에피소드를 추가하세요
-        ];
-
-        // -------------------- 전역 변수 --------------------
-        let currentEpisodeIndex = 0; // 현재 에피소드 인덱스 (0부터 시작)
-        let currentPageIndex = 0;   // 현재 페이지 인덱스 (0부터 시작)
-
-        // -------------------- DOM 요소 가져오기 --------------------
-        const comicPageImage = document.getElementById('comic-page-image');
-        const currentPageDisplay = document.getElementById('current-page-display');
-        const totalPagesDisplay = document.getElementById('total-pages-display');
-        const episodeSelect = document.getElementById('episode-select');
-        const comicListSection = document.getElementById('comic-list-section');
-        const comicViewerSection = document.getElementById('comic-viewer-section');
-        const comicEpisodeList = document.getElementById('comic-episode-list');
-
-        // -------------------- 초기화 함수 --------------------
-        function initializeComicViewer() {
-            loadEpisodeList(); // 에피소드 드롭다운 메뉴 및 목록 생성
-            loadLastViewedPage(); // 웹 스토리지에서 마지막으로 본 페이지 불러오기
-            updateComicView(); // 만화 뷰어 업데이트
-            setupEventListeners(); // 이벤트 리스너 설정
-        }
-
-        // -------------------- 에피소드 목록 로드 및 업데이트 --------------------
-        function loadEpisodeList() {
-            episodeSelect.innerHTML = ''; // 기존 옵션 초기화
-            comicEpisodeList.innerHTML = ''; // 기존 목록 초기화
-
-            comicData.forEach((episode, index) => {
-                // 셀렉트 박스 옵션 추가
-                const option = document.createElement('option');
-                option.value = index;
-                option.textContent = episode.title;
-                episodeSelect.appendChild(option);
-
-                // 만화 목록 (ul)에 항목 추가
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `<a href="#" data-episode-index="${index}" style="text-decoration: none; color: #333; font-weight: bold;">${episode.title}</a>`;
-                listItem.style.padding = '10px 0';
-                listItem.style.borderBottom = '1px solid #eee';
-                listItem.style.cursor = 'pointer';
-                listItem.style.transition = 'color 0.3s ease';
-                listItem.onmouseover = () => listItem.style.color = '#ff6b6b';
-                listItem.onmouseout = () => listItem.style.color = '#333';
-                comicEpisodeList.appendChild(listItem);
-            });
-
-            // 현재 에피소드 선택 상태 반영
-            episodeSelect.value = currentEpisodeIndex;
-        }
-
-        // -------------------- 만화 뷰어 업데이트 --------------------
-        function updateComicView() {
-            const currentEpisode = comicData[currentEpisodeIndex];
-            if (!currentEpisode || currentEpisode.pages.length === 0) {
-                comicPageImage.src = ''; // 이미지가 없을 경우 비워둠
-                currentPageDisplay.textContent = '0';
-                totalPagesDisplay.textContent = '0';
-                return;
-            }
-
-            // 현재 페이지 인덱스 유효성 검사 (범위를 벗어나지 않도록)
-            if (currentPageIndex < 0) currentPageIndex = 0;
-            if (currentPageIndex >= currentEpisode.pages.length) currentPageIndex = currentEpisode.pages.length - 1;
-
-            comicPageImage.src = currentEpisode.pages[currentPageIndex];
-            currentPageDisplay.textContent = currentPageIndex + 1; // 1부터 시작하는 페이지 번호
-            totalPagesDisplay.textContent = currentEpisode.pages.length;
-
-            saveLastViewedPage(); // 페이지 변경 시 웹 스토리지에 저장
-        }
-
-        // -------------------- 페이지 이동 함수 --------------------
-        function goToPage(episodeIndex, pageIndex) {
-            if (episodeIndex >= 0 && episodeIndex < comicData.length) {
-                currentEpisodeIndex = episodeIndex;
-                episodeSelect.value = currentEpisodeIndex; // 셀렉트 박스 동기화
-
-                const targetEpisode = comicData[currentEpisodeIndex];
-                if (pageIndex >= 0 && pageIndex < targetEpisode.pages.length) {
-                    currentPageIndex = pageIndex;
-                } else if (pageIndex < 0) {
-                    currentPageIndex = 0;
-                } else {
-                    currentPageIndex = targetEpisode.pages.length - 1;
-                }
-                updateComicView();
-            }
-        }
-
-        function prevPage() {
-            if (currentPageIndex > 0) {
-                currentPageIndex--;
-            } else if (currentEpisodeIndex > 0) { // 첫 페이지에서 이전 버튼 누르면 이전 화의 마지막 페이지로
-                currentEpisodeIndex--;
-                currentPageIndex = comicData[currentEpisodeIndex].pages.length - 1;
-                episodeSelect.value = currentEpisodeIndex; // 셀렉트 박스 동기화
-            }
-            updateComicView();
-        }
-
-        function nextPage() {
-            const currentEpisode = comicData[currentEpisodeIndex];
-            if (currentPageIndex < currentEpisode.pages.length - 1) {
-                currentPageIndex++;
-            } else if (currentEpisodeIndex < comicData.length - 1) { // 마지막 페이지에서 다음 버튼 누르면 다음 화의 첫 페이지로
-                currentEpisodeIndex++;
-                currentPageIndex = 0;
-                episodeSelect.value = currentEpisodeIndex; // 셀렉트 박스 동기화
-            }
-            updateComicView();
-        }
-
-        function goToFirstPage() {
-            goToPage(currentEpisodeIndex, 0);
-        }
-
-        function goToLastPage() {
-            goToPage(currentEpisodeIndex, comicData[currentEpisodeIndex].pages.length - 1);
-        }
-
-        function skipPages(offset) {
-            let newPageIndex = currentPageIndex + offset;
-            goToPage(currentEpisodeIndex, newPageIndex);
-        }
-
-        // -------------------- 웹 스토리지 (localStorage) --------------------
-        function saveLastViewedPage() {
-            try {
-                // 에피소드별로 마지막 페이지를 저장
-                localStorage.setItem(`comic_last_episode_${currentEpisodeIndex}`, currentPageIndex);
-                // 마지막으로 본 에피소드 자체도 저장 (재접속 시 해당 에피소드로 이동)
-                localStorage.setItem('comic_last_viewed_episode', currentEpisodeIndex);
-            } catch (e) {
-                console.error("localStorage 저장 실패:", e);
-                // 사용자에게 알림을 줄 수도 있습니다. (예: "자동 저장 기능이 작동하지 않습니다.")
-            }
-        }
-
-        function loadLastViewedPage() {
-            try {
-                const lastEpisode = parseInt(localStorage.getItem('comic_last_viewed_episode'));
-                if (!isNaN(lastEpisode) && lastEpisode >= 0 && lastEpisode < comicData.length) {
-                    currentEpisodeIndex = lastEpisode;
-                }
-
-                const savedPageIndex = parseInt(localStorage.getItem(`comic_last_episode_${currentEpisodeIndex}`));
-                if (!isNaN(savedPageIndex)) {
-                    currentPageIndex = savedPageIndex;
-                }
-            } catch (e) {
-                console.warn("localStorage 불러오기 실패 (초기 방문이거나 오류):", e);
-            }
-        }
-
-        // -------------------- 이벤트 리스너 --------------------
-        function setupEventListeners() {
-            document.getElementById('prev-page').addEventListener('click', prevPage);
-            document.getElementById('next-page').addEventListener('click', nextPage);
-            document.getElementById('first-page').addEventListener('click', goToFirstPage);
-            document.getElementById('last-page').addEventListener('click', goToLastPage);
-            document.getElementById('prev-3-pages').addEventListener('click', () => skipPages(-3));
-            document.getElementById('next-3-pages').addEventListener('click', () => skipPages(3));
-
-            episodeSelect.addEventListener('change', (event) => {
-                currentEpisodeIndex = parseInt(event.target.value);
-                currentPageIndex = 0; // 에피소드 변경 시 첫 페이지로
-                updateComicView();
-            });
-
-            // 만화 목록 버튼 클릭 시
-            document.getElementById('show-comic-list').addEventListener('click', () => {
-                comicViewerSection.style.display = 'none';
-                comicListSection.style.display = 'block';
-            });
-
-            // 만화 목록 닫기 버튼 클릭 시
-            document.getElementById('close-comic-list').addEventListener('click', () => {
-                comicViewerSection.style.display = 'flex';
-                comicListSection.style.display = 'none';
-            });
-
-            // 만화 목록에서 에피소드 클릭 시
-            comicEpisodeList.addEventListener('click', (event) => {
-                const target = event.target.closest('a[data-episode-index]');
-                if (target) {
-                    const episodeIndex = parseInt(target.dataset.episodeIndex);
-                    goToPage(episodeIndex, 0); // 해당 에피소드의 첫 페이지로 이동
-                    comicViewerSection.style.display = 'flex'; // 뷰어 섹션 보이기
-                    comicListSection.style.display = 'none'; // 목록 섹션 숨기기
-                }
-            });
-
-            // 이미지 클릭으로 페이지 넘기기 (PC/모바일 모두 유효)
-            const leftClickArea = document.querySelector('.page-nav-buttons.left');
-            const rightClickArea = document.querySelector('.page-nav-buttons.right');
-            leftClickArea.addEventListener('click', (e) => {
-                e.stopPropagation(); // 부모 요소 클릭 이벤트 중복 방지
-                prevPage();
-            });
-            rightClickArea.addEventListener('click', (e) => {
-                e.stopPropagation(); // 부모 요소 클릭 이벤트 중복 방지
-                nextPage();
-            });
-
-            // 키보드 방향키로 페이지 넘기기
-            document.addEventListener('keydown', (event) => {
-                if (event.key === 'ArrowLeft') {
-                    prevPage();
-                } else if (event.key === 'ArrowRight') {
-                    nextPage();
-                }
-            });
-        }
-
-        // 페이지 로드 시 초기화 함수 실행
-        document.addEventListener('DOMContentLoaded', initializeComicViewer);
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('webtoons.json')
+                .then(response => response.json())
+                .then(data => {
+                    const episodeListContainer = document.getElementById('episodeList');
+                    data.forEach(episode => {
+                        const episodeItem = document.createElement('div');
+                        episodeItem.classList.add('episode-item');
+                        episodeItem.innerHTML = `
+                            <img src="${episode.thumbnail}" alt="${episode.title} 썸네일">
+                            <div class="episode-info">
+                                <h2>${episode.title}</h2>
+                                <p>${episode.description}</p>
+                            </div>
+                        `;
+                        episodeItem.addEventListener('click', () => {
+                            window.location.href = episode.file;
+                        });
+                        episodeListContainer.appendChild(episodeItem);
+                    });
+                })
+                .catch(error => console.error('Error loading webtoons:', error));
+        });
     </script>
 </body>
 

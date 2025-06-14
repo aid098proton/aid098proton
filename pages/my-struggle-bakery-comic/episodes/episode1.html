@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>첫 번째 이야기: 새로운 시작</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #222;
+            color: #eee;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .viewer-wrapper {
+            max-width: 800px;
+            /* 웹툰 이미지 최대 너비 */
+            margin: 0 auto;
+            background-color: #333;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            min-height: 100vh;
+            /* 최소 화면 높이 */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .webtoon-header {
+            padding: 20px 0;
+            background-color: #2c3e50;
+            color: #fff;
+        }
+
+        .webtoon-title {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .webtoon-viewer-area {
+            flex-grow: 1;
+            /* 남은 공간을 모두 차지 */
+            position: relative;
+            overflow-y: auto;
+            /* 컷이 길 때 스크롤 가능 */
+            -webkit-overflow-scrolling: touch;
+            /* iOS 부드러운 스크롤 */
+            cursor: pointer;
+            /* 클릭 가능 영역 표시 */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            /* 이미지가 상단부터 보이도록 */
+        }
+
+        .webtoon-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .webtoon-footer {
+            padding: 15px 20px;
+            background-color: #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            margin: 5px;
+            flex-shrink: 0;
+        }
+
+        .nav-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* 비활성화된 버튼 스타일 */
+        .nav-button.disabled {
+            /* 'disabled' 클래스 추가 */
+            background-color: #6c757d;
+            cursor: not-allowed;
+            pointer-events: none;
+            /* 클릭 이벤트 자체를 막습니다 */
+        }
+
+        .cut-info {
+            color: #ddd;
+            font-size: 1em;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="viewer-wrapper">
+        <div class="webtoon-header">
+            <h1 class="webtoon-title">첫 번째 이야기: 새로운 시작</h1>
+        </div>
+
+        <div id="webtoonViewerArea" class="webtoon-viewer-area">
+            <img id="currentWebtoonImage" src="" alt="웹툰 컷" class="webtoon-image">
+        </div>
+
+        <div class="webtoon-footer">
+            <a href="../my-struggle-bakery-comic.html" class="nav-button">⟵ 목록으로</a>
+            <span id="cutInfo" class="cut-info">1 / 5</span>
+            <div>
+                <a id="prevEpisodeBtn" href="../my-struggle-bakery-comic.html" class="nav-button">⟵ 이전 화</a>
+                <a id="nextEpisodeBtn" href="episode2.html" class="nav-button">다음 화 ⟶</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 이 배열에 해당 에피소드의 모든 .webp 이미지 경로를 순서대로 나열합니다.
+        const episodeImages = [
+            '../images/episode1/01.webp',
+            '../images/episode1/02.webp',
+            '../images/episode1/03.webp',
+            '../images/episode1/04.webp'
+            // 필요한 만큼 이미지 경로를 추가하세요.
+        ];
+
+        let currentCutIndex = 0;
+        let isScrolling = false;
+
+        const webtoonViewerArea = document.getElementById('webtoonViewerArea');
+        const currentWebtoonImage = document.getElementById('currentWebtoonImage');
+        const cutInfo = document.getElementById('cutInfo');
+        const prevEpisodeBtn = document.getElementById('prevEpisodeBtn');
+        const nextEpisodeBtn = document.getElementById('nextEpisodeBtn');
+
+        // *** 중요: 각 에피소드 파일마다 이 링크를 수정해야 합니다! ***
+        // 첫 번째 에피소드 (episode1.html)
+        // 이전 화 버튼: 목록으로 (첫 화이므로)
+        prevEpisodeBtn.href = '../my-struggle-bakery-comic.html';
+        // 다음 화 버튼: episode2.html로 링크 (다음 화가 있다면)
+        nextEpisodeBtn.href = 'episode2.html';
+        // 만약 이 에피소드가 마지막 에피소드라면 아래처럼 변경
+        // nextEpisodeBtn.href = '#'; // 링크 비활성화를 위해 '#'
+        // nextEpisodeBtn.classList.add('disabled'); // 시각적으로 비활성화
+
+        // 컷 로드 함수
+        function loadCut(index) {
+            if (index >= 0 && index < episodeImages.length) {
+                currentCutIndex = index;
+                currentWebtoonImage.src = episodeImages[currentCutIndex];
+                cutInfo.textContent = `${currentCutIndex + 1} / ${episodeImages.length}`;
+                webtoonViewerArea.scrollTo(0, 0); // 새 컷 로드 시 스크롤 맨 위로
+            }
+        }
+
+        // 초기 로드
+        loadCut(currentCutIndex);
+
+        // 스크롤 완료 여부 확인
+        function isScrolledToBottom() {
+            const imgScrollHeight = currentWebtoonImage.scrollHeight;
+            const viewerClientHeight = webtoonViewerArea.clientHeight;
+            const viewerScrollTop = webtoonViewerArea.scrollTop;
+
+            // 이미지가 뷰어 영역보다 작거나, 이미 스크롤이 끝까지 내려갔다면 true
+            // 스크롤 가능한 요소의 스크롤 위치가 끝에 도달했는지 확인 (약간의 오차 허용)
+            return imgScrollHeight <= viewerClientHeight || (viewerScrollTop + viewerClientHeight >= webtoonViewerArea.scrollHeight - 5);
+        }
+
+        // 클릭/터치 이벤트 핸들러
+        webtoonViewerArea.addEventListener('click', (event) => {
+            const areaRect = webtoonViewerArea.getBoundingClientRect();
+            const clickX = event.clientX - areaRect.left;
+            const areaWidth = areaRect.width;
+
+            if (clickX > areaWidth / 2) {
+                // 오른쪽 영역 클릭: 다음 컷 시도
+                if (isScrolledToBottom()) {
+                    if (currentCutIndex < episodeImages.length - 1) {
+                        loadCut(currentCutIndex + 1);
+                    } else {
+                        // 에피소드의 마지막 컷이고, 다음 에피소드로 이동할 링크가 있다면 이동
+                        // 'disabled' 클래스가 없는 경우에만 이동
+                        if (!nextEpisodeBtn.classList.contains('disabled') && nextEpisodeBtn.href && nextEpisodeBtn.href !== '#') {
+                            window.location.href = nextEpisodeBtn.href;
+                        } else {
+                            alert('이 에피소드의 마지막 컷입니다!');
+                        }
+                    }
+                } else {
+                    alert('컷을 끝까지 스크롤하여 읽어주세요.');
+                }
+            } else {
+                // 왼쪽 영역 클릭: 이전 컷 시도
+                if (currentCutIndex > 0) {
+                    loadCut(currentCutIndex - 1);
+                } else {
+                    // 에피소드의 첫 컷이고, 이전 에피소드로 이동할 링크가 있다면 이동
+                    if (!prevEpisodeBtn.classList.contains('disabled') && prevEpisodeBtn.href && prevEpisodeBtn.href !== '#') {
+                        window.location.href = prevEpisodeBtn.href;
+                    } else {
+                        alert('이 에피소드의 첫 컷입니다.');
+                    }
+                }
+            }
+        });
+
+        // 스와이프 구현 (모바일 환경 고려)
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const minSwipeDistance = 50; // 최소 스와이프 거리 (px)
+
+        webtoonViewerArea.addEventListener('touchstart', (event) => {
+            if (event.touches.length === 1) { // 단일 터치만 감지
+                touchStartX = event.touches[0].clientX;
+                isScrolling = false; // 스와이프 감지 전 스크롤 상태 초기화
+            }
+        });
+
+        webtoonViewerArea.addEventListener('touchmove', (event) => {
+            // 터치 이동 시 스크롤 중인지 판단 (세로 이동이 많으면 스크롤로 간주)
+            if (event.touches.length === 1) {
+                const deltaY = Math.abs(event.touches[0].clientY - touchStartX); // 잘못된 계산, clientY - event.changedTouches[0].clientY 가 맞음
+                const deltaX = Math.abs(event.touches[0].clientX - touchStartX); // 잘못된 계산, clientX - event.changedTouches[0].clientX 가 맞음
+
+                // 터치 이동의 시작점과 현재점의 차이를 통해 스크롤 판단
+                const currentTouchY = event.touches[0].clientY;
+                const currentTouchX = event.touches[0].clientX;
+
+                const initialTouchY = event.targetTouches[0].clientY;
+                const initialTouchX = event.targetTouches[0].clientX;
+
+                const actualDeltaY = Math.abs(currentTouchY - initialTouchY);
+                const actualDeltaX = Math.abs(currentTouchX - initialTouchX);
+
+                if (actualDeltaY > actualDeltaX && actualDeltaY > 10) { // 세로 이동이 가로보다 많고 일정 거리 이상이면 스크롤로 간주
+                    isScrolling = true;
+                } else {
+                    // 가로 스와이프가 감지될 수 있도록 isScrolling을 false로 유지
+                    isScrolling = false;
+                }
+            }
+        });
+
+        webtoonViewerArea.addEventListener('touchend', (event) => {
+            if (isScrolling) { // 스크롤 중이었다면 컷 이동 로직 실행 안함
+                isScrolling = false;
+                return;
+            }
+
+            if (event.changedTouches.length === 1) {
+                touchEndX = event.changedTouches[0].clientX;
+                const touchDeltaX = touchEndX - touchStartX;
+
+                if (Math.abs(touchDeltaX) > minSwipeDistance) {
+                    if (touchDeltaX < 0) { // 왼쪽으로 스와이프 (다음 컷)
+                        if (isScrolledToBottom()) {
+                            if (currentCutIndex < episodeImages.length - 1) {
+                                loadCut(currentCutIndex + 1);
+                            } else {
+                                if (!nextEpisodeBtn.classList.contains('disabled') && nextEpisodeBtn.href && nextEpisodeBtn.href !== '#') {
+                                    window.location.href = nextEpisodeBtn.href;
+                                } else {
+                                    alert('이 에피소드의 마지막 컷입니다!');
+                                }
+                            }
+                        } else {
+                            // 긴 컷 스크롤 중일 때는 스와이프 무시 (이 alert는 스와이프 시에는 너무 자주 뜰 수 있으므로 제거함)
+                            // alert('컷을 끝까지 스크롤하여 읽어주세요.');
+                        }
+                    } else { // 오른쪽으로 스와이프 (이전 컷)
+                        if (currentCutIndex > 0) {
+                            loadCut(currentCutIndex - 1);
+                        } else {
+                            if (!prevEpisodeBtn.classList.contains('disabled') && prevEpisodeBtn.href && prevEpisodeBtn.href !== '#') {
+                                window.location.href = prevEpisodeBtn.href;
+                            } else {
+                                alert('이 에피소드의 첫 컷입니다.');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 뷰어 영역 스크롤 시 스크롤 플래그 관리
+        webtoonViewerArea.addEventListener('scroll', () => {
+            // 스크롤 이벤트가 발생하면 isScrolling을 true로 설정하고, 
+            // 짧은 시간 안에 다른 스크롤 이벤트가 없으면 false로 되돌립니다.
+            isScrolling = true;
+            clearTimeout(webtoonViewerArea.scrollTimeout);
+            webtoonViewerArea.scrollTimeout = setTimeout(() => {
+                isScrolling = false;
+            }, 100); // 100ms 동안 스크롤 없으면 멈춘 것으로 간주
+        });
+
+        currentWebtoonImage.onload = () => {
+            // 이미지가 로드될 때마다 스크롤바 위치 초기화
+            webtoonViewerArea.scrollTop = 0;
+        };
+    </script>
+</body>
+
+</html>
